@@ -1,7 +1,7 @@
 // Zombies Management & Wave Director Module
 import { gameState, saveGameState } from './state.js';
 import { zombieTypes, plantTypes } from './config.js';
-import { SPRITES } from './sprites.js';
+import { SPRITES, ZOMBIE_IMAGES } from './sprites.js';
 import { updatePlantHealth } from './plants.js';
 import { updateWaveDisplay, updateDamageDisplay, addScore, showPointsPopup, createParticleEffect } from './ui.js';
 import { playWaveSound, playLawnmowerSound } from './sound.js';
@@ -34,12 +34,18 @@ export function spawnZombie() {
     typeIndex = 1;
   }
 
-  const zombieType = zombieTypes[zombieTypeKeys[typeIndex]];
+  const typeKey = zombieTypeKeys[typeIndex];
+  const zombieType = zombieTypes[typeKey];
 
   const zombie = document.createElement('div');
-  zombie.className = 'zombie';
-  // Authentic Vector Sprite
-  zombie.innerHTML = SPRITES[zombieTypeKeys[typeIndex]] || SPRITES.normal;
+  zombie.className = `zombie zombie-${typeKey}`;
+
+  // Authentic Official-Style Zombie Sprite Image
+  const img = document.createElement('img');
+  img.src = ZOMBIE_IMAGES[typeKey] || ZOMBIE_IMAGES.normal;
+  img.alt = typeKey;
+  img.className = 'zombie-img';
+  zombie.appendChild(img);
 
   const healthBar = document.createElement('div');
   healthBar.className = 'zombie-health-bar';
@@ -50,7 +56,7 @@ export function spawnZombie() {
   zombie.appendChild(healthBar);
 
   const startX = gameState.boardRect.width;
-  const yPosition = gameState.boardRect.top + row * gameState.cellSize.height + gameState.cellSize.height / 2 - 40;
+  const yPosition = gameState.boardRect.top + row * gameState.cellSize.height + gameState.cellSize.height / 2 - 45;
 
   zombie.style.position = 'fixed';
   zombie.style.left = `${gameState.boardRect.left + startX}px`;
@@ -58,6 +64,7 @@ export function spawnZombie() {
 
   const container = document.getElementById('gameContainer') || document.body;
   container.appendChild(zombie);
+
 
   const zombieObj = {
     element: zombie,

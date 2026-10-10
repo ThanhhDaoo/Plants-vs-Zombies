@@ -87,36 +87,63 @@
 /* Zombies */
 .zombie {
   position: absolute;
-  width: 85px;
-  height: 100px;
+  width: 90px;
+  height: 120px;
   z-index: 3;
   will-change: transform;
   transform: scaleX(-1);
-  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.45));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.zombie-sprite {
-  animation: zombieLimp 1.2s ease-in-out infinite;
+.zombie-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(2px 5px 6px rgba(0, 0, 0, 0.45));
+  animation: zombieWalkLimp 1.2s ease-in-out infinite;
   transform-origin: 50% 90%;
+  pointer-events: none;
 }
 
-@keyframes zombieLimp {
+@keyframes zombieWalkLimp {
   0%, 100% { transform: rotate(0deg) translateY(0); }
-  25% { transform: rotate(-3deg) translateY(-3px); }
-  75% { transform: rotate(3deg) translateY(1px); }
+  25% { transform: rotate(-3.5deg) translateY(-4px); }
+  75% { transform: rotate(3deg) translateY(2px); }
+}
+
+.zombie.eating .zombie-img {
+  animation: zombieEatingChomp 0.35s infinite;
+}
+
+@keyframes zombieEatingChomp {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-8px) scaleY(1.08) scaleX(0.95); }
+}
+
+.zombie-strong {
+  width: 125px;
+  height: 160px;
+}
+
+.zombie-fast {
+  width: 100px;
+  height: 110px;
 }
 
 .zombie-health-bar {
   position: absolute;
-  width: 44px;
+  width: 48px;
   height: 5px;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  top: -8px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 3px;
   overflow: hidden;
+  z-index: 5;
 }
 
 .zombie-health-fill {
@@ -125,27 +152,19 @@
   transition: width 0.2s ease;
 }
 
-.zombie.slowed {
-  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.45)) hue-rotate(190deg) brightness(1.2);
+.zombie.slowed .zombie-img {
+  filter: drop-shadow(2px 5px 6px rgba(0, 0, 0, 0.45)) hue-rotate(190deg) brightness(1.2);
 }
 
-.zombie.eating {
-  animation: zombieChew 0.4s infinite;
-}
-
-@keyframes zombieChew {
-  0%, 100% { transform: scaleX(-1) translateY(0); }
-  50% { transform: scaleX(-1) translateY(-6px) scaleY(1.05); }
-}
-
-.damage-effect {
+.damage-effect .zombie-img {
   animation: zombieFlash 0.25s ease;
 }
 
 @keyframes zombieFlash {
-  0%, 100% { filter: brightness(1) drop-shadow(2px 4px 6px rgba(0,0,0,0.45)); }
-  50% { filter: brightness(2) drop-shadow(0 0 10px #ffea00); }
+  0%, 100% { filter: drop-shadow(2px 5px 6px rgba(0, 0, 0, 0.45)); }
+  50% { filter: brightness(2.2) drop-shadow(0 0 12px #ffea00); }
 }
+
 
 /* Projectiles */
 .projectile {

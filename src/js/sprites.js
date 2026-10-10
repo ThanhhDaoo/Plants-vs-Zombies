@@ -1,7 +1,13 @@
-// Authentic Plants vs Zombies Vector Character & Entity Sprites
-// Hand-crafted cartoon SVGs with cel-shading, dark outlines, and expressive animations
+export const ZOMBIE_IMAGES = {
+  normal: '/assets/zombie_normal.png',
+  cone: '/assets/zombie_cone.png',
+  bucket: '/assets/zombie_bucket.png',
+  fast: '/assets/zombie_fast.png',
+  strong: '/assets/zombie_strong.png'
+};
 
 export const SPRITES = {
+
   // --- PLANTS ---
 
   peashooter: `
