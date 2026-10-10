@@ -61,24 +61,24 @@
   }
 
   #gameBoard {
-    top: 98px;
-    bottom: max(8px, env(safe-area-inset-bottom, 8px));
-    left: 26%;
-    right: max(8px, env(safe-area-inset-right, 8px));
+    top: 28.2%;
+    bottom: 2.0%;
+    left: 26.5%;
+    right: 5.0%;
     padding: 0;
-    gap: 2px;
+    gap: 0;
   }
 
   #lawnmowersContainer {
-    top: 98px;
-    bottom: max(8px, env(safe-area-inset-bottom, 8px));
-    left: calc(26% - 54px);
-    width: 52px;
+    top: 28.2%;
+    bottom: 2.0%;
+    left: calc(26.5% - 46px);
+    width: 44px;
   }
 
   .lawnmower {
-    width: 50px;
-    height: 38px;
+    width: 42px;
+    height: 32px;
   }
 
   #wave {
@@ -128,8 +128,8 @@
 /* Tablet and small laptops */
 @media (max-width: 900px) {
   #gameBoard {
-    left: 26%;
-    right: 4%;
+    left: 26.5%;
+    right: 5.0%;
   }
 
   #ui {

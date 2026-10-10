@@ -1,5 +1,5 @@
 // Service Worker for Plants vs Zombies PWA Offline Support
-const CACHE_NAME = 'pvz-v1.0.2';
+const CACHE_NAME = 'pvz-v1.0.3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
