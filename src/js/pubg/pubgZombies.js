@@ -125,18 +125,20 @@ export function spawnInitialZombies(count = 32) {
 
     const typeDef = ZOMBIE_TYPES[typeKey];
 
-    // Spawn across map, keeping safe distance from player initially
-    let x, y, dist;
-    do {
-      if (typeKey === 'boss') {
-        x = MAP_CONFIG.WIDTH / 2 + (Math.random() - 0.5) * 200;
-        y = MAP_CONFIG.HEIGHT / 2 + (Math.random() - 0.5) * 200;
-      } else {
-        x = 120 + Math.random() * (MAP_CONFIG.WIDTH - 240);
-        y = 120 + Math.random() * (MAP_CONFIG.HEIGHT - 240);
-      }
-      dist = Math.hypot(x - p.x, y - p.y);
-    } while (dist < 400);
+    // Spawn across map safely away from player
+    let x, y;
+    if (typeKey === 'boss') {
+      // 1 Titan Boss guards the North Graveyard Lair
+      x = 1200;
+      y = 480;
+    } else {
+      let attempts = 0;
+      do {
+        x = 140 + Math.random() * (MAP_CONFIG.WIDTH - 280);
+        y = 140 + Math.random() * (MAP_CONFIG.HEIGHT - 280);
+        attempts++;
+      } while (Math.hypot(x - p.x, y - p.y) < 350 && attempts < 25);
+    }
 
     pubgState.zombies.push({
       id: `z_${i}`,

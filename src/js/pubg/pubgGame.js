@@ -46,7 +46,9 @@ export function startPubgGame() {
 
   const p = pubgState.player;
   p.x = 1200;
-  p.y = 1200;
+  p.y = 1950;
+  pubgState.camera.x = 1200;
+  pubgState.camera.y = 1950;
   p.health = playerStats.maxHealth;
   p.maxHealth = playerStats.maxHealth;
   p.armor = playerStats.initialArmor;

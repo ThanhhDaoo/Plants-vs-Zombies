@@ -1,4 +1,4 @@
-/* PvZ Battle Royale (PUBG Mode) Styles */
+/* PvZ Battle Royale (PUBG Mode) - Authentic Comic Game HUD Styles */
 
 #pubgContainer {
   display: none;
@@ -7,10 +7,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #101c13;
+  background: #142617;
   z-index: 500;
   overflow: hidden;
   user-select: none;
+  font-family: 'Fredoka', sans-serif;
 }
 
 #pubgCanvas {
@@ -47,41 +48,53 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+  border: 3px solid #2e1c0c;
   padding: 6px 14px;
-  border-radius: 12px;
+  border-radius: 14px;
   color: #fff;
-  font-weight: 800;
-  backdrop-filter: blur(8px);
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.05em;
+  letter-spacing: 0.6px;
+  box-shadow: 0 4px 0 #1a0f06, 0 6px 15px rgba(0, 0, 0, 0.4);
   pointer-events: auto;
 }
 
 .pubg-exit-btn {
-  background: linear-gradient(180deg, #d32f2f, #b71c1c);
+  font-family: 'Luckiest Guy', cursive;
+  background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
   color: #fff;
-  border: 1px solid #ff8a80;
-  padding: 4px 10px;
-  border-radius: 8px;
+  border: 2px solid #b71c1c;
+  padding: 4px 12px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 800;
-  font-size: 0.85em;
-  transition: transform 0.15s ease;
+  font-size: 0.82em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 0 #7f0000;
+  transition: all 0.1s ease;
 }
 
 .pubg-exit-btn:hover {
-  transform: scale(1.05);
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.pubg-exit-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #7f0000;
 }
 
 .pubg-center-stats {
   display: flex;
   gap: 14px;
-  background: rgba(15, 23, 42, 0.88);
-  border: 2px solid #00e5ff;
-  border-radius: 14px;
-  padding: 8px 18px;
-  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, #4e342e 0%, #3e2723 60%, #2e1c0c 100%);
+  border: 3.5px solid #2e1c0c;
+  border-radius: 18px;
+  padding: 7px 20px;
+  box-shadow: 
+    0 6px 0 #1a0f06,
+    0 10px 25px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.2);
 }
 
 .stat-pill {
@@ -91,21 +104,22 @@
 }
 
 .stat-pill .label {
-  font-size: 0.68em;
-  color: #90caf9;
-  text-transform: uppercase;
+  font-size: 0.72em;
+  color: #ffca28;
   font-weight: 900;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .stat-pill .value {
-  font-size: 1.2em;
-  font-weight: 900;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.3em;
   color: #fff;
+  text-shadow: 1.5px 1.5px 0 #1a0f06;
 }
 
 .stat-pill.danger .value {
-  color: #ff1744;
+  color: #ff5252;
 }
 
 .stat-pill.gold .value {
@@ -123,22 +137,23 @@
   top: 85px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(211, 47, 47, 0.9);
-  border: 2px solid #ff8a80;
+  font-family: 'Luckiest Guy', cursive;
+  background: linear-gradient(180deg, #d32f2f, #b71c1c);
+  border: 3.5px solid #ffeb3b;
   color: #fff;
   padding: 8px 24px;
   border-radius: 20px;
-  font-weight: 900;
-  font-size: 1em;
+  font-size: 1.15em;
   letter-spacing: 1px;
-  box-shadow: 0 0 25px rgba(255, 23, 68, 0.8);
+  box-shadow: 0 6px 0 #7f0000, 0 0 30px rgba(255, 23, 68, 0.8);
+  text-shadow: 2px 2px 0 #7f0000;
   animation: pulse-danger 0.8s infinite alternate ease-in-out;
   pointer-events: none;
 }
 
 @keyframes pulse-danger {
-  0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
-  100% { transform: translateX(-50%) scale(1.06); opacity: 1; }
+  0% { transform: translateX(-50%) scale(1); }
+  100% { transform: translateX(-50%) scale(1.05); }
 }
 
 /* Bottom Player Stats & Weapon Cards */
@@ -152,13 +167,13 @@
 .pubg-player-status {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  padding: 8px 14px;
-  border-radius: 14px;
-  backdrop-filter: blur(10px);
-  width: 210px;
+  gap: 7px;
+  background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+  border: 3px solid #2e1c0c;
+  padding: 10px 16px;
+  border-radius: 18px;
+  box-shadow: 0 6px 0 #1a0f06, 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 220px;
 }
 
 .bar-container {
@@ -168,16 +183,17 @@
 }
 
 .bar-label {
-  font-size: 1.1em;
+  font-size: 1.2em;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4));
 }
 
 .bar-track {
   flex: 1;
-  height: 12px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 6px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 7px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #2e1c0c;
 }
 
 .bar-fill {
@@ -186,77 +202,82 @@
 }
 
 .bar-fill.hp {
-  background: linear-gradient(90deg, #ff1744, #00e676);
+  background: linear-gradient(90deg, #ff1744 0%, #ffeb3b 50%, #4caf50 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
 }
 
 .bar-fill.armor {
-  background: linear-gradient(90deg, #ffd600, #ff9100);
+  background: linear-gradient(90deg, #ffa000 0%, #ffd54f 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
 }
 
 .bar-value {
-  font-size: 0.75em;
-  font-weight: 900;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 0.95em;
   color: #fff;
-  min-width: 58px;
+  min-width: 65px;
   text-align: right;
+  text-shadow: 1.5px 1.5px 0 #1a0f06;
 }
 
-/* Current Weapon Card */
+/* Current Weapon Wooden Seed Card */
 .pubg-weapon-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(20, 30, 45, 0.9);
-  border: 2px solid #00e5ff;
-  padding: 8px 22px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, #5d4037 0%, #4e342e 50%, #3e2723 100%);
+  border: 3.5px solid #2e1c0c;
+  padding: 9px 24px;
+  border-radius: 20px;
+  box-shadow: 0 6px 0 #1a0f06, 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
 .weapon-title {
-  font-size: 1.1em;
-  font-weight: 900;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.2em;
   color: #fff;
+  text-shadow: 2px 2px 0 #1a0f06;
 }
 
 .weapon-ammo {
-  font-size: 1.25em;
-  font-weight: 900;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.4em;
   color: #ffd54f;
-  margin-top: 2px;
+  margin-top: 1px;
+  text-shadow: 2px 2px 0 #7f4b00;
 }
 
 /* Mobile Quick Action Buttons */
 .pubg-touch-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   pointer-events: auto;
 }
 
 .touch-btn {
-  width: 58px;
-  height: 58px;
+  font-family: 'Luckiest Guy', cursive;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid #fff;
+  background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+  border: 3.5px solid #fff;
   color: #fff;
-  font-weight: 900;
-  font-size: 0.8em;
+  font-size: 0.85em;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 0 #bf360c, 0 8px 15px rgba(0, 0, 0, 0.4);
+  text-shadow: 1.5px 1.5px 0 #bf360c;
 }
 
 .touch-btn:active {
-  transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #bf360c;
 }
 
-/* Match Finish Modals */
+/* Finish Modals (Defeat / Victory) */
 .pubg-modal {
   display: none;
   position: absolute;
@@ -264,101 +285,121 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(5, 10, 20, 0.9);
+  background: rgba(8, 14, 10, 0.9);
   z-index: 100;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
   padding: 20px;
 }
 
 .pubg-modal-box {
-  background: linear-gradient(180deg, #1e293b, #0f172a);
-  border: 3px solid #00e5ff;
-  border-radius: 24px;
-  padding: 28px 36px;
+  background: linear-gradient(180deg, #4e342e 0%, #3e2723 60%, #2e1c0c 100%);
+  border: 4.5px solid #1a0f06;
+  border-radius: 26px;
+  padding: 28px 40px;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
-  max-width: 460px;
+  box-shadow: 
+    0 12px 0 #0f0803,
+    0 25px 60px rgba(0, 0, 0, 0.9),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  max-width: 480px;
   width: 90%;
   color: #fff;
 }
 
 .pubg-modal-box h2 {
-  font-size: 2.1em;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 2.3em;
   margin-bottom: 8px;
-  font-weight: 900;
-}
-
-.pubg-modal-box.victory {
-  border-color: #ffd54f;
+  letter-spacing: 1px;
 }
 
 .pubg-modal-box.victory h2 {
   color: #ffd54f;
-  text-shadow: 0 0 20px rgba(255, 213, 79, 0.8);
-}
-
-.pubg-modal-box.defeat {
-  border-color: #ff5252;
+  text-shadow: 3px 3px 0 #bf360c, 0 0 30px rgba(255, 213, 79, 0.8);
 }
 
 .pubg-modal-box.defeat h2 {
   color: #ff5252;
+  text-shadow: 3px 3px 0 #7f0000;
 }
 
 .pubg-stats-summary {
   display: flex;
   justify-content: space-around;
-  margin: 18px 0;
+  margin: 20px 0;
   padding: 14px 10px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid #2e1c0c;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .pubg-stats-summary b {
-  font-size: 1.3em;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.5em;
+  letter-spacing: 0.8px;
   color: #fff;
 }
 
 .pubg-stats-summary small {
-  color: #94a3b8;
-  font-size: 0.75em;
+  color: #ffca28;
+  font-size: 0.8em;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .modal-btn-row {
   display: flex;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .modal-btn {
   flex: 1;
-  padding: 12px 18px;
-  border-radius: 14px;
-  font-weight: 800;
-  font-size: 1em;
+  font-family: 'Luckiest Guy', cursive;
+  padding: 13px 20px;
+  border-radius: 16px;
+  font-size: 1.1em;
+  letter-spacing: 0.8px;
   cursor: pointer;
-  border: none;
-  transition: all 0.15s ease;
+  border: 3px solid #1a0f06;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  transition: all 0.1s ease;
 }
 
 .modal-btn.primary {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
+  background: linear-gradient(180deg, #ffb300 0%, #f57c00 100%);
   color: #fff;
-  border: 1px solid #ffe082;
+  box-shadow: 0 6px 0 #bf360c;
+}
+
+.modal-btn.primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #bf360c;
+}
+
+.modal-btn.primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #bf360c;
 }
 
 .modal-btn.secondary {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, #795548 0%, #5d4037 100%);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 0 #2e1c0c;
 }
 
-.modal-btn:hover {
-  transform: translateY(-2px);
+.modal-btn.secondary:hover {
   filter: brightness(1.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #2e1c0c;
+}
+
+.modal-btn.secondary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #2e1c0c;
 }

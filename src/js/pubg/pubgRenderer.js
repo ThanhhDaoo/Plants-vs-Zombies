@@ -590,12 +590,15 @@ function drawFloatingTexts(ctx) {
   if (!pubgState.floatingTexts) return;
   pubgState.floatingTexts.forEach((ft) => {
     ctx.save();
-    ctx.font = `bold ${ft.size || 14}px sans-serif`;
-    ctx.fillStyle = ft.color || '#ffeb3b';
+    ctx.font = `bold ${ft.size || 16}px 'Luckiest Guy', 'Fredoka', sans-serif`;
     ctx.textAlign = 'center';
-    ctx.shadowColor = '#000000';
-    ctx.shadowBlur = 4;
     ctx.globalAlpha = Math.max(0, ft.life / ft.maxLife);
+    // Comic dark outline
+    ctx.lineWidth = 3.5;
+    ctx.strokeStyle = '#1a0f06';
+    ctx.strokeText(ft.text, ft.x, ft.y);
+    // Vibrant comic fill
+    ctx.fillStyle = ft.color || '#ffeb3b';
     ctx.fillText(ft.text, ft.x, ft.y);
     ctx.restore();
   });
@@ -610,12 +613,15 @@ function drawScreenOverlays(ctx, canvas) {
   const ratio = mapW / MAP_CONFIG.WIDTH;
 
   ctx.save();
-  // Minimap background frame
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+  // Minimap background frame (Carved wood & gold)
+  ctx.fillStyle = 'rgba(26, 46, 28, 0.9)';
   ctx.fillRect(mapX, mapY, mapW, mapH);
-  ctx.strokeStyle = '#00e5ff';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#2e1c0c';
+  ctx.lineWidth = 5;
   ctx.strokeRect(mapX, mapY, mapW, mapH);
+  ctx.strokeStyle = '#ffd54f';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(mapX + 2, mapY + 2, mapW - 4, mapH - 4);
 
   // Minimap Zone
   const z = pubgState.zone;
