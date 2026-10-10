@@ -80,6 +80,7 @@
 
       <div id="controlButtons">
         <div class="controlRow">
+          <button class="controlBtn" id="modeSwitchBtn" style="background: linear-gradient(180deg, #ff9800, #e65100); border-color: #ffe082; font-weight: 900;">🎯 Sinh Tồn</button>
           <button class="controlBtn" id="pauseBtn">⏸️ Pause</button>
           <button class="controlBtn" id="speedBtn">⚡ x1</button>
         </div>
@@ -145,6 +146,103 @@
       <div>
         <button class="btn gold" onclick="showLeaderboard()">View Top 10</button>
         <button class="btn" onclick="restartGame()">Play Again</button>
+      </div>
+    </div>
+
+    <!-- PvZ Battle Royale (PUBG Mode) Viewport & HUD -->
+    <div id="pubgContainer">
+      <canvas id="pubgCanvas"></canvas>
+      <div id="pubgHud">
+        <!-- Top Stats Banner -->
+        <div class="pubg-top-bar">
+          <div class="pubg-mode-badge">
+            <span>🎯 PvZ Sinh Tồn</span>
+            <button class="pubg-exit-btn" id="exitPubgBtn">⬅ Về Cổ Điển</button>
+          </div>
+
+          <div class="pubg-center-stats">
+            <div class="stat-pill">
+              <span class="label">Sống Sót</span>
+              <span class="value" id="pubgAlive">31</span>
+            </div>
+            <div class="stat-pill danger">
+              <span class="label">Hạ Gục</span>
+              <span class="value" id="pubgKills">0</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">Vòng Bo</span>
+              <span class="value" id="pubgZoneTime">Bo thu: 40s</span>
+            </div>
+          </div>
+
+          <!-- Empty spacer to balance Minimap top right -->
+          <div style="width: 175px;"></div>
+        </div>
+
+        <!-- Safe Zone Danger Alert -->
+        <div id="pubgZoneWarning">⚠️ BẠN ĐANG Ở NGOÀI VÒNG BO!</div>
+
+        <!-- Bottom Player Stats & Weapon Cards -->
+        <div class="pubg-bottom-bar">
+          <div class="pubg-player-status">
+            <div class="bar-container">
+              <span class="bar-label">💚</span>
+              <div class="bar-track">
+                <div class="bar-fill hp" id="pubgHpFill" style="width: 100%;"></div>
+              </div>
+              <span class="bar-value" id="pubgHpText">100 / 100</span>
+            </div>
+            <div class="bar-container">
+              <span class="bar-label">🛡️</span>
+              <div class="bar-track">
+                <div class="bar-fill armor" id="pubgArmorFill" style="width: 50%;"></div>
+              </div>
+              <span class="bar-value" id="pubgArmorText">Giáp</span>
+            </div>
+          </div>
+
+          <div class="pubg-weapon-card">
+            <div class="weapon-title" id="pubgWeaponName">🌱 Pea Pistol</div>
+            <div class="weapon-ammo" id="pubgAmmo">24 / 24</div>
+          </div>
+
+          <div class="pubg-touch-actions">
+            <button class="touch-btn" id="pubgDashBtn">⚡<br>Lướt</button>
+            <button class="touch-btn" id="pubgReloadBtn">🔄<br>Đạn</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Battle Royale Defeat Modal -->
+      <div class="pubg-modal" id="pubgGameOverModal">
+        <div class="pubg-modal-box defeat">
+          <h2>💀 BẠN ĐÃ BỊ HẠ GỤC!</h2>
+          <p>Chúc may mắn ở trận chiến sinh tồn lần sau!</p>
+          <div class="pubg-stats-summary">
+            <div><b id="pubgFinalKills">0</b><br><small>Hạ gục</small></div>
+            <div><b>#15</b><br><small>Xếp hạng</small></div>
+          </div>
+          <div>
+            <button class="btn" onclick="window.restartPubg()">Chơi Lại</button>
+            <button class="btn secondary" onclick="window.exitPubg()">Về Thủ Thành</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Battle Royale Victory Modal -->
+      <div class="pubg-modal" id="pubgVictoryModal">
+        <div class="pubg-modal-box victory">
+          <h2>🏆 WINNER WINNER!</h2>
+          <p style="color: #ffd54f; font-size: 1.25em; font-weight: 800;">CHICKEN DINNER! TOP #1 SINH TỒN!</p>
+          <div class="pubg-stats-summary">
+            <div><b id="pubgWinKills">30</b><br><small>Hạ gục</small></div>
+            <div><b>TOP #1</b><br><small>Xếp hạng</small></div>
+          </div>
+          <div>
+            <button class="btn gold" onclick="window.restartPubg()">Chơi Tiếp</button>
+            <button class="btn secondary" onclick="window.exitPubg()">Về Thủ Thành</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

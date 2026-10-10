@@ -1,0 +1,88 @@
+// PvZ Battle Royale Weapons System
+export const WEAPONS = {
+  pea_pistol: {
+    id: 'pea_pistol',
+    name: 'Pea Pistol',
+    emoji: '🌱',
+    damage: 28,
+    fireRate: 260, // ms between shots
+    magazineSize: 24,
+    reloadTime: 1300, // ms
+    bulletSpeed: 15,
+    bulletRadius: 6,
+    bulletColor: '#76c828',
+    trailColor: 'rgba(118, 200, 40, 0.4)',
+    pellets: 1,
+    spread: 0.04,
+    description: 'Súng đậu lục tiêu chuẩn - Bắn ổn định, nạp đạn nhanh'
+  },
+  threepeater: {
+    id: 'threepeater',
+    name: 'Threepeater Shotgun',
+    emoji: '🌿',
+    damage: 22,
+    fireRate: 520,
+    magazineSize: 10,
+    reloadTime: 1700,
+    bulletSpeed: 13,
+    bulletRadius: 5.5,
+    bulletColor: '#43a047',
+    trailColor: 'rgba(67, 160, 71, 0.4)',
+    pellets: 4,
+    spread: 0.22,
+    description: 'Shotgun 3 đầu nòng - Bắn xòe chùm đạn, sát thương cận chiến cực mạnh'
+  },
+  snow_sniper: {
+    id: 'snow_sniper',
+    name: 'Snow Pea Sniper',
+    emoji: '❄️',
+    damage: 75,
+    fireRate: 750,
+    magazineSize: 6,
+    reloadTime: 2000,
+    bulletSpeed: 22,
+    bulletRadius: 7,
+    bulletColor: '#00e5ff',
+    trailColor: 'rgba(0, 229, 255, 0.5)',
+    pellets: 1,
+    spread: 0.01,
+    slowEffect: 0.5,
+    slowDuration: 3000,
+    description: 'Súng ngắm bắn tỉa Đậu Băng - Tầm cực xa, làm chậm đối thủ 50%'
+  },
+  fire_gatling: {
+    id: 'fire_gatling',
+    name: 'Fire Pea Gatling',
+    emoji: '🔥',
+    damage: 34,
+    fireRate: 110,
+    magazineSize: 45,
+    reloadTime: 2200,
+    bulletSpeed: 17,
+    bulletRadius: 6.5,
+    bulletColor: '#ff5722',
+    trailColor: 'rgba(255, 87, 34, 0.6)',
+    pellets: 1,
+    spread: 0.08,
+    isFire: true,
+    description: 'Đại liên Đậu Lửa - Tốc độ xả đạn cực nhanh, sát thương thiêu đốt'
+  },
+  melon_launcher: {
+    id: 'melon_launcher',
+    name: 'Melon Bazooka',
+    emoji: '🍈',
+    damage: 130,
+    fireRate: 1100,
+    magazineSize: 4,
+    reloadTime: 2500,
+    bulletSpeed: 10,
+    bulletRadius: 12,
+    bulletColor: '#8bc34a',
+    trailColor: 'rgba(139, 195, 74, 0.5)',
+    pellets: 1,
+    spread: 0.02,
+    isExplosive: true,
+    blastRadius: 85,
+    description: 'Súng cối Dưa Hấu nổ - Đạn dưa hấu hạng nặng phát nổ diện rộng AOE'
+  }
+};

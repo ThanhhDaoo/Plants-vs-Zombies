@@ -1,0 +1,323 @@
+/* PvZ Battle Royale (PUBG Mode) Styles */
+
+#pubgContainer {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1b2838;
+  z-index: 500;
+  overflow: hidden;
+  user-select: none;
+}
+
+#pubgCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Battle Royale HUD */
+#pubgHud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 18px;
+  box-sizing: border-box;
+}
+
+/* Top Stats Banner */
+.pubg-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.pubg-mode-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.pubg-exit-btn {
+  background: linear-gradient(180deg, #d32f2f, #b71c1c);
+  color: #fff;
+  border: 1px solid #ff8a80;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85em;
+  transition: transform 0.15s ease;
+}
+
+.pubg-exit-btn:hover {
+  transform: scale(1.05);
+}
+
+.pubg-center-stats {
+  display: flex;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid #00e5ff;
+  border-radius: 14px;
+  padding: 8px 18px;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-pill .label {
+  font-size: 0.7em;
+  color: #90caf9;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.stat-pill .value {
+  font-size: 1.25em;
+  font-weight: 900;
+  color: #fff;
+}
+
+.stat-pill.danger .value {
+  color: #ff1744;
+}
+
+/* Zone Warning Alert */
+#pubgZoneWarning {
+  display: none;
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(211, 47, 47, 0.85);
+  border: 2px solid #ff8a80;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.1em;
+  padding: 6px 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 25px rgba(255, 23, 68, 0.8);
+  animation: pulseDanger 0.8s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes pulseDanger {
+  from { transform: translateX(-50%) scale(1); opacity: 0.9; }
+  to { transform: translateX(-50%) scale(1.06); opacity: 1; }
+}
+
+/* Bottom Player Controls & Status */
+.pubg-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.pubg-player-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+  background: rgba(10, 15, 25, 0.75);
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-label {
+  font-size: 0.8em;
+  font-weight: 900;
+  width: 24px;
+  text-align: center;
+}
+
+.bar-track {
+  flex: 1;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.15s ease;
+}
+
+.bar-fill.hp {
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+}
+
+.bar-fill.armor {
+  background: linear-gradient(90deg, #ffb300, #ffd54f);
+}
+
+.bar-value {
+  font-size: 0.75em;
+  font-weight: 900;
+  color: #fff;
+  min-width: 52px;
+  text-align: right;
+}
+
+/* Current Weapon Card */
+.pubg-weapon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(20, 30, 45, 0.85);
+  border: 2px solid #ffca28;
+  padding: 8px 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.weapon-title {
+  font-size: 1.1em;
+  font-weight: 900;
+  color: #fff;
+}
+
+.weapon-ammo {
+  font-size: 1.25em;
+  font-weight: 900;
+  color: #ffd54f;
+  margin-top: 2px;
+}
+
+/* Mobile Quick Action Buttons */
+.pubg-touch-actions {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.touch-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.8em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.touch-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Modals */
+.pubg-modal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 10, 20, 0.85);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  backdrop-filter: blur(12px);
+  padding: 20px;
+}
+
+.pubg-modal-box {
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  border: 3px solid #ffca28;
+  border-radius: 20px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  max-width: 440px;
+  width: 90%;
+  color: #fff;
+}
+
+.pubg-modal-box h2 {
+  font-size: 2.2em;
+  margin-bottom: 15px;
+}
+
+.pubg-modal-box.victory h2 {
+  color: #ffd54f;
+  text-shadow: 0 0 20px rgba(255, 213, 79, 0.8);
+}
+
+.pubg-modal-box.defeat h2 {
+  color: #ff5252;
+}
+
+.pubg-stats-summary {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+}
+
+/* Mode Switcher Button on Classic Screen */
+#modeSwitchBtn {
+  background: linear-gradient(180deg, #ff9800, #e65100);
+  border: 2px solid #ffe082;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.85em;
+  padding: 5px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, filter 0.15s ease;
+  white-space: nowrap;
+}
+
+#modeSwitchBtn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}

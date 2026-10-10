@@ -8,12 +8,34 @@ import { showLeaderboard, closeLeaderboard } from './js/ui.js';
 import { initAudio, toggleAudio, isAudioEnabled } from './js/sound.js';
 import { SPRITES } from './js/sprites.js';
 
+import { initPubg, startPubgGame, stopPubg } from './js/pubg/pubgGame.js';
+import { triggerDash, triggerReload } from './js/pubg/pubgControls.js';
+
 // Expose functions globally for inline HTML event handlers
 window.resumeGame = resumeGame;
 window.restartGame = restartGame;
 window.resetGame = resetGame;
 window.showLeaderboard = showLeaderboard;
 window.closeLeaderboard = closeLeaderboard;
+window.restartPubg = () => startPubgGame();
+window.exitPubg = () => exitPubgMode();
+
+function enterPubgMode() {
+  gameState.isPaused = true;
+  const pauseMenuEl = document.getElementById('pauseMenu');
+  if (pauseMenuEl) pauseMenuEl.style.display = 'none';
+  const pubgCont = document.getElementById('pubgContainer');
+  if (pubgCont) pubgCont.style.display = 'block';
+  startPubgGame();
+}
+
+function exitPubgMode() {
+  stopPubg();
+  const pubgCont = document.getElementById('pubgContainer');
+  if (pubgCont) pubgCont.style.display = 'none';
+  gameState.isPaused = false;
+  gameState.lastUpdate = Date.now();
+}
 
 // Register Service Worker for PWA Offline Play
 if ('serviceWorker' in navigator && !window.location.host.includes('localhost:5173')) {
@@ -118,10 +140,32 @@ function setupAppListeners() {
       }
     }
   });
+  // Mode Switch to PUBG Battle Royale
+  const modeSwitchBtn = document.getElementById('modeSwitchBtn');
+  if (modeSwitchBtn) {
+    modeSwitchBtn.addEventListener('click', enterPubgMode);
+  }
+
+  const exitPubgBtn = document.getElementById('exitPubgBtn');
+  if (exitPubgBtn) {
+    exitPubgBtn.addEventListener('click', exitPubgMode);
+  }
+
+  const pubgDashBtn = document.getElementById('pubgDashBtn');
+  if (pubgDashBtn) {
+    pubgDashBtn.addEventListener('click', triggerDash);
+  }
+
+  const pubgReloadBtn = document.getElementById('pubgReloadBtn');
+  if (pubgReloadBtn) {
+    pubgReloadBtn.addEventListener('click', triggerReload);
+  }
 }
 
 // Bootstrap Game on Page Load
 window.addEventListener('DOMContentLoaded', () => {
   setupAppListeners();
   initGame();
+  initPubg();
 });
+
