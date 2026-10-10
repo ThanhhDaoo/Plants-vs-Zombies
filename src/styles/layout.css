@@ -23,25 +23,26 @@ body:-ms-fullscreen #gameContainer {
   box-shadow: none;
 }
 
+/* 5x9 Game Board strictly positioned on the grass lawn */
 #gameBoard {
   position: absolute;
-  top: 140px;
-  left: 140px;
-  right: 40px;
+  top: 135px;
+  left: 26%;
+  right: 4%;
   bottom: 25px;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  gap: 4px;
-  background: rgba(0, 0, 0, 0.08);
-  padding: 6px;
-  border-radius: 10px;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.15);
+  gap: 3px;
+  background: transparent;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 .cell {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1.5px dashed rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.22);
   border-radius: 8px;
   position: relative;
   cursor: pointer;
@@ -53,18 +54,18 @@ body:-ms-fullscreen #gameContainer {
 }
 
 .cell:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.16);
   border-color: #ffd54f;
-  box-shadow: 0 0 16px rgba(255, 213, 79, 0.5);
+  box-shadow: 0 0 14px rgba(255, 213, 79, 0.45);
   transform: scale(1.02);
 }
 
-/* Lawnmowers Container */
+/* Lawnmowers Container - parked on the open brick walkway right in front of the grass */
 #lawnmowersContainer {
   position: absolute;
-  top: 140px;
-  left: 60px;
-  width: 75px;
+  top: 135px;
+  left: calc(26% - 52px);
+  width: 50px;
   bottom: 25px;
   display: flex;
   flex-direction: column;
@@ -81,11 +82,12 @@ body:-ms-fullscreen #gameContainer {
 }
 
 .lawnmower {
-  width: 68px;
-  height: 52px;
+  width: 48px;
+  height: 36px;
   filter: drop-shadow(2px 3px 5px rgba(0, 0, 0, 0.5));
   transition: transform 0.1s linear;
 }
+
 
 .lawnmower.active {
   animation: mowerShake 0.1s infinite alternate;
