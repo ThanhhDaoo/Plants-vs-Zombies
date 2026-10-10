@@ -1,0 +1,197 @@
+/* Plants */
+.plant {
+  font-size: 2.5em;
+  animation: plantSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+
+@keyframes plantSpawn {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); }
+  60% { transform: translate(-50%, -50%) scale(1.2) rotate(10deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+.plant.shooting {
+  animation: plantRecoil 0.3s ease;
+}
+
+@keyframes plantRecoil {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  40% { transform: translate(-50%, -50%) scale(1.25); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.plant-health-bar {
+  position: absolute;
+  width: 40px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.plant-health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  transition: width 0.25s ease;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+.plant-damage-effect {
+  animation: plantDamage 0.3s ease;
+}
+
+@keyframes plantDamage {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+  50% { transform: translate(-50%, -50%) scale(0.9); filter: brightness(1.6) hue-rotate(90deg); }
+}
+
+/* Zombies */
+.zombie {
+  position: absolute;
+  font-size: 2.5em;
+  z-index: 3;
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5));
+  transition: filter 0.3s ease;
+  will-change: transform;
+  transform: scaleX(-1);
+}
+
+.zombie-health-bar {
+  position: absolute;
+  width: 42px;
+  height: 4px;
+  background: rgba(255, 0, 0, 0.7);
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.zombie-health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff0000, #ff6600);
+  transition: width 0.25s ease;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.zombie.slowed {
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)) hue-rotate(200deg) brightness(1.4);
+}
+
+.zombie.eating {
+  animation: zombieChew 0.5s infinite;
+}
+
+@keyframes zombieChew {
+  0%, 100% { transform: scaleX(-1) translateY(0); }
+  50% { transform: scaleX(-1) translateY(-6px); }
+}
+
+.damage-effect {
+  animation: zombieDamage 0.3s ease;
+}
+
+@keyframes zombieDamage {
+  0%, 100% { transform: scaleX(-1); filter: brightness(1); }
+  50% { transform: scaleX(-1) scale(0.9); filter: brightness(1.6) hue-rotate(180deg); }
+}
+
+/* Projectiles */
+.projectile {
+  position: absolute;
+  font-size: 1.5em;
+  z-index: 4;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 0, 0.8));
+  will-change: transform;
+}
+
+.projectile.fire {
+  filter: drop-shadow(0 0 12px rgba(255, 100, 0, 1));
+  animation: flameGlow 0.3s infinite alternate;
+}
+
+@keyframes flameGlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.25); }
+}
+
+/* Suns */
+.sun {
+  position: absolute;
+  font-size: 2.1em;
+  cursor: pointer;
+  animation: sunFalling 10s linear;
+  z-index: 5;
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.85));
+  transition: transform 0.2s ease, filter 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sun:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+}
+
+@keyframes sunFalling {
+  from { top: -50px; }
+  to { top: 88%; }
+}
+
+.sun-value {
+  font-size: 0.55em;
+  font-weight: 800;
+  color: #d97706;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.collect-effect {
+  animation: sunCollect 0.5s ease forwards;
+}
+
+@keyframes sunCollect {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+/* Particles & Popups */
+.points-popup {
+  position: absolute;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: #FFD700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  pointer-events: none;
+  animation: floatPoints 1.5s ease-out forwards;
+}
+
+@keyframes floatPoints {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-50px) scale(1.4); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  animation: particleFly 1s ease-out forwards;
+  font-size: 1.5em;
+  z-index: 15;
+}
+
+@keyframes particleFly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+}

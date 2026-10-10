@@ -1,0 +1,8 @@
+{
+  "appId": "com.thanhdao.plantsvszombies",
+  "appName": "Plants vs Zombies",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

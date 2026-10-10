@@ -1,0 +1,61 @@
+#gameContainer {
+  width: 100%;
+  max-width: 1200px;
+  height: 100vh;
+  max-height: 700px;
+  position: relative;
+  background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #228B22 100%);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Fullscreen mode adjustments */
+body:fullscreen #gameContainer,
+body:-webkit-full-screen #gameContainer,
+body:-moz-full-screen #gameContainer,
+body:-ms-fullscreen #gameContainer {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0;
+}
+
+#gameBoard {
+  position: absolute;
+  top: 150px;
+  left: 100px;
+  right: 20px;
+  bottom: 50px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cell {
+  background: linear-gradient(135deg, var(--board-lawn-1), var(--board-lawn-2));
+  border: 2px solid var(--cell-border);
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.cell:hover {
+  background: var(--cell-hover);
+  transform: scale(1.04);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  border-color: #4CAF50;
+}
+
+.cell.valid-target {
+  box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.8);
+}

@@ -1,0 +1,44 @@
+:root {
+  --primary-color: #4CAF50;
+  --primary-dark: #388E3C;
+  --secondary-color: #667eea;
+  --secondary-dark: #764ba2;
+  --accent-sun: #FFD700;
+  --accent-orange: #FFA500;
+  --danger-color: #ff4757;
+  --board-lawn-1: rgba(144, 238, 144, 0.35);
+  --board-lawn-2: rgba(34, 139, 34, 0.35);
+  --cell-border: rgba(34, 139, 34, 0.5);
+  --cell-hover: rgba(144, 238, 144, 0.6);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --shadow-card: 0 5px 15px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 15px rgba(76, 175, 80, 0.6);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  font-family: var(--font-family);
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  touch-action: manipulation;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
