@@ -26,10 +26,10 @@ body:-ms-fullscreen #gameContainer {
 /* 5x9 Game Board strictly aligned with the 5 lanes and 9 stripes of the lawn artwork */
 #gameBoard {
   position: absolute;
-  top: 28.2%;
-  left: 26.5%;
-  right: 5.0%;
-  bottom: 2.0%;
+  top: 27.5%;
+  left: 23.75%;
+  right: 6.25%;
+  bottom: 2.78%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(5, 1fr);
@@ -59,13 +59,13 @@ body:-ms-fullscreen #gameContainer {
   box-shadow: inset 0 0 12px rgba(255, 213, 79, 0.45);
 }
 
-/* Lawnmowers Container - parked on the open brick walkway, vertically centered with each lane */
+/* Lawnmowers Container - parked on the open stone patio, vertically centered with each lane */
 #lawnmowersContainer {
   position: absolute;
-  top: 28.2%;
-  left: calc(26.5% - 56px);
+  top: 27.5%;
+  left: calc(23.75% - 56px);
   width: 50px;
-  bottom: 2.0%;
+  bottom: 2.78%;
   display: flex;
   flex-direction: column;
   pointer-events: none;

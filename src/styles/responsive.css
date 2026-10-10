@@ -61,18 +61,18 @@
   }
 
   #gameBoard {
-    top: 28.2%;
-    bottom: 2.0%;
-    left: 26.5%;
-    right: 5.0%;
+    top: 27.5%;
+    bottom: 2.78%;
+    left: 23.75%;
+    right: 6.25%;
     padding: 0;
     gap: 0;
   }
 
   #lawnmowersContainer {
-    top: 28.2%;
-    bottom: 2.0%;
-    left: calc(26.5% - 46px);
+    top: 27.5%;
+    bottom: 2.78%;
+    left: calc(23.75% - 46px);
     width: 44px;
   }
 
@@ -128,8 +128,8 @@
 /* Tablet and small laptops */
 @media (max-width: 900px) {
   #gameBoard {
-    left: 26.5%;
-    right: 5.0%;
+    left: 23.75%;
+    right: 6.25%;
   }
 
   #ui {
