@@ -1,6 +1,7 @@
-// Board and Viewport Dimension Module
+// Board, Lawnmowers, and Viewport Dimension Module
 import { gameState } from './state.js';
 import { GAME_CONSTANTS } from './config.js';
+import { SPRITES } from './sprites.js';
 import { placePlant } from './plants.js';
 
 export function isMobile() {
@@ -8,6 +9,34 @@ export function isMobile() {
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
     window.innerWidth <= 768
   );
+}
+
+export function createLawnmowers() {
+  let mowersContainer = document.getElementById('lawnmowersContainer');
+  if (!mowersContainer) {
+    mowersContainer = document.createElement('div');
+    mowersContainer.id = 'lawnmowersContainer';
+    const gameContainer = document.getElementById('gameContainer');
+    if (gameContainer) gameContainer.appendChild(mowersContainer);
+  }
+
+  mowersContainer.innerHTML = '';
+
+  for (let row = 0; row < GAME_CONSTANTS.GRID_ROWS; row++) {
+    const laneDiv = document.createElement('div');
+    laneDiv.className = 'lawnmower-lane';
+    laneDiv.id = `lawnmower-lane-${row}`;
+
+    if (gameState.lawnmowers[row]) {
+      const mower = document.createElement('div');
+      mower.className = 'lawnmower';
+      mower.id = `lawnmower-${row}`;
+      mower.innerHTML = SPRITES.lawnmower;
+      laneDiv.appendChild(mower);
+    }
+
+    mowersContainer.appendChild(laneDiv);
+  }
 }
 
 export function createBoard() {
@@ -34,6 +63,7 @@ export function createBoard() {
     }
   }
 
+  createLawnmowers();
   setTimeout(updateBoardDimensions, 100);
 }
 
@@ -51,14 +81,14 @@ export function updateBoardDimensions() {
     };
   }
 
-  // Update existing zombie and projectile positions
+  // Update existing zombie positions
   gameState.zombies.forEach((zombie) => {
     if (zombie.element) {
       const yPosition =
         gameState.boardRect.top +
         zombie.row * gameState.cellSize.height +
         gameState.cellSize.height / 2 -
-        20;
+        40;
       zombie.element.style.top = `${yPosition}px`;
     }
   });

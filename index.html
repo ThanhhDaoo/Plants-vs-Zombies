@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="description" content="Plants vs Zombies - Browser & Mobile Native Lane Defense Game">
-  <meta name="theme-color" content="#4CAF50">
+  <meta name="theme-color" content="#4e342e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PvZ">
@@ -23,58 +23,58 @@
 
   <!-- Main Game Container -->
   <div id="gameContainer">
-    <!-- Top HUD & Controls -->
+    <!-- Top Wooden Seed Conveyor HUD & Controls -->
     <div id="ui">
       <div id="leftPanel">
-        <div id="sunCounter">☀️ <span id="sunCount">200</span></div>
-        <div id="scoreCounter">⭐ <span id="scoreCount">0</span></div>
+        <div id="sunCounter"><span>☀️</span> <span id="sunCount">200</span></div>
+        <div id="scoreCounter"><span>⭐</span> <span id="scoreCount">0</span></div>
       </div>
 
       <div id="plantSelection">
         <div class="plantCard" data-plant="sunflower" data-cost="50">
-          <div class="emoji">🌻</div>
-          <div class="cost">50</div>
+          <div class="card-preview"></div>
           <div class="name">Sunflower</div>
+          <div class="cost-badge">50</div>
         </div>
         <div class="plantCard" data-plant="peashooter" data-cost="100">
-          <div class="emoji">🌱</div>
-          <div class="cost">100</div>
+          <div class="card-preview"></div>
           <div class="name">Peashooter</div>
+          <div class="cost-badge">100</div>
         </div>
         <div class="plantCard" data-plant="repeater" data-cost="200">
-          <div class="emoji">🌾</div>
-          <div class="cost">200</div>
+          <div class="card-preview"></div>
           <div class="name">Repeater</div>
+          <div class="cost-badge">200</div>
         </div>
         <div class="plantCard" data-plant="snowpea" data-cost="175">
-          <div class="emoji">❄️</div>
-          <div class="cost">175</div>
+          <div class="card-preview"></div>
           <div class="name">Snow Pea</div>
+          <div class="cost-badge">175</div>
         </div>
         <div class="plantCard" data-plant="wallnut" data-cost="50">
-          <div class="emoji">🥥</div>
-          <div class="cost">50</div>
+          <div class="card-preview"></div>
           <div class="name">Wall-nut</div>
+          <div class="cost-badge">50</div>
         </div>
         <div class="plantCard" data-plant="chomper" data-cost="150">
-          <div class="emoji">🌿</div>
-          <div class="cost">150</div>
+          <div class="card-preview"></div>
           <div class="name">Chomper</div>
+          <div class="cost-badge">150</div>
         </div>
         <div class="plantCard" data-plant="threepeater" data-cost="325">
-          <div class="emoji">🎋</div>
-          <div class="cost">325</div>
+          <div class="card-preview"></div>
           <div class="name">Threepeater</div>
+          <div class="cost-badge">325</div>
         </div>
         <div class="plantCard" data-plant="firepea" data-cost="250">
-          <div class="emoji">🔥</div>
-          <div class="cost">250</div>
+          <div class="card-preview"></div>
           <div class="name">Fire Pea</div>
+          <div class="cost-badge">250</div>
         </div>
         <div class="plantCard" data-plant="cactus" data-cost="125">
-          <div class="emoji">🌵</div>
-          <div class="cost">125</div>
+          <div class="card-preview"></div>
           <div class="name">Cactus</div>
+          <div class="cost-badge">125</div>
         </div>
       </div>
 
@@ -84,20 +84,23 @@
           <button class="controlBtn" id="speedBtn">⚡ x1</button>
         </div>
         <div class="controlRow">
-          <button class="controlBtn" id="soundBtn">🔊 Sound</button>
+          <button class="controlBtn active" id="soundBtn">🔊 Sound</button>
           <button class="controlBtn" id="leaderBtn">🏆 Top 10</button>
           <button class="controlBtn" id="fullscreenBtn">🔳 Full</button>
         </div>
       </div>
     </div>
 
-    <!-- Wave Counter -->
+    <!-- Wave Flag / Warning Badge -->
     <div id="wave">
       <div>Wave: <span id="waveCount">1</span>/20</div>
       <div class="damage-bonus">DMG: +<span id="damageBonus">0</span>%</div>
     </div>
 
-    <!-- 5x9 Lawn Game Board -->
+    <!-- Lawnmowers on Porch Driveway -->
+    <div id="lawnmowersContainer"></div>
+
+    <!-- 5x9 Backyard Lawn Board -->
     <div id="gameBoard"></div>
 
     <!-- Debug Info HUD -->
@@ -118,7 +121,8 @@
     </div>
 
     <div id="gameOver">
-      <h2>Game Over!</h2>
+      <h2>🧟 Game Over!</h2>
+      <p style="color: #ffcdd2; font-size: 1.1em; margin-bottom: 15px;">The Zombies Ate Your Brains!</p>
       <div class="stats">
         <p>Final Score: <span id="finalScore">0</span></p>
         <p>Waves Survived: <span id="finalWave">0</span></p>
@@ -133,10 +137,10 @@
     <div id="victoryScreen">
       <h2>🎉 Victory! 🎉</h2>
       <div class="stats">
-        <p style="font-size: 1.3em; color: #FFD700; font-weight: bold;">You survived all 20 waves!</p>
-        <p>Final Score: <span id="victoryScore" style="font-size: 1.5em; color: #764ba2; font-weight: bold;">0</span></p>
+        <p style="font-size: 1.3em; color: #FFD700; font-weight: bold;">You defended your lawn across 20 waves!</p>
+        <p>Final Score: <span id="victoryScore" style="font-size: 1.5em; color: #ffd54f; font-weight: bold;">0</span></p>
         <p>Zombies Defeated: <span id="victoryZombies">0</span></p>
-        <p style="margin-top: 15px; color: #4CAF50; font-weight: 600;">Your score has been saved!</p>
+        <p style="margin-top: 15px; color: #a5d6a7; font-weight: 600;">Your high score has been saved!</p>
       </div>
       <div>
         <button class="btn gold" onclick="showLeaderboard()">View Top 10</button>

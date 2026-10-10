@@ -1,6 +1,7 @@
 // Sun Spawning and Collection System
 import { gameState } from './state.js';
 import { plantTypes, GAME_CONSTANTS } from './config.js';
+import { SPRITES } from './sprites.js';
 import { updateSunDisplay, addScore, createParticleEffect } from './ui.js';
 import { playSunSound } from './sound.js';
 
@@ -14,18 +15,15 @@ export function produceSun(plant) {
 
   const sun = document.createElement('div');
   sun.className = 'sun';
-
-  const sunEmoji = document.createElement('span');
-  sunEmoji.textContent = '☀️';
-  sun.appendChild(sunEmoji);
+  sun.innerHTML = SPRITES.sun;
 
   const sunValueElement = document.createElement('span');
   sunValueElement.className = 'sun-value';
   sunValueElement.textContent = sunValue;
   sun.appendChild(sunValueElement);
 
-  sun.style.left = `${rect.left + rect.width / 2 - 15}px`;
-  sun.style.top = `${rect.top}px`;
+  sun.style.left = `${rect.left + rect.width / 2 - 25}px`;
+  sun.style.top = `${rect.top - 10}px`;
   sun.style.animation = 'none';
   sun.style.position = 'fixed';
 
@@ -50,17 +48,14 @@ export function produceSun(plant) {
 export function spawnFallingSun() {
   const sun = document.createElement('div');
   sun.className = 'sun';
-
-  const sunEmoji = document.createElement('span');
-  sunEmoji.textContent = '☀️';
-  sun.appendChild(sunEmoji);
+  sun.innerHTML = SPRITES.sun;
 
   const sunValue = document.createElement('span');
   sunValue.className = 'sun-value';
   sunValue.textContent = `${GAME_CONSTANTS.SKY_SUN_VALUE}`;
   sun.appendChild(sunValue);
 
-  sun.style.left = `${Math.random() * (window.innerWidth - 60)}px`;
+  sun.style.left = `${Math.random() * (window.innerWidth - 80) + 20}px`;
 
   const container = document.getElementById('gameContainer') || document.body;
   container.appendChild(sun);
@@ -89,7 +84,7 @@ export function collectSun(sunElement, value) {
   updateSunDisplay();
 
   addScore(10);
-  createParticleEffect(sunElement, `+${value}`);
+  createParticleEffect(sunElement, `+${value} ☀️`);
 
   setTimeout(() => {
     if (sunElement.parentElement) {

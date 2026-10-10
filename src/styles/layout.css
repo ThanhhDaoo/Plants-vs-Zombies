@@ -1,13 +1,15 @@
 #gameContainer {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   height: 100vh;
-  max-height: 700px;
+  max-height: 720px;
   position: relative;
-  background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #228B22 100%);
-  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.4);
+  background: #2d5a27 url('/assets/lawn_bg.jpg') no-repeat center center;
+  background-size: cover;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.55), 0 0 0 4px #4e342e;
   border-radius: 16px;
   overflow: hidden;
+  user-select: none;
 }
 
 /* Fullscreen mode adjustments */
@@ -18,31 +20,32 @@ body:-ms-fullscreen #gameContainer {
   max-width: 100%;
   max-height: 100%;
   border-radius: 0;
+  box-shadow: none;
 }
 
 #gameBoard {
   position: absolute;
-  top: 150px;
-  left: 100px;
-  right: 20px;
-  bottom: 50px;
+  top: 140px;
+  left: 140px;
+  right: 40px;
+  bottom: 25px;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  gap: 3px;
-  background: rgba(0, 0, 0, 0.15);
-  padding: 10px;
-  border-radius: 12px;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 6px;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 .cell {
-  background: linear-gradient(135deg, var(--board-lawn-1), var(--board-lawn-2));
-  border: 2px solid var(--cell-border);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px dashed rgba(255, 255, 255, 0.22);
   border-radius: 8px;
   position: relative;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,12 +53,45 @@ body:-ms-fullscreen #gameContainer {
 }
 
 .cell:hover {
-  background: var(--cell-hover);
-  transform: scale(1.04);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-  border-color: #4CAF50;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #ffd54f;
+  box-shadow: 0 0 16px rgba(255, 213, 79, 0.5);
+  transform: scale(1.02);
 }
 
-.cell.valid-target {
-  box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.8);
+/* Lawnmowers Container */
+#lawnmowersContainer {
+  position: absolute;
+  top: 140px;
+  left: 60px;
+  width: 75px;
+  bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.lawnmower-lane {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.lawnmower {
+  width: 68px;
+  height: 52px;
+  filter: drop-shadow(2px 3px 5px rgba(0, 0, 0, 0.5));
+  transition: transform 0.1s linear;
+}
+
+.lawnmower.active {
+  animation: mowerShake 0.1s infinite alternate;
+}
+
+@keyframes mowerShake {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2px); }
 }

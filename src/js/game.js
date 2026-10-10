@@ -1,7 +1,7 @@
 // Core Game Engine and Loop Controller
 import { gameState, resetGameState, loadGameState } from './state.js';
 import { plantTypes, GAME_CONSTANTS } from './config.js';
-import { createBoard, updateBoardDimensions, enterFullscreen, isMobile } from './board.js';
+import { createBoard, updateBoardDimensions, enterFullscreen, isMobile, createLawnmowers } from './board.js';
 import { selectPlant, shoot } from './plants.js';
 import { moveZombies, spawnZombieWave } from './zombies.js';
 import { moveProjectiles } from './projectiles.js';
@@ -57,7 +57,9 @@ export function resetGame() {
   updateSunDisplay();
   updateDamageDisplay();
   updateWaveDisplay();
+  createLawnmowers();
   updateBoardDimensions();
+
 
   spawnSunPeriodically();
   setTimeout(() => spawnZombieWave(victory), GAME_CONSTANTS.FIRST_WAVE_DELAY);

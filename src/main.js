@@ -6,6 +6,7 @@ import { selectPlant } from './js/plants.js';
 import { updateBoardDimensions, toggleFullscreen } from './js/board.js';
 import { showLeaderboard, closeLeaderboard } from './js/ui.js';
 import { initAudio, toggleAudio, isAudioEnabled } from './js/sound.js';
+import { SPRITES } from './js/sprites.js';
 
 // Expose functions globally for inline HTML event handlers
 window.resumeGame = resumeGame;
@@ -26,6 +27,15 @@ if ('serviceWorker' in navigator && !window.location.host.includes('localhost:51
 
 // Setup Event Listeners
 function setupAppListeners() {
+  // Populate seed cards with rich vector preview
+  document.querySelectorAll('.plantCard').forEach((card) => {
+    const type = card.dataset.plant;
+    const preview = card.querySelector('.card-preview');
+    if (preview && SPRITES[type]) {
+      preview.innerHTML = SPRITES[type];
+    }
+  });
+
   // Unlock Web Audio on first user interaction (required by mobile browsers & iOS)
   const unlockAudio = () => {
     initAudio();
@@ -45,6 +55,7 @@ function setupAppListeners() {
     card.addEventListener('click', handleSelect);
     card.addEventListener('touchstart', handleSelect, { passive: false });
   });
+
 
   // Pause Button
   const pauseBtn = document.getElementById('pauseBtn');

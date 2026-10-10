@@ -1,6 +1,7 @@
 // Plants Management Module
 import { gameState } from './state.js';
 import { plantTypes } from './config.js';
+import { SPRITES } from './sprites.js';
 import { updateSunDisplay, createParticleEffect, addScore } from './ui.js';
 import { playPlantSound, playShootSound } from './sound.js';
 
@@ -46,7 +47,8 @@ export function placePlant(cell) {
 
     const plantElement = document.createElement('div');
     plantElement.className = 'plant';
-    plantElement.textContent = plantType.emoji;
+    // Authentic Vector Sprite
+    plantElement.innerHTML = SPRITES[plant.type] || '🌱';
 
     const healthBar = document.createElement('div');
     healthBar.className = 'plant-health-bar';
@@ -78,9 +80,23 @@ export function updatePlantHealth(plant) {
   plant.healthFill.style.width = `${healthPercent * 100}%`;
 
   if (healthPercent < 0.3) {
-    plant.healthFill.style.background = 'linear-gradient(90deg, #ff0000, #ff6600)';
+    plant.healthFill.style.background = 'linear-gradient(90deg, #ff1744, #ff5252)';
   } else if (healthPercent < 0.6) {
-    plant.healthFill.style.background = 'linear-gradient(90deg, #FFA500, #FFD700)';
+    plant.healthFill.style.background = 'linear-gradient(90deg, #ffa000, #ffca28)';
+  }
+
+  // Wall-nut crack visual states
+  if (plant.type === 'wallnut') {
+    const cracks = plant.element.querySelector('.nut-cracks');
+    if (cracks) {
+      if (healthPercent < 0.35) {
+        cracks.setAttribute('opacity', '1');
+      } else if (healthPercent < 0.7) {
+        cracks.setAttribute('opacity', '0.6');
+      } else {
+        cracks.setAttribute('opacity', '0');
+      }
+    }
   }
 }
 
@@ -109,7 +125,7 @@ export function shoot(plant) {
   plant.element.classList.add('shooting');
   setTimeout(() => {
     if (plant.element) plant.element.classList.remove('shooting');
-  }, 300);
+  }, 250);
 
   const cell = plant.element.parentElement;
   const rect = cell.getBoundingClientRect();
@@ -119,11 +135,14 @@ export function shoot(plant) {
     const projectile = document.createElement('div');
     projectile.className = 'projectile';
     if (plantType.fire) projectile.classList.add('fire');
-    projectile.textContent = plantType.projectile || '🟢';
 
-    const rowY = gameState.boardRect.top + targetRow * gameState.cellSize.height + gameState.cellSize.height / 2 - 10;
+    // Vector projectile sprite
+    const projSvg = SPRITES.projectiles[plant.type] || SPRITES.projectiles.peashooter;
+    projectile.innerHTML = projSvg;
 
-    projectile.style.left = `${rect.left + rect.width}px`;
+    const rowY = gameState.boardRect.top + targetRow * gameState.cellSize.height + gameState.cellSize.height / 2 - 14;
+
+    projectile.style.left = `${rect.left + rect.width - 15}px`;
     projectile.style.top = `${rowY}px`;
     projectile.style.position = 'fixed';
 
@@ -143,7 +162,7 @@ export function shoot(plant) {
       fire: plantType.fire,
       pierce: plantType.pierce,
       x: rect.left + rect.width - gameState.boardRect.left,
-      speed: 200 * gameState.gameSpeed,
+      speed: 240 * gameState.gameSpeed,
       hitZombies: []
     };
 

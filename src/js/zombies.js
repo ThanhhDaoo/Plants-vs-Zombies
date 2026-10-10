@@ -1,9 +1,10 @@
 // Zombies Management & Wave Director Module
 import { gameState, saveGameState } from './state.js';
 import { zombieTypes, plantTypes } from './config.js';
+import { SPRITES } from './sprites.js';
 import { updatePlantHealth } from './plants.js';
 import { updateWaveDisplay, updateDamageDisplay, addScore, showPointsPopup, createParticleEffect } from './ui.js';
-import { playWaveSound } from './sound.js';
+import { playWaveSound, playLawnmowerSound } from './sound.js';
 
 export function getZombieDamage(baseZombieDamage) {
   return baseZombieDamage * gameState.zombieDamageMultiplier;
@@ -37,7 +38,8 @@ export function spawnZombie() {
 
   const zombie = document.createElement('div');
   zombie.className = 'zombie';
-  zombie.textContent = zombieType.emoji;
+  // Authentic Vector Sprite
+  zombie.innerHTML = SPRITES[zombieTypeKeys[typeIndex]] || SPRITES.normal;
 
   const healthBar = document.createElement('div');
   healthBar.className = 'zombie-health-bar';
@@ -48,7 +50,7 @@ export function spawnZombie() {
   zombie.appendChild(healthBar);
 
   const startX = gameState.boardRect.width;
-  const yPosition = gameState.boardRect.top + row * gameState.cellSize.height + gameState.cellSize.height / 2 - 20;
+  const yPosition = gameState.boardRect.top + row * gameState.cellSize.height + gameState.cellSize.height / 2 - 40;
 
   zombie.style.position = 'fixed';
   zombie.style.left = `${gameState.boardRect.left + startX}px`;
@@ -75,6 +77,49 @@ export function spawnZombie() {
   gameState.zombies.push(zombieObj);
 }
 
+// Lawnmower Trigger on Lane Breach
+export function triggerLawnmower(row) {
+  if (!gameState.lawnmowers[row]) return false;
+  gameState.lawnmowers[row] = false;
+
+  playLawnmowerSound();
+
+  const mowerEl = document.getElementById(`lawnmower-${row}`);
+  if (mowerEl) {
+    mowerEl.classList.add('active');
+    let posX = 0;
+    const speed = 750; // fast roll
+    const startLeft = mowerEl.getBoundingClientRect().left;
+
+    const mowerInterval = setInterval(() => {
+      posX += speed * (16 / 1000) * gameState.gameSpeed;
+      mowerEl.style.transform = `translateX(${posX}px)`;
+
+      // Crush any zombie in this row
+      const mowerRect = mowerEl.getBoundingClientRect();
+      gameState.zombies.forEach((z) => {
+        if (z.row === row && z.element) {
+          const zRect = z.element.getBoundingClientRect();
+          if (mowerRect.right > zRect.left && mowerRect.left < zRect.right) {
+            createParticleEffect(z.element, '💀');
+            addScore(zombieTypes[z.type].points);
+            gameState.zombiesDefeated++;
+            z.element.remove();
+            z.element = null;
+          }
+        }
+      });
+
+      if (startLeft + posX > window.innerWidth + 100) {
+        clearInterval(mowerInterval);
+        mowerEl.remove();
+      }
+    }, 16);
+  }
+
+  return true;
+}
+
 export function moveZombies(deltaTime, onGameOver) {
   if (!gameState.boardRect) return;
 
@@ -93,7 +138,7 @@ export function moveZombies(deltaTime, onGameOver) {
       zombie.x -= ((currentSpeed * deltaTime) / 1000) * gameState.gameSpeed;
       zombie.element.style.left = `${gameState.boardRect.left + zombie.x}px`;
 
-      const yPosition = gameState.boardRect.top + zombie.row * gameState.cellSize.height + gameState.cellSize.height / 2 - 20;
+      const yPosition = gameState.boardRect.top + zombie.row * gameState.cellSize.height + gameState.cellSize.height / 2 - 40;
       zombie.element.style.top = `${yPosition}px`;
     }
 
@@ -145,9 +190,14 @@ export function moveZombies(deltaTime, onGameOver) {
       zombie.element.classList.remove('eating');
     }
 
-    if (zombie.x <= -gameState.cellSize.width) {
-      if (typeof onGameOver === 'function') {
-        onGameOver();
+    // Lane breach check
+    if (zombie.x <= -15) {
+      // Check if lawnmower can save the row
+      const savedByMower = triggerLawnmower(zombie.row);
+      if (!savedByMower) {
+        if (typeof onGameOver === 'function') {
+          onGameOver();
+        }
       }
     }
 

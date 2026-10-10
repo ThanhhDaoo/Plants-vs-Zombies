@@ -9,6 +9,8 @@ export const gameState = {
   zombies: [],
   projectiles: [],
   suns: [],
+  lawnmowers: [true, true, true, true, true],
+  activeLawnmowers: [],
   wave: 1,
   maxWaves: GAME_CONSTANTS.MAX_WAVES,
   zombiesDefeated: 0,
@@ -45,6 +47,8 @@ export function resetGameState() {
   gameState.zombies = [];
   gameState.projectiles = [];
   gameState.suns = [];
+  gameState.lawnmowers = [true, true, true, true, true];
+  gameState.activeLawnmowers = [];
   gameState.wave = 1;
   gameState.zombiesDefeated = 0;
   gameState.isPaused = false;
