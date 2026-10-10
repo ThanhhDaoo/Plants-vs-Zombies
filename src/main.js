@@ -1,43 +1,43 @@
-// Entry Point - Plants vs Zombies Multi-Platform
+// Entry Point - Plants vs Zombies: Battle Royale Survival
 import './styles/index.css';
-import { gameState } from './js/state.js';
-import { initGame, resetGame, restartGame, togglePause, resumeGame } from './js/game.js';
-import { selectPlant } from './js/plants.js';
-import { updateBoardDimensions, toggleFullscreen } from './js/board.js';
-import { showLeaderboard, closeLeaderboard } from './js/ui.js';
-import { initAudio, toggleAudio, isAudioEnabled } from './js/sound.js';
-import { SPRITES } from './js/sprites.js';
-
+import { initAudio, toggleAudio } from './js/sound.js';
 import { initPubg, startPubgGame, stopPubg } from './js/pubg/pubgGame.js';
+import { setupSurvivalUI, renderLobbyStats, openArmoryModal, closeArmoryModal } from './js/pubg/pubgUI.js';
 import { triggerDash, triggerReload } from './js/pubg/pubgControls.js';
 
-// Expose functions globally for inline HTML event handlers
-window.resumeGame = resumeGame;
-window.restartGame = restartGame;
-window.resetGame = resetGame;
-window.showLeaderboard = showLeaderboard;
-window.closeLeaderboard = closeLeaderboard;
-window.restartPubg = () => startPubgGame();
-window.exitPubg = () => exitPubgMode();
-
-function enterPubgMode() {
-  gameState.isPaused = true;
-  const pauseMenuEl = document.getElementById('pauseMenu');
-  if (pauseMenuEl) pauseMenuEl.style.display = 'none';
-  const pubgCont = document.getElementById('pubgContainer');
-  if (pubgCont) pubgCont.style.display = 'block';
+// Expose globals for modal button clicks
+window.restartPubg = () => {
   startPubgGame();
-}
+};
 
-function exitPubgMode() {
+window.exitPubg = () => {
   stopPubg();
   const pubgCont = document.getElementById('pubgContainer');
   if (pubgCont) pubgCont.style.display = 'none';
-  gameState.isPaused = false;
-  gameState.lastUpdate = Date.now();
+
+  const lobbyScreen = document.getElementById('lobbyScreen');
+  if (lobbyScreen) lobbyScreen.style.display = 'flex';
+
+  renderLobbyStats();
+};
+
+window.openArmory = () => openArmoryModal();
+window.closeArmory = () => closeArmoryModal();
+
+// Fullscreen toggle helper
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch((err) => {
+      console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+    });
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
 }
 
-// Register Service Worker for PWA Offline Play
+// Service worker for PWA offline play
 if ('serviceWorker' in navigator && !window.location.host.includes('localhost:5173')) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -47,18 +47,8 @@ if ('serviceWorker' in navigator && !window.location.host.includes('localhost:51
   });
 }
 
-// Setup Event Listeners
-function setupAppListeners() {
-  // Populate seed cards with rich vector preview
-  document.querySelectorAll('.plantCard').forEach((card) => {
-    const type = card.dataset.plant;
-    const preview = card.querySelector('.card-preview');
-    if (preview && SPRITES[type]) {
-      preview.innerHTML = SPRITES[type];
-    }
-  });
-
-  // Unlock Web Audio on first user interaction (required by mobile browsers & iOS)
+function setupApp() {
+  // Setup audio on first click
   const unlockAudio = () => {
     initAudio();
     window.removeEventListener('click', unlockAudio);
@@ -67,90 +57,19 @@ function setupAppListeners() {
   window.addEventListener('click', unlockAudio, { once: true });
   window.addEventListener('touchstart', unlockAudio, { once: true });
 
-  // Plant Cards Selection
-  document.querySelectorAll('.plantCard').forEach((card) => {
-    const handleSelect = (e) => {
-      if (e) e.preventDefault();
-      initAudio();
-      selectPlant(card);
-    };
-    card.addEventListener('click', handleSelect);
-    card.addEventListener('touchstart', handleSelect, { passive: false });
-  });
-
-
-  // Pause Button
-  const pauseBtn = document.getElementById('pauseBtn');
-  if (pauseBtn) {
-    pauseBtn.addEventListener('click', togglePause);
+  // Fullscreen button
+  const fsBtn = document.getElementById('lobbyFullscreenBtn');
+  if (fsBtn) {
+    fsBtn.addEventListener('click', toggleFullscreen);
   }
 
-  // Speed Toggle Button
-  const speedBtn = document.getElementById('speedBtn');
-  if (speedBtn) {
-    speedBtn.addEventListener('click', () => {
-      gameState.gameSpeed = gameState.gameSpeed === 1 ? 2 : gameState.gameSpeed === 2 ? 3 : 1;
-      speedBtn.textContent = `⚡ x${gameState.gameSpeed}`;
-      speedBtn.classList.toggle('active', gameState.gameSpeed > 1);
-    });
-  }
-
-  // Sound Toggle Button
-  const soundBtn = document.getElementById('soundBtn');
-  if (soundBtn) {
-    soundBtn.addEventListener('click', () => {
-      const enabled = toggleAudio();
-      soundBtn.textContent = enabled ? '🔊 Sound' : '🔇 Mute';
-      soundBtn.classList.toggle('active', enabled);
-    });
-  }
-
-  // Leaderboard Button
-  const leaderBtn = document.getElementById('leaderBtn');
-  if (leaderBtn) {
-    leaderBtn.addEventListener('click', showLeaderboard);
-  }
-
-  // Fullscreen Button
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
-  if (fullscreenBtn) {
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-  }
-
-  // Window Resize & Fullscreen changes
-  window.addEventListener('resize', updateBoardDimensions);
-  document.addEventListener('fullscreenchange', () => setTimeout(updateBoardDimensions, 100));
-  document.addEventListener('webkitfullscreenchange', () => setTimeout(updateBoardDimensions, 100));
-
-  // Visibility change: auto-pause when leaving tab
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && !gameState.isPaused && !gameState.isGameOver) {
-      togglePause();
-    } else if (!document.hidden && !gameState.isPaused) {
-      gameState.lastUpdate = Date.now();
-    }
-  });
-
-  // Debug HUD toggle with 'D' key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'd' || e.key === 'D') {
-      const debugInfo = document.getElementById('debugInfo');
-      if (debugInfo) {
-        debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
-      }
-    }
-  });
-  // Mode Switch to PUBG Battle Royale
-  const modeSwitchBtn = document.getElementById('modeSwitchBtn');
-  if (modeSwitchBtn) {
-    modeSwitchBtn.addEventListener('click', enterPubgMode);
-  }
-
+  // PUBG exit button
   const exitPubgBtn = document.getElementById('exitPubgBtn');
   if (exitPubgBtn) {
-    exitPubgBtn.addEventListener('click', exitPubgMode);
+    exitPubgBtn.addEventListener('click', window.exitPubg);
   }
 
+  // PUBG mobile touch controls
   const pubgDashBtn = document.getElementById('pubgDashBtn');
   if (pubgDashBtn) {
     pubgDashBtn.addEventListener('click', triggerDash);
@@ -160,12 +79,11 @@ function setupAppListeners() {
   if (pubgReloadBtn) {
     pubgReloadBtn.addEventListener('click', triggerReload);
   }
+
+  // Initialize UI & Survival Engine
+  setupSurvivalUI();
+  initPubg();
 }
 
-// Bootstrap Game on Page Load
-window.addEventListener('DOMContentLoaded', () => {
-  setupAppListeners();
-  initGame();
-  initPubg();
-});
-
+// Bootstrap on DOM load
+window.addEventListener('DOMContentLoaded', setupApp);

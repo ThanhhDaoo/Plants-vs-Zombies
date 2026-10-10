@@ -1,0 +1,676 @@
+/* Lobby & Armory Design System */
+
+/* Main Lobby Screen */
+#lobbyScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, #1a3320 0%, #0d1b11 50%, #060b08 100%);
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 16px 24px;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Background Atmospheric Grid & Vignette */
+#lobbyScreen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(76, 175, 80, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 175, 80, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Top Lobby Header Bar */
+.lobby-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: rgba(13, 27, 17, 0.75);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.lobby-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 2em;
+  filter: drop-shadow(0 0 10px #76ff03);
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 1.35em;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #76ff03, #00e676, #00e5ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+  font-size: 0.75em;
+  color: #a5d6a7;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Currency Bar */
+.lobby-currencies {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.currency-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 1em;
+  color: #fff;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.currency-badge.gold {
+  border-color: #ffd54f;
+  color: #ffd54f;
+}
+
+.currency-badge.brain {
+  border-color: #e040fb;
+  color: #f48fb1;
+}
+
+.currency-badge.rank {
+  border-color: #00e5ff;
+  color: #80d8ff;
+}
+
+.lobby-quick-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(76, 175, 80, 0.25);
+  border-color: #76ff03;
+  transform: translateY(-2px);
+}
+
+/* Hero Showcase Center Stage */
+.lobby-center-stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex: 1;
+  padding: 10px 0;
+}
+
+.hero-preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.hero-stage-podium {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.podium-ring {
+  position: absolute;
+  bottom: 10px;
+  width: 200px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(76, 175, 80, 0.4) 0%, rgba(0, 229, 255, 0.2) 50%, transparent 70%);
+  border: 2px solid rgba(118, 255, 3, 0.4);
+  box-shadow: 0 0 30px rgba(118, 255, 3, 0.35);
+  animation: pulse-ring 3s infinite ease-in-out;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 45px rgba(0, 229, 255, 0.5); }
+}
+
+#lobbyHeroCanvas {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
+}
+
+/* Selected Weapon Info Card */
+.equipped-weapon-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  border-radius: 14px;
+  padding: 12px 18px;
+  width: 240px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.card-title-small {
+  font-size: 0.7em;
+  color: #90caf9;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.weapon-title-large {
+  font-size: 1.2em;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.weapon-quick-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85em;
+  color: #cfd8dc;
+}
+
+.weapon-quick-stats b {
+  color: #ffd54f;
+}
+
+/* Bottom Lobby Navigation */
+.lobby-footer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.lobby-nav-btn {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 1.05em;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.lobby-nav-btn:hover {
+  transform: translateY(-4px);
+  border-color: #ffd54f;
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 0 10px 25px rgba(255, 213, 79, 0.3);
+}
+
+.lobby-battle-btn {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 50%, #e65100 100%);
+  border: 2px solid #ffe082;
+  color: #fff;
+  padding: 16px 45px;
+  border-radius: 18px;
+  font-size: 1.4em;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(245, 124, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: pulse-battle 2s infinite ease-in-out;
+}
+
+@keyframes pulse-battle {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(245, 124, 0, 0.6); }
+  50% { transform: scale(1.04); box-shadow: 0 14px 40px rgba(245, 124, 0, 0.9), 0 0 20px #ffe082; }
+}
+
+.lobby-battle-btn:hover {
+  transform: scale(1.06) translateY(-2px);
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 50%, #ef6c00 100%);
+}
+
+/* ============================================================
+   ARMORY & INVENTORY MODAL
+   ============================================================ */
+.survival-modal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 10, 15, 0.88);
+  backdrop-filter: blur(16px);
+  z-index: 600;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.armory-box {
+  width: 100%;
+  max-width: 960px;
+  max-height: 90vh;
+  background: #0f172a;
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 229, 255, 0.2);
+  overflow: hidden;
+}
+
+.armory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.armory-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.armory-title-row h3 {
+  margin: 0;
+  font-size: 1.4em;
+  color: #fff;
+  font-weight: 900;
+}
+
+.armory-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cfd8dc;
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.9em;
+  transition: all 0.15s ease;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #00e5ff, #00b0ff);
+  color: #000;
+  border-color: #00e5ff;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+}
+
+.close-modal-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.4em;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.close-modal-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff5252;
+}
+
+/* Modal Content Grid */
+.armory-content {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 16px;
+}
+
+/* Item Card (Weapons) */
+.armory-item-card {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.armory-item-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 229, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 229, 255, 0.2);
+}
+
+.armory-item-card.equipped {
+  border-color: #00e5ff;
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+}
+
+.armory-item-card.locked {
+  opacity: 0.85;
+  filter: grayscale(0.2);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.weapon-icon {
+  font-size: 2em;
+}
+
+.weapon-meta h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.05em;
+  font-weight: 800;
+}
+
+.stars {
+  color: #ffd54f;
+  font-size: 0.9em;
+  letter-spacing: 2px;
+}
+
+.equipped-badge {
+  margin-left: auto;
+  background: #00e5ff;
+  color: #000;
+  font-size: 0.65em;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.weapon-stats {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85em;
+  color: #94a3b8;
+  margin: 2px 0;
+}
+
+.stat-row b {
+  color: #fff;
+}
+
+.weapon-desc {
+  font-size: 0.8em;
+  color: #94a3b8;
+  margin: 0 0 14px 0;
+  line-height: 1.35;
+  min-height: 34px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.88em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.action-btn.equip {
+  background: linear-gradient(135deg, #00e676, #00c853);
+  color: #000;
+}
+
+.action-btn.equip:hover {
+  filter: brightness(1.15);
+  transform: scale(1.02);
+}
+
+.action-btn.unlock.can-buy {
+  background: linear-gradient(135deg, #ffb300, #ff8f00);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(255, 179, 0, 0.4);
+}
+
+.action-btn.upgrade.can-buy {
+  background: linear-gradient(135deg, #00e5ff, #00b0ff);
+  color: #000;
+}
+
+.action-btn.disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.max-badge {
+  flex: 1;
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: 800;
+  color: #ffd54f;
+  background: rgba(255, 213, 79, 0.15);
+  border: 1px solid #ffd54f;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+/* Stat Upgrade Cards */
+.armory-stat-card {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.stat-icon {
+  font-size: 2em;
+}
+
+.stat-header h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 800;
+}
+
+.level-indicator {
+  font-size: 0.8em;
+  color: #00e5ff;
+  font-weight: 700;
+}
+
+.stat-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.stat-progress-bar .fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00e676, #00e5ff);
+  transition: width 0.3s ease;
+}
+
+.stat-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85em;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.stat-values b {
+  color: #fff;
+}
+
+.next-val b {
+  color: #ffd54f;
+}
+
+.stat-desc {
+  font-size: 0.8em;
+  color: #94a3b8;
+  margin-bottom: 14px;
+  line-height: 1.35;
+  min-height: 32px;
+}
+
+/* Guide Modal */
+.guide-box {
+  width: 100%;
+  max-width: 640px;
+  background: #0f172a;
+  border: 2px solid #76ff03;
+  border-radius: 20px;
+  padding: 24px;
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.guide-box h3 {
+  margin-top: 0;
+  color: #76ff03;
+  font-size: 1.4em;
+  text-align: center;
+}
+
+.guide-item {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  align-items: flex-start;
+}
+
+.guide-icon {
+  font-size: 1.5em;
+}
+
+.guide-item p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #cfd8dc;
+  line-height: 1.4;
+}
+
+.guide-item b {
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lobby-center-stage {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .equipped-weapon-card {
+    width: 220px;
+    padding: 8px 12px;
+  }
+  .lobby-battle-btn {
+    padding: 12px 28px;
+    font-size: 1.15em;
+  }
+  .lobby-nav-btn {
+    padding: 10px 16px;
+    font-size: 0.9em;
+  }
+}

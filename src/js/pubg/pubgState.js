@@ -4,7 +4,7 @@ import { WEAPONS } from './pubgWeapons.js';
 export const MAP_CONFIG = {
   WIDTH: 2400,
   HEIGHT: 2400,
-  TOTAL_ZOMBIES: 30
+  TOTAL_ZOMBIES: 32
 };
 
 export const pubgState = {
@@ -16,14 +16,15 @@ export const pubgState = {
   player: {
     x: 1200,
     y: 1200,
-    radius: 24,
+    radius: 25,
     angle: 0,
     health: 100,
     maxHealth: 100,
-    armor: 50,
+    armor: 25,
     maxArmor: 100,
     speed: 4.6,
     speedBoostTimer: 0,
+    magnetRadius: 60,
     isDashing: false,
     dashTimer: 0,
     dashCooldown: 0,
@@ -32,6 +33,7 @@ export const pubgState = {
     isReloading: false,
     reloadTimer: 0,
     lastShotTime: 0,
+    recoilOffset: 0,
     kills: 0,
     score: 0
   },
@@ -54,17 +56,27 @@ export const pubgState = {
     shrinkSpeed: 0.35,
     phase: 1,
     maxPhases: 4,
-    countdown: 45, // seconds until shrink starts
+    countdown: 40,
     isShrinking: false,
     damagePerSec: 4
   },
 
   zombies: [],
+  enemyProjectiles: [],
+  shockwaves: [],
   bullets: [],
   crates: [],
   groundItems: [],
   particles: [],
+  floatingTexts: [],
   airdrop: null,
+
+  // In-match collected rewards
+  matchRewards: {
+    coins: 0,
+    brains: 0,
+    kills: 0
+  },
 
   // Input states
   input: {
@@ -100,6 +112,6 @@ export const pubgState = {
     }
   },
 
-  aliveCount: 31, // 30 zombies + 1 player
+  aliveCount: 33,
   gameTime: 0
 };
