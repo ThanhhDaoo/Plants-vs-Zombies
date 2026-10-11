@@ -537,12 +537,15 @@
   padding: 5px 10px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  gap: 8px;
 }
 
+.weapon-quick-stats span,
 .weapon-quick-stats b {
-  color: #ffd54f;
-  font-weight: 900;
-  font-size: 1.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ============================================================
