@@ -484,27 +484,48 @@
     font-size: 1.05em;
   }
 
+  /* Mobile Ergonomic Touch Cluster for Compact Landscape */
   .pubg-touch-actions {
-    bottom: 12px;
-    right: max(14px, env(safe-area-inset-right, 14px));
-    gap: 8px;
-  }
-
-  .touch-btn.sub-btn {
-    width: 44px;
-    height: 44px;
+    bottom: max(4px, env(safe-area-inset-bottom, 4px));
+    right: max(6px, env(safe-area-inset-right, 6px));
+    width: 145px;
+    height: 135px;
   }
 
   .touch-btn.fire-btn {
-    width: 66px;
-    height: 66px;
+    right: 2px;
+    bottom: 2px;
+    width: 68px;
+    height: 68px;
+  }
+
+  .touch-btn.dash-btn {
+    right: 18px;
+    bottom: 82px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .touch-btn.reload-btn {
+    right: 80px;
+    bottom: 20px;
+    width: 46px;
+    height: 46px;
   }
 
   .fire-icon {
-    font-size: 1.28em;
+    font-size: 1.25em;
   }
 
   .fire-label {
-    font-size: 0.75em;
+    font-size: 0.72em;
+  }
+
+  .btn-icon {
+    font-size: 1.05em;
+  }
+
+  .btn-label {
+    font-size: 0.68em;
   }
 }
