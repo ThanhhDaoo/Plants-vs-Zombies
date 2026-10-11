@@ -20,7 +20,8 @@
 }
 
 #landscapeMessage h2 {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
   font-size: 2.2em;
   color: #ffd54f;
   margin-bottom: 14px;
@@ -248,6 +249,121 @@
     padding: 6px 8px;
     font-size: 0.82em;
     border-radius: 8px;
+  }
+
+  /* Guide Modal on Mobile Landscape */
+  .guide-box {
+    max-width: 720px;
+    max-height: 96vh;
+    max-height: 96dvh;
+    border-radius: 16px;
+    border-width: 3px;
+  }
+
+  .guide-header {
+    padding: 5px 12px;
+    gap: 8px;
+  }
+
+  .guide-title-row h3 {
+    font-size: 1em;
+  }
+
+  .guide-tabs {
+    padding: 2px 4px;
+    border-radius: 9px;
+    gap: 4px;
+  }
+
+  .guide-tab-btn {
+    padding: 3px 8px;
+    font-size: 0.75em;
+    border-radius: 7px;
+  }
+
+  .guide-body {
+    padding: 6px 10px;
+  }
+
+  .guide-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .guide-card {
+    padding: 5px 8px;
+    gap: 8px;
+    border-radius: 9px;
+  }
+
+  .guide-card-icon {
+    font-size: 1.35em;
+  }
+
+  .guide-card-info h4 {
+    font-size: 0.8em;
+    margin-bottom: 1px;
+  }
+
+  .guide-card-info p {
+    font-size: 0.7em;
+    line-height: 1.2;
+  }
+
+  .guide-footer {
+    padding: 5px 12px;
+  }
+
+  .guide-footer .modal-btn {
+    max-width: 220px;
+    padding: 5px 12px;
+    font-size: 0.85em;
+  }
+
+  /* Victory & Defeat GameOver Modals on Mobile Landscape */
+  .pubg-modal-box {
+    max-height: 94vh;
+    max-height: 94dvh;
+    padding: 10px 20px;
+    border-radius: 18px;
+    border-width: 3px;
+    box-shadow: 0 6px 0 #0f0803, 0 15px 35px rgba(0, 0, 0, 0.9);
+    max-width: 420px;
+  }
+
+  .pubg-modal-box h2 {
+    font-size: 1.35em;
+    margin-bottom: 2px;
+  }
+
+  .pubg-modal-box p {
+    font-size: 0.78em;
+    margin: 0;
+  }
+
+  .pubg-stats-summary {
+    margin: 6px 0;
+    padding: 5px 10px;
+    border-radius: 11px;
+  }
+
+  .pubg-stats-summary b {
+    font-size: 1.15em;
+  }
+
+  .pubg-stats-summary small {
+    font-size: 0.65em;
+  }
+
+  .modal-btn-row {
+    margin-top: 6px;
+    gap: 10px;
+  }
+
+  .modal-btn-row .modal-btn {
+    padding: 6px 12px;
+    font-size: 0.88em;
+    border-radius: 11px;
   }
 
   /* In-Game HUD on Mobile Landscape */

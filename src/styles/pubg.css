@@ -53,7 +53,8 @@
   padding: 6px 14px;
   border-radius: 14px;
   color: #fff;
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   font-size: 1.05em;
   letter-spacing: 0.6px;
   box-shadow: 0 4px 0 #1a0f06, 0 6px 15px rgba(0, 0, 0, 0.4);
@@ -61,7 +62,8 @@
 }
 
 .pubg-exit-btn {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
   color: #fff;
   border: 2px solid #b71c1c;
@@ -112,7 +114,8 @@
 }
 
 .stat-pill .value {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
   font-size: 1.3em;
   color: #fff;
   text-shadow: 1.5px 1.5px 0 #1a0f06;
@@ -137,7 +140,8 @@
   top: 85px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
   background: linear-gradient(180deg, #d32f2f, #b71c1c);
   border: 3.5px solid #ffeb3b;
   color: #fff;
@@ -212,7 +216,8 @@
 }
 
 .bar-value {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   font-size: 0.95em;
   color: #fff;
   min-width: 65px;
@@ -233,14 +238,16 @@
 }
 
 .weapon-title {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   font-size: 1.2em;
   color: #fff;
   text-shadow: 2px 2px 0 #1a0f06;
 }
 
 .weapon-ammo {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
   font-size: 1.4em;
   color: #ffd54f;
   margin-top: 1px;
@@ -255,7 +262,8 @@
 }
 
 .touch-btn {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   width: 62px;
   height: 62px;
   border-radius: 50%;
@@ -310,10 +318,11 @@
 }
 
 .pubg-modal-box h2 {
-  font-family: 'Luckiest Guy', cursive;
-  font-size: 2.3em;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  font-size: 2.2em;
   margin-bottom: 8px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .pubg-modal-box.victory h2 {
@@ -338,9 +347,10 @@
 }
 
 .pubg-stats-summary b {
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
   font-size: 1.5em;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   color: #fff;
 }
 
@@ -359,7 +369,8 @@
 
 .modal-btn {
   flex: 1;
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
   padding: 13px 20px;
   border-radius: 16px;
   font-size: 1.1em;

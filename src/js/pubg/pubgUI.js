@@ -155,19 +155,48 @@ function setupLobbyEvents() {
     });
   }
 
-  // Open Guide Button
+  // Guide Modal Controls & Tab Switching
+  const guideModal = document.getElementById('guideModal');
   const guideBtn = document.getElementById('lobbyGuideBtn');
-  if (guideBtn) {
+  if (guideBtn && guideModal) {
     guideBtn.addEventListener('click', () => {
-      document.getElementById('guideModal').style.display = 'flex';
+      initAudio();
+      guideModal.style.display = 'flex';
     });
   }
 
-  // Close Guide Button
   const closeGuideBtn = document.getElementById('closeGuideBtn');
-  if (closeGuideBtn) {
+  if (closeGuideBtn && guideModal) {
     closeGuideBtn.addEventListener('click', () => {
-      document.getElementById('guideModal').style.display = 'none';
+      guideModal.style.display = 'none';
+    });
+  }
+
+  const closeGuideTopBtn = document.getElementById('closeGuideTopBtn');
+  if (closeGuideTopBtn && guideModal) {
+    closeGuideTopBtn.addEventListener('click', () => {
+      guideModal.style.display = 'none';
+    });
+  }
+
+  if (guideModal) {
+    guideModal.addEventListener('click', (e) => {
+      if (e.target === guideModal) {
+        guideModal.style.display = 'none';
+      }
+    });
+
+    // Wire up Guide tab switching
+    const guideTabBtns = guideModal.querySelectorAll('.guide-tab-btn');
+    guideTabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        guideTabBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const targetTabId = btn.dataset.tab;
+        guideModal.querySelectorAll('.guide-tab-content').forEach((content) => {
+          content.style.display = content.id === targetTabId ? 'block' : 'none';
+        });
+      });
     });
   }
 

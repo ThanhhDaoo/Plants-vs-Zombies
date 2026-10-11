@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" href="/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800;900&family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@600;700;800;900&display=swap" rel="stylesheet">
   <title>Plants vs Zombies: Battle Royale - Sinh Tồn Đậu Chiến Binh</title>
 </head>
 <body>
@@ -134,37 +134,141 @@
       </div>
     </div>
 
-    <!-- 3. HƯỚNG DẪN SINH TỒN MODAL -->
+    <!-- 3. HƯỚNG DẪN SINH TỒN MODAL (TABBED VISUAL CODEX) -->
     <div class="survival-modal" id="guideModal">
       <div class="guide-box">
-        <h3>📖 HƯỚNG DẪN CHIẾN ĐẤU SINH TỒN</h3>
-        <div class="guide-item">
-          <span class="guide-icon">🕹️</span>
-          <p><b>Di chuyển & Lướt:</b> Sử dụng cụm phím <b>WASD</b> (hoặc Joystick trái trên điện thoại) để chạy. Nhấn <b>Space</b> hoặc nút <b>Lướt</b> để bứt tốc né đòn cắn.</p>
+        <div class="guide-header">
+          <div class="guide-title-row">
+            <h3>📖 CẨM NANG SINH TỒN</h3>
+          </div>
+          <div class="guide-tabs">
+            <button class="guide-tab-btn active" data-tab="guide-controls">🕹️ Thao Tác</button>
+            <button class="guide-tab-btn" data-tab="guide-zombies">🧟 Kẻ Thù</button>
+            <button class="guide-tab-btn" data-tab="guide-loot">🎁 Nhặt Đồ</button>
+          </div>
+          <button class="close-modal-btn" id="closeGuideTopBtn">✕</button>
         </div>
-        <div class="guide-item">
-          <span class="guide-icon">🎯</span>
-          <p><b>Ngắm & Bắn 360°:</b> Dùng chuột di chuyển để ngắm hướng tia laser đỏ, <b>Chuột trái</b> để bắn tự động. Nhấn <b>R</b> để nạp đạn (Reload).</p>
+
+        <div class="guide-body">
+          <!-- TAB 1: THAO TÁC / CONTROLS -->
+          <div class="guide-tab-content active" id="guide-controls">
+            <div class="guide-cards-grid">
+              <div class="guide-card">
+                <span class="guide-card-icon">🕹️</span>
+                <div class="guide-card-info">
+                  <h4>DI CHUYỂN</h4>
+                  <p>Phím <b>WASD</b> trên PC hoặc <b>Cần Gạt Ảo</b> nửa trái màn hình điện thoại.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🎯</span>
+                <div class="guide-card-info">
+                  <h4>NGẮM & BẮN 360°</h4>
+                  <p><b>Chuột</b> để ngắm bắn tự động hoặc <b>Chạm giữ</b> nửa phải điện thoại.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">⚡</span>
+                <div class="guide-card-info">
+                  <h4>LƯỚT NÉ ĐÒN</h4>
+                  <p>Bấm nút <b>Lướt</b> hoặc phím <b>Space / Shift</b> để bứt tốc né Zombie.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🔄</span>
+                <div class="guide-card-info">
+                  <h4>NẠP ĐẠN</h4>
+                  <p>Bấm nút <b>Đạn</b> hoặc phím <b>R</b> để nạp lại đầy băng đạn.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: KẺ THÙ / ZOMBIE TIERS -->
+          <div class="guide-tab-content" id="guide-zombies" style="display: none;">
+            <div class="guide-cards-grid">
+              <div class="guide-card">
+                <span class="guide-card-icon">🚶</span>
+                <div class="guide-card-info">
+                  <h4>WALKER ZOMBIE</h4>
+                  <p>Zombie đi chậm cơ bản. Rơi nhiều <b>Đồng Xu Vàng 🪙</b>.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🪖</span>
+                <div class="guide-card-info">
+                  <h4>NÓN & XÔ THÉP</h4>
+                  <p>Đội nón và xô sắt dày, giảm 25% sát thương nhận vào.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🏃</span>
+                <div class="guide-card-info">
+                  <h4>FOOTBALL RUNNER</h4>
+                  <p>Chạy siêu nhanh lao vào húc. Rơi <b>Ớt Tăng Tốc 🌶️</b>.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🧪</span>
+                <div class="guide-card-info">
+                  <h4>TOXIC SPITTER</h4>
+                  <p>Bắn bọc axit độc từ xa. Rơi <b>Não Zombie 🧠</b> & Máu.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🛡️</span>
+                <div class="guide-card-info">
+                  <h4>SHIELD ZOMBIE</h4>
+                  <p>Cầm cửa gỗ chắn đạn phía trước. <b>Bọc sườn bắn sau lưng!</b></p>
+                </div>
+              </div>
+              <div class="guide-card boss-card">
+                <span class="guide-card-icon">👑</span>
+                <div class="guide-card-info">
+                  <h4>TITAN BOSS</h4>
+                  <p>Vác cột đèn đập đất Shockwave. Diệt xong rơi <b>Rương Khủng 🎁</b>!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: VẬT PHẨM & VÒNG BO -->
+          <div class="guide-tab-content" id="guide-loot" style="display: none;">
+            <div class="guide-cards-grid">
+              <div class="guide-card">
+                <span class="guide-card-icon">🪙</span>
+                <div class="guide-card-info">
+                  <h4>ĐỒNG XU VÀNG</h4>
+                  <p>Tích lũy mua và nâng cấp vũ khí tại <b>Tủ Đồ</b>.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">🧠</span>
+                <div class="guide-card-info">
+                  <h4>NÃO ZOMBIE</h4>
+                  <p>Nguyên liệu quý mở khóa các loại súng tối thượng.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">💚</span>
+                <div class="guide-card-info">
+                  <h4>BÌNH MÁU & GIÁP</h4>
+                  <p>Hồi ngay <b>+45 Máu</b> và <b>+45 Giáp</b> khi nhặt.</p>
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-card-icon">⚡</span>
+                <div class="guide-card-info">
+                  <h4>VÒNG BO ĐIỆN</h4>
+                  <p>Quan sát Radar và chạy vào vòng an toàn trước khi bão điện thu hẹp!</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="guide-item">
-          <span class="guide-icon">🧟</span>
-          <p><b>Cấp Độ Zombie & Boss:</b><br>
-          • <i>Zombie Nón & Xô:</i> Giáp dày, chống đạn.<br>
-          • <i>Football Zombie:</i> Chạy cực nhanh, lao tới húc sát thương lớn.<br>
-          • <i>Toxic Zombie:</i> Phun quả cầu axit độc tầm xa, rớt Não Zombie.<br>
-          • <i>Shield Zombie:</i> Cầm khiên cửa chặn đạn phía trước, cần bọc sườn bắn sau lưng.<br>
-          • <i>Gargantuar Titan Boss:</i> Vác cột điện đập đất shockwave, tiêu diệt nhận Rương Huyền Thoại!</p>
-        </div>
-        <div class="guide-item">
-          <span class="guide-icon">🎁</span>
-          <p><b>Loot Đồ Khi Diệt Zombie:</b> Nhặt Đồng xu vàng 🪙, Não Zombie 🧠, Bình máu 💚, Giáp 🛡️, Đạn 🔋 để nâng cấp trong Tủ Đồ!</p>
-        </div>
-        <div class="guide-item">
-          <span class="guide-icon">⚡</span>
-          <p><b>Vòng Bo Điện Từ:</b> Luôn chú ý Radar Minimap góc phải và chạy vào vòng tròn an toàn trước khi bão điện thu hẹp.</p>
-        </div>
-        <div style="text-align: center; margin-top: 18px;">
-          <button class="modal-btn primary" id="closeGuideBtn" style="padding: 10px 30px;">Đã Hiểu!</button>
+
+        <div class="guide-footer">
+          <button class="modal-btn primary" id="closeGuideBtn">ĐÃ HIỂU, CHIẾN THÔI!</button>
         </div>
       </div>
     </div>

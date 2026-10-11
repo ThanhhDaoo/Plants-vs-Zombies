@@ -590,7 +590,7 @@ function drawFloatingTexts(ctx) {
   if (!pubgState.floatingTexts) return;
   pubgState.floatingTexts.forEach((ft) => {
     ctx.save();
-    ctx.font = `bold ${ft.size || 16}px 'Luckiest Guy', 'Fredoka', sans-serif`;
+    ctx.font = `900 ${ft.size || 16}px 'Fredoka', 'Baloo 2', sans-serif`;
     ctx.textAlign = 'center';
     ctx.globalAlpha = Math.max(0, ft.life / ft.maxLife);
     // Comic dark outline
