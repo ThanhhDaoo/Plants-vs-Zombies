@@ -29,7 +29,7 @@
     "mobile",
     "vite"
   ],
-  "author": "Thanh Dao (@ThanhhDaoo)",
+  "author": "Thanh Đạo (@ThanhhDaoo)",
   "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^8.5.3",

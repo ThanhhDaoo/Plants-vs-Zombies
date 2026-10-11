@@ -2,7 +2,7 @@
 
 Game sinh tồn chiến thuật 2D kết hợp phong cách Battle Royale và cơ chế Plants vs Zombies cổ điển, được phát triển trên nền tảng Web, Mobile PWA và ứng dụng di động Native (Android & iOS) sử dụng Vite và Capacitor.
 
-**Tác giả:** Thanh Đào ([@ThanhhDaoo](https://github.com/ThanhhDaoo))
+**Tác giả:** Thanh Đạo ([@ThanhhDaoo](https://github.com/ThanhhDaoo))
 
 ---
 
@@ -112,5 +112,5 @@ plants-vs-zombies/
 
 ## Tác giả
 
-- **Thanh Đào** - [@ThanhhDaoo](https://github.com/ThanhhDaoo)
+- **Thanh Đạo** - [@ThanhhDaoo](https://github.com/ThanhhDaoo)
 - Mọi quyền được bảo lưu (All Rights Reserved).
