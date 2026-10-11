@@ -606,10 +606,11 @@ function drawFloatingTexts(ctx) {
 
 function drawScreenOverlays(ctx, canvas) {
   // 1. Tactical Radar Minimap (Top Right)
-  const mapW = 160;
-  const mapH = 160;
-  const mapX = canvas.width - mapW - 16;
-  const mapY = 16;
+  const isCompact = canvas.height < 520;
+  const mapW = isCompact ? 100 : 160;
+  const mapH = isCompact ? 100 : 160;
+  const mapX = canvas.width - mapW - (isCompact ? 10 : 16);
+  const mapY = isCompact ? 8 : 16;
   const ratio = mapW / MAP_CONFIG.WIDTH;
 
   ctx.save();

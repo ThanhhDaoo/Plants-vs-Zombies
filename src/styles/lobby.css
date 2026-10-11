@@ -16,8 +16,10 @@
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 16px 24px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   user-select: none;
 }
 
