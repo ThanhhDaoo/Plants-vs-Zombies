@@ -423,11 +423,16 @@
     font-size: 1em;
   }
 
+  .pubg-bottom-center-panel {
+    gap: 3px;
+    margin-bottom: 2px;
+  }
+
   .pubg-player-status {
-    width: 155px;
+    width: 175px;
     padding: 3px 8px;
     gap: 2px;
-    border-radius: 10px;
+    border-radius: 9px;
     border-width: 2px;
   }
 

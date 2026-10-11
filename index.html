@@ -279,28 +279,9 @@
       <div id="pubgHud">
         <!-- Top Stats Banner -->
         <div class="pubg-top-bar">
-          <div class="pubg-top-left-panel">
-            <div class="pubg-mode-badge">
-              <span>🎯 PvZ Sinh Tồn</span>
-              <button class="pubg-exit-btn" id="exitPubgBtn">⬅ Về Sảnh</button>
-            </div>
-            <!-- Relocated Player Health & Shield Bar -->
-            <div class="pubg-player-status">
-              <div class="bar-container">
-                <span class="bar-label">💚</span>
-                <div class="bar-track">
-                  <div class="bar-fill hp" id="pubgHpFill" style="width: 100%;"></div>
-                </div>
-                <span class="bar-value" id="pubgHpText">100 / 100</span>
-              </div>
-              <div class="bar-container">
-                <span class="bar-label">🛡️</span>
-                <div class="bar-track">
-                  <div class="bar-fill armor" id="pubgArmorFill" style="width: 50%;"></div>
-                </div>
-                <span class="bar-value" id="pubgArmorText">Giáp</span>
-              </div>
-            </div>
+          <div class="pubg-mode-badge">
+            <span>🎯 PvZ Sinh Tồn</span>
+            <button class="pubg-exit-btn" id="exitPubgBtn">⬅ Về Sảnh</button>
           </div>
 
           <div class="pubg-center-stats">
@@ -346,11 +327,32 @@
           </div>
         </div>
 
-        <!-- Bottom Bar (Weapon Card & Tactical Touch Cluster) -->
+        <!-- Bottom Bar (Bottom-Center Combat Console & Tactical Touch Actions) -->
         <div class="pubg-bottom-bar">
-          <div class="pubg-weapon-card">
-            <div class="weapon-title" id="pubgWeaponName">🌱 Pea Pistol</div>
-            <div class="weapon-ammo" id="pubgAmmo">24 / 24</div>
+          <div class="pubg-bottom-center-panel">
+            <!-- Player Health & Shield Bar (Directly with Weapon Card) -->
+            <div class="pubg-player-status">
+              <div class="bar-container">
+                <span class="bar-label">💚</span>
+                <div class="bar-track">
+                  <div class="bar-fill hp" id="pubgHpFill" style="width: 100%;"></div>
+                </div>
+                <span class="bar-value" id="pubgHpText">100 / 100</span>
+              </div>
+              <div class="bar-container">
+                <span class="bar-label">🛡️</span>
+                <div class="bar-track">
+                  <div class="bar-fill armor" id="pubgArmorFill" style="width: 50%;"></div>
+                </div>
+                <span class="bar-value" id="pubgArmorText">Giáp</span>
+              </div>
+            </div>
+
+            <!-- Weapon & Ammo Card -->
+            <div class="pubg-weapon-card">
+              <div class="weapon-title" id="pubgWeaponName">🌱 Pea Pistol</div>
+              <div class="weapon-ammo" id="pubgAmmo">24 / 24</div>
+            </div>
           </div>
 
           <!-- Bottom-Right Combat Actions (Fire + Dash + Reload) -->

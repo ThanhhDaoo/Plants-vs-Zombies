@@ -44,13 +44,6 @@
   width: 100%;
 }
 
-.pubg-top-left-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: flex-start;
-  pointer-events: auto;
-}
 
 .pubg-mode-badge {
   display: flex;
@@ -168,17 +161,25 @@
   100% { transform: translateX(-50%) scale(1.05); }
 }
 
-/* Relocated Top-Left Player Status Bar */
+/* Bottom Center Combat Console (Health Bar + Weapon Card) */
+.pubg-bottom-center-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
 .pubg-player-status {
   display: flex;
   flex-direction: column;
   gap: 3px;
   background: linear-gradient(180deg, #4e342e 0%, #3e2723 60%, #2e1c0c 100%);
   border: 2.5px solid #2e1c0c;
-  padding: 5px 10px;
+  padding: 4px 12px;
   border-radius: 12px;
   box-shadow: 0 4px 0 #1a0f06, 0 6px 15px rgba(0, 0, 0, 0.5);
-  width: 175px;
+  width: 195px;
   pointer-events: auto;
 }
 
