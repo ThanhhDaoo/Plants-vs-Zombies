@@ -210,6 +210,9 @@ function updatePubg(delta) {
   if (p.recoilOffset > 0) {
     p.recoilOffset = Math.max(0, p.recoilOffset - (delta / 16) * 1.5);
   }
+  if (pubgState.input.crosshairRecoil > 0) {
+    pubgState.input.crosshairRecoil = Math.max(0, pubgState.input.crosshairRecoil - (delta / 16) * 1.2);
+  }
 
   p.x += moveX * currentSpeed;
   p.y += moveY * currentSpeed;
@@ -217,6 +220,65 @@ function updatePubg(delta) {
   // Clamp player to map
   p.x = Math.max(p.radius + 15, Math.min(MAP_CONFIG.WIDTH - p.radius - 15, p.x));
   p.y = Math.max(p.radius + 15, Math.min(MAP_CONFIG.HEIGHT - p.radius - 15, p.y));
+
+  // --- Dynamic Aim & Smart Auto-Targeting ("Tâm Bắn Linh Động") ---
+  if (!pubgState.input.isManualAiming && !pubgState.input.mouse.isDown && !pubgState.input.touch.aimActive) {
+    // Find nearest alive zombie in tactical range (450px)
+    let nearestZm = null;
+    let minDist = 450;
+    if (pubgState.zombies && pubgState.zombies.length > 0) {
+      for (let i = 0; i < pubgState.zombies.length; i++) {
+        const zm = pubgState.zombies[i];
+        if (zm.health <= 0) continue;
+        const d = Math.hypot(zm.x - p.x, zm.y - p.y);
+        if (d < minDist) {
+          minDist = d;
+          nearestZm = zm;
+        }
+      }
+    }
+
+    if (nearestZm) {
+      pubgState.input.lockedTarget = nearestZm;
+      const targetAngle = Math.atan2(nearestZm.y - p.y, nearestZm.x - p.x);
+      let diff = targetAngle - p.angle;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      // Smooth natural tracking towards zombie
+      p.angle += diff * Math.min(1, (delta / 16) * 0.16);
+    } else {
+      pubgState.input.lockedTarget = null;
+      // If moving without enemies, face movement direction
+      if (moveLen > 0) {
+        const moveAngle = Math.atan2(moveY, moveX);
+        let diff = moveAngle - p.angle;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        p.angle += diff * Math.min(1, (delta / 16) * 0.12);
+      }
+    }
+  } else {
+    // Manual aim active: check if any zombie is closely aligned with crosshair
+    let alignedZm = null;
+    let minAngleDiff = 0.35; // ~20 degrees
+    if (pubgState.zombies && pubgState.zombies.length > 0) {
+      for (let i = 0; i < pubgState.zombies.length; i++) {
+        const zm = pubgState.zombies[i];
+        if (zm.health <= 0) continue;
+        const dist = Math.hypot(zm.x - p.x, zm.y - p.y);
+        if (dist < 520) {
+          const angleToZm = Math.atan2(zm.y - p.y, zm.x - p.x);
+          let aDiff = Math.abs(angleToZm - p.angle);
+          while (aDiff > Math.PI) aDiff = Math.abs(aDiff - Math.PI * 2);
+          if (aDiff < minAngleDiff) {
+            minAngleDiff = aDiff;
+            alignedZm = zm;
+          }
+        }
+      }
+    }
+    pubgState.input.lockedTarget = alignedZm;
+  }
 
   // 2. Camera follow smoothly
   const cam = pubgState.camera;
@@ -236,12 +298,13 @@ function updatePubg(delta) {
     }
   }
 
-  const isFiring = pubgState.input.mouse.isDown || pubgState.input.touch.aimActive;
+  const isFiring = pubgState.input.mouse.isDown || pubgState.input.touch.aimActive || pubgState.input.touch.isFiring;
   if (isFiring && !p.isReloading && now - p.lastShotTime >= currentW.fireRate) {
     if (p.ammo > 0) {
       fireWeapon(currentW);
       p.lastShotTime = now;
       p.recoilOffset = 6; // Jerk back barrel
+      pubgState.input.crosshairRecoil = Math.min(16, (pubgState.input.crosshairRecoil || 0) + 5);
       p.ammo--;
       if (p.ammo === 0) triggerReload();
     } else {

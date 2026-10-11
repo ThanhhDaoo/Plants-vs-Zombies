@@ -56,16 +56,199 @@ export function setupPubgControls(canvas) {
     }
   });
 
-  // --- Touch Listeners (Dual Joystick for Mobile) ---
-  canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-  canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-  canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-  canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+  // --- Touch Listeners (Dual Joystick & Combat Buttons for Mobile) ---
+  setupMobileTouchHud();
+
+  canvas.addEventListener('touchstart', handleCanvasTouchStart, { passive: false });
+  canvas.addEventListener('touchmove', handleCanvasTouchMove, { passive: false });
+  canvas.addEventListener('touchend', handleCanvasTouchEnd, { passive: false });
+  canvas.addEventListener('touchcancel', handleCanvasTouchEnd, { passive: false });
 }
 
-function handleTouchStart(e) {
+// On-Screen Joystick & Dedicated Combat Buttons
+function setupMobileTouchHud() {
+  const joystickZone = document.getElementById('pubgJoystickZone');
+  const joystickBase = document.getElementById('pubgJoystickBase');
+  const joystickKnob = document.getElementById('pubgJoystickKnob');
+
+  let joystickTouchId = null;
+  let baseCenterX = 0;
+  let baseCenterY = 0;
+  const MAX_RADIUS = 42;
+
+  function updateBaseCenter() {
+    if (joystickBase) {
+      const rect = joystickBase.getBoundingClientRect();
+      baseCenterX = rect.left + rect.width / 2;
+      baseCenterY = rect.top + rect.height / 2;
+    }
+  }
+
+  if (joystickZone && joystickBase && joystickKnob) {
+    joystickZone.addEventListener('touchstart', (e) => {
+      if (!pubgState.active) return;
+      e.preventDefault();
+      updateBaseCenter();
+
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        if (joystickTouchId === null) {
+          joystickTouchId = t.identifier;
+          handleJoystickMove(t.clientX, t.clientY);
+          break;
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!pubgState.active || joystickTouchId === null) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        if (t.identifier === joystickTouchId) {
+          handleJoystickMove(t.clientX, t.clientY);
+          break;
+        }
+      }
+    }, { passive: false });
+
+    const handleJoystickEnd = (e) => {
+      if (joystickTouchId === null) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        if (e.changedTouches[i].identifier === joystickTouchId) {
+          joystickTouchId = null;
+          pubgState.input.touch.moveActive = false;
+          joystickKnob.style.transform = 'translate(0px, 0px)';
+          joystickBase.classList.remove('active');
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('touchend', handleJoystickEnd, { passive: false });
+    window.addEventListener('touchcancel', handleJoystickEnd, { passive: false });
+
+    function handleJoystickMove(clientX, clientY) {
+      const dx = clientX - baseCenterX;
+      const dy = clientY - baseCenterY;
+      const dist = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx);
+
+      const clampedDist = Math.min(dist, MAX_RADIUS);
+      const knobX = Math.cos(angle) * clampedDist;
+      const knobY = Math.sin(angle) * clampedDist;
+
+      joystickKnob.style.transform = `translate(${knobX}px, ${knobY}px)`;
+      joystickBase.classList.add('active');
+
+      pubgState.input.touch.moveActive = true;
+      pubgState.input.touch.moveStartX = 0;
+      pubgState.input.touch.moveStartY = 0;
+      pubgState.input.touch.moveCurX = knobX;
+      pubgState.input.touch.moveCurY = knobY;
+    }
+  }
+
+  // Dedicated Fire Button (Tap/Hold to shoot & Drag to aim)
+  const fireBtn = document.getElementById('pubgFireBtn');
+  let fireTouchId = null;
+  let fireBtnCenterX = 0;
+  let fireBtnCenterY = 0;
+
+  if (fireBtn) {
+    fireBtn.addEventListener('touchstart', (e) => {
+      if (!pubgState.active) return;
+      e.preventDefault();
+      const rect = fireBtn.getBoundingClientRect();
+      fireBtnCenterX = rect.left + rect.width / 2;
+      fireBtnCenterY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        if (fireTouchId === null) {
+          fireTouchId = t.identifier;
+          pubgState.input.touch.isFiring = true;
+          fireBtn.classList.add('active');
+          break;
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!pubgState.active || fireTouchId === null) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        if (t.identifier === fireTouchId) {
+          const dx = t.clientX - fireBtnCenterX;
+          const dy = t.clientY - fireBtnCenterY;
+          if (Math.hypot(dx, dy) > 16) {
+            pubgState.player.angle = Math.atan2(dy, dx);
+            pubgState.isManualAiming = true;
+          }
+          break;
+        }
+      }
+    }, { passive: false });
+
+    const handleFireEnd = (e) => {
+      if (fireTouchId === null) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        if (e.changedTouches[i].identifier === fireTouchId) {
+          fireTouchId = null;
+          pubgState.input.touch.isFiring = false;
+          pubgState.isManualAiming = false;
+          fireBtn.classList.remove('active');
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('touchend', handleFireEnd, { passive: false });
+    window.addEventListener('touchcancel', handleFireEnd, { passive: false });
+
+    // Desktop testing support for fire button
+    fireBtn.addEventListener('mousedown', (e) => {
+      if (!pubgState.active) return;
+      e.preventDefault();
+      pubgState.input.touch.isFiring = true;
+      fireBtn.classList.add('active');
+    });
+
+    window.addEventListener('mouseup', () => {
+      pubgState.input.touch.isFiring = false;
+      pubgState.isManualAiming = false;
+      fireBtn.classList.remove('active');
+    });
+  }
+
+  // Dash & Reload Buttons
+  const dashBtn = document.getElementById('pubgDashBtn');
+  if (dashBtn) {
+    dashBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerDash();
+    }, { passive: false });
+    dashBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerDash();
+    });
+  }
+
+  const reloadBtn = document.getElementById('pubgReloadBtn');
+  if (reloadBtn) {
+    reloadBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerReload();
+    }, { passive: false });
+    reloadBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerReload();
+    });
+  }
+}
+
+// Background Canvas Touch Handlers (Fallback & Free Aim Swipe)
+function handleCanvasTouchStart(e) {
   if (!pubgState.active) return;
-  e.preventDefault();
   const rect = e.target.getBoundingClientRect();
   const halfW = rect.width / 2;
 
@@ -74,29 +257,21 @@ function handleTouchStart(e) {
     const x = t.clientX - rect.left;
     const y = t.clientY - rect.top;
 
-    if (x < halfW && !pubgState.input.touch.moveActive) {
-      // Left half: movement joystick
-      pubgState.input.touch.moveActive = true;
-      pubgState.input.touch.moveId = t.identifier;
-      pubgState.input.touch.moveStartX = x;
-      pubgState.input.touch.moveStartY = y;
-      pubgState.input.touch.moveCurX = x;
-      pubgState.input.touch.moveCurY = y;
-    } else if (x >= halfW && !pubgState.input.touch.aimActive) {
-      // Right half: aim & shoot joystick
+    if (x >= halfW && !pubgState.input.touch.aimActive) {
+      // Free aim swipe on right half
       pubgState.input.touch.aimActive = true;
       pubgState.input.touch.aimId = t.identifier;
       pubgState.input.touch.aimStartX = x;
       pubgState.input.touch.aimStartY = y;
       pubgState.input.touch.aimCurX = x;
       pubgState.input.touch.aimCurY = y;
+      pubgState.isManualAiming = true;
     }
   }
 }
 
-function handleTouchMove(e) {
+function handleCanvasTouchMove(e) {
   if (!pubgState.active) return;
-  e.preventDefault();
   const rect = e.target.getBoundingClientRect();
 
   for (let i = 0; i < e.changedTouches.length; i++) {
@@ -104,34 +279,26 @@ function handleTouchMove(e) {
     const x = t.clientX - rect.left;
     const y = t.clientY - rect.top;
 
-    if (pubgState.input.touch.moveActive && t.identifier === pubgState.input.touch.moveId) {
-      pubgState.input.touch.moveCurX = x;
-      pubgState.input.touch.moveCurY = y;
-    }
-
     if (pubgState.input.touch.aimActive && t.identifier === pubgState.input.touch.aimId) {
       pubgState.input.touch.aimCurX = x;
       pubgState.input.touch.aimCurY = y;
       const dx = x - pubgState.input.touch.aimStartX;
       const dy = y - pubgState.input.touch.aimStartY;
-      if (Math.hypot(dx, dy) > 15) {
+      if (Math.hypot(dx, dy) > 12) {
         pubgState.player.angle = Math.atan2(dy, dx);
+        pubgState.isManualAiming = true;
       }
     }
   }
 }
 
-function handleTouchEnd(e) {
+function handleCanvasTouchEnd(e) {
   if (!pubgState.active) return;
-  e.preventDefault();
-
   for (let i = 0; i < e.changedTouches.length; i++) {
     const t = e.changedTouches[i];
-    if (pubgState.input.touch.moveActive && t.identifier === pubgState.input.touch.moveId) {
-      pubgState.input.touch.moveActive = false;
-    }
     if (pubgState.input.touch.aimActive && t.identifier === pubgState.input.touch.aimId) {
       pubgState.input.touch.aimActive = false;
+      pubgState.isManualAiming = false;
     }
   }
 }

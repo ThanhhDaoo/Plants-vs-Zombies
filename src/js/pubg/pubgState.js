@@ -108,8 +108,12 @@ export const pubgState = {
       aimStartY: 0,
       aimCurX: 0,
       aimCurY: 0,
-      aimAngle: 0
-    }
+      aimAngle: 0,
+      isFiring: false
+    },
+    isManualAiming: false,
+    lockedTarget: null,
+    crosshairRecoil: 0
   },
 
   aliveCount: 33,

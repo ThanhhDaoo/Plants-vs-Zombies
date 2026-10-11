@@ -279,9 +279,28 @@
       <div id="pubgHud">
         <!-- Top Stats Banner -->
         <div class="pubg-top-bar">
-          <div class="pubg-mode-badge">
-            <span>🎯 PvZ Sinh Tồn</span>
-            <button class="pubg-exit-btn" id="exitPubgBtn">⬅ Về Sảnh</button>
+          <div class="pubg-top-left-panel">
+            <div class="pubg-mode-badge">
+              <span>🎯 PvZ Sinh Tồn</span>
+              <button class="pubg-exit-btn" id="exitPubgBtn">⬅ Về Sảnh</button>
+            </div>
+            <!-- Relocated Player Health & Shield Bar -->
+            <div class="pubg-player-status">
+              <div class="bar-container">
+                <span class="bar-label">💚</span>
+                <div class="bar-track">
+                  <div class="bar-fill hp" id="pubgHpFill" style="width: 100%;"></div>
+                </div>
+                <span class="bar-value" id="pubgHpText">100 / 100</span>
+              </div>
+              <div class="bar-container">
+                <span class="bar-label">🛡️</span>
+                <div class="bar-track">
+                  <div class="bar-fill armor" id="pubgArmorFill" style="width: 50%;"></div>
+                </div>
+                <span class="bar-value" id="pubgArmorText">Giáp</span>
+              </div>
+            </div>
           </div>
 
           <div class="pubg-center-stats">
@@ -314,33 +333,41 @@
         <!-- Safe Zone Danger Alert -->
         <div id="pubgZoneWarning">⚠️ BẠN ĐANG Ở NGOÀI VÒNG BO!</div>
 
-        <!-- Bottom Player Stats & Weapon Cards -->
-        <div class="pubg-bottom-bar">
-          <div class="pubg-player-status">
-            <div class="bar-container">
-              <span class="bar-label">💚</span>
-              <div class="bar-track">
-                <div class="bar-fill hp" id="pubgHpFill" style="width: 100%;"></div>
-              </div>
-              <span class="bar-value" id="pubgHpText">100 / 100</span>
-            </div>
-            <div class="bar-container">
-              <span class="bar-label">🛡️</span>
-              <div class="bar-track">
-                <div class="bar-fill armor" id="pubgArmorFill" style="width: 50%;"></div>
-              </div>
-              <span class="bar-value" id="pubgArmorText">Giáp</span>
+        <!-- Visible On-Screen Analog Movement Joystick (Bottom-Left) -->
+        <div id="pubgJoystickZone" class="pubg-joystick-zone">
+          <div id="pubgJoystickBase" class="pubg-joystick-base">
+            <div class="joystick-dir up">▲</div>
+            <div class="joystick-dir down">▼</div>
+            <div class="joystick-dir left">◀</div>
+            <div class="joystick-dir right">▶</div>
+            <div id="pubgJoystickKnob" class="pubg-joystick-knob">
+              <div class="knob-inner-pip"></div>
             </div>
           </div>
+        </div>
 
+        <!-- Bottom Bar (Weapon Card & Tactical Touch Cluster) -->
+        <div class="pubg-bottom-bar">
           <div class="pubg-weapon-card">
             <div class="weapon-title" id="pubgWeaponName">🌱 Pea Pistol</div>
             <div class="weapon-ammo" id="pubgAmmo">24 / 24</div>
           </div>
 
+          <!-- Bottom-Right Combat Actions (Fire + Dash + Reload) -->
           <div class="pubg-touch-actions">
-            <button class="touch-btn" id="pubgDashBtn">⚡<br>Lướt</button>
-            <button class="touch-btn" id="pubgReloadBtn">🔄<br>Đạn</button>
+            <button class="touch-btn sub-btn reload-btn" id="pubgReloadBtn" title="Nạp đạn">
+              <span class="btn-icon">🔄</span>
+              <span class="btn-label">Đạn</span>
+            </button>
+            <button class="touch-btn sub-btn dash-btn" id="pubgDashBtn" title="Lướt né đòn">
+              <span class="btn-icon">⚡</span>
+              <span class="btn-label">Lướt</span>
+            </button>
+            <button class="touch-btn fire-btn" id="pubgFireBtn" title="Bắn">
+              <span class="fire-icon">🎯</span>
+              <span class="fire-label">BẮN</span>
+              <span class="fire-ring"></span>
+            </button>
           </div>
         </div>
       </div>

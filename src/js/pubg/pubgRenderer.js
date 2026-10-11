@@ -505,21 +505,100 @@ function drawPlayer(ctx, p) {
   ctx.lineWidth = 2.5;
   ctx.stroke();
 
-  // Red Laser Sight Line
-  ctx.strokeStyle = 'rgba(255, 23, 68, 0.75)';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([8, 6]);
+  // --- Dynamic Tactical Crosshair & Laser Sight ("Tâm Bắn Linh Động") ---
+  const isLocked = !!pubgState.input.lockedTarget;
+  const targetDist = isLocked
+    ? Math.max(60, Math.min(480, Math.hypot(pubgState.input.lockedTarget.x - p.x, pubgState.input.lockedTarget.y - p.y)))
+    : 260;
+  const recoil = pubgState.input.crosshairRecoil || 0;
+  const aimColor = isLocked ? '#ff1744' : '#ffd54f';
+  const aimGlow = isLocked ? 'rgba(255, 23, 68, 0.4)' : 'rgba(255, 213, 79, 0.3)';
+
+  // 1. Soft Laser Glow Beam
+  ctx.save();
+  ctx.strokeStyle = aimGlow;
+  ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.moveTo(snoutX + 10, 0);
-  ctx.lineTo(snoutX + 350, 0);
+  ctx.lineTo(targetDist, 0);
+  ctx.stroke();
+
+  // 2. Sharp Core Laser Line with subtle dash
+  ctx.strokeStyle = aimColor;
+  ctx.lineWidth = isLocked ? 2 : 1.5;
+  ctx.setLineDash(isLocked ? [12, 6] : [6, 6]);
+  ctx.beginPath();
+  ctx.moveTo(snoutX + 10, 0);
+  ctx.lineTo(targetDist, 0);
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Laser sight emitter dot
-  ctx.fillStyle = '#ff1744';
+  // Laser sight emitter dot at snout
+  ctx.fillStyle = aimColor;
   ctx.beginPath();
-  ctx.arc(snoutX + 8, -6, 2, 0, Math.PI * 2);
+  ctx.arc(snoutX + 8, -6, 2.5, 0, Math.PI * 2);
   ctx.fill();
+
+  // 3. Dynamic Tactical Reticle at Target Distance
+  const reticleR = Math.max(12, 16 + recoil);
+  ctx.translate(targetDist, 0);
+
+  // Outer segmented crosshair ring
+  ctx.strokeStyle = aimColor;
+  ctx.lineWidth = isLocked ? 2.5 : 1.8;
+  const rotAnim = (Date.now() / 800) % (Math.PI * 2);
+  for (let a = 0; a < 4; a++) {
+    const startA = a * (Math.PI / 2) + rotAnim * (isLocked ? 1.5 : 0.8) + 0.15;
+    const endA = startA + Math.PI / 2 - 0.3;
+    ctx.beginPath();
+    ctx.arc(0, 0, reticleR, startA, endA);
+    ctx.stroke();
+  }
+
+  // Crosshair 4 directional ticks (+)
+  ctx.beginPath();
+  ctx.moveTo(0, -reticleR - 3);
+  ctx.lineTo(0, -reticleR - 9);
+  ctx.moveTo(0, reticleR + 3);
+  ctx.lineTo(0, reticleR + 9);
+  ctx.moveTo(-reticleR - 3, 0);
+  ctx.lineTo(-reticleR - 9, 0);
+  ctx.moveTo(reticleR + 3, 0);
+  ctx.lineTo(reticleR + 9, 0);
+  ctx.stroke();
+
+  // Center pip dot
+  ctx.fillStyle = aimColor;
+  ctx.beginPath();
+  ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Corner Lock Brackets & Indicator when target is locked
+  if (isLocked) {
+    const boxR = reticleR + 8;
+    ctx.strokeStyle = '#ff1744';
+    ctx.lineWidth = 2.2;
+    // Top-left
+    ctx.beginPath();
+    ctx.moveTo(-boxR, -boxR + 6);
+    ctx.lineTo(-boxR, -boxR);
+    ctx.lineTo(-boxR + 6, -boxR);
+    // Top-right
+    ctx.moveTo(boxR - 6, -boxR);
+    ctx.lineTo(boxR, -boxR);
+    ctx.lineTo(boxR, -boxR + 6);
+    // Bottom-left
+    ctx.moveTo(-boxR, boxR - 6);
+    ctx.lineTo(-boxR, boxR);
+    ctx.lineTo(-boxR + 6, boxR);
+    // Bottom-right
+    ctx.moveTo(boxR - 6, boxR);
+    ctx.lineTo(boxR, boxR);
+    ctx.lineTo(boxR, boxR - 6);
+    ctx.stroke();
+  }
+
+  ctx.restore();
 
   // 5. Determined Warrior Eyes
   ctx.fillStyle = '#ffffff';
@@ -659,36 +738,5 @@ function drawScreenOverlays(ctx, canvas) {
   ctx.stroke();
 
   ctx.restore();
-
-  // 2. Touch Joysticks
-  const touch = pubgState.input.touch;
-  if (touch.moveActive) {
-    ctx.beginPath();
-    ctx.arc(touch.moveStartX, touch.moveStartY, 50, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(touch.moveCurX, touch.moveCurY, 26, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(76, 175, 80, 0.8)';
-    ctx.fill();
-  }
-
-  if (touch.aimActive) {
-    ctx.beginPath();
-    ctx.arc(touch.aimStartX, touch.aimStartY, 50, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(touch.aimCurX, touch.aimCurY, 26, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 87, 34, 0.8)';
-    ctx.fill();
-  }
 }
+
