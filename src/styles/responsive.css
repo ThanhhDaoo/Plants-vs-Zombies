@@ -253,20 +253,22 @@
 
   /* Guide Modal on Mobile Landscape */
   .guide-box {
-    max-width: 720px;
-    max-height: 96vh;
-    max-height: 96dvh;
+    max-width: 760px;
+    width: 96%;
+    max-height: 94vh;
+    max-height: 94dvh;
     border-radius: 16px;
     border-width: 3px;
   }
 
   .guide-header {
-    padding: 5px 12px;
+    padding: 6px 14px;
     gap: 8px;
+    min-height: 38px;
   }
 
   .guide-title-row h3 {
-    font-size: 1em;
+    font-size: 1.05em;
   }
 
   .guide-tabs {
@@ -276,48 +278,79 @@
   }
 
   .guide-tab-btn {
-    padding: 3px 8px;
-    font-size: 0.75em;
+    padding: 4px 10px;
+    font-size: 0.78em;
     border-radius: 7px;
   }
 
+  .guide-header .close-modal-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+    top: 5px;
+    right: 8px;
+  }
+
   .guide-body {
-    padding: 6px 10px;
+    padding: 8px 12px;
+    flex: 1;
+    overflow-y: auto;
   }
 
   .guide-cards-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+  }
+
+  /* 3 columns for 6 zombies tab on mobile landscape */
+  #guide-zombies .guide-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
   }
 
   .guide-card {
-    padding: 5px 8px;
+    padding: 7px 10px;
     gap: 8px;
-    border-radius: 9px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  #guide-zombies .guide-card {
+    padding: 5px 8px;
+    gap: 6px;
   }
 
   .guide-card-icon {
-    font-size: 1.35em;
+    font-size: 1.5em;
+  }
+
+  #guide-zombies .guide-card-icon {
+    font-size: 1.3em;
   }
 
   .guide-card-info h4 {
-    font-size: 0.8em;
+    font-size: 0.85em;
+    margin-bottom: 2px;
+  }
+
+  #guide-zombies .guide-card-info h4 {
+    font-size: 0.76em;
     margin-bottom: 1px;
   }
 
   .guide-card-info p {
-    font-size: 0.7em;
-    line-height: 1.2;
+    font-size: 0.72em;
+    line-height: 1.25;
   }
 
+  #guide-zombies .guide-card-info p {
+    font-size: 0.66em;
+    line-height: 1.18;
+  }
+
+  /* Hide redundant bottom button on mobile landscape to give maximum room to content (top ✕ is always present) */
   .guide-footer {
-    padding: 5px 12px;
-  }
-
-  .guide-footer .modal-btn {
-    max-width: 220px;
-    padding: 5px 12px;
-    font-size: 0.85em;
+    display: none;
   }
 
   /* Victory & Defeat GameOver Modals on Mobile Landscape */
