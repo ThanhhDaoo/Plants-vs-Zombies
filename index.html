@@ -55,39 +55,50 @@
         </div>
       </div>
 
-      <!-- Center Hero Showcase -->
-      <div class="lobby-center-stage">
-        <div class="hero-preview-box">
+      <!-- Main Lobby Content: Left Hero Showcase & Right Action Panel -->
+      <div class="lobby-main-layout">
+        <!-- LEFT COLUMN: Character & Equipped Weapon Plaque -->
+        <div class="lobby-left-col">
           <div class="hero-stage-podium">
             <div class="podium-ring"></div>
-            <canvas id="lobbyHeroCanvas" width="220" height="220"></canvas>
+            <canvas id="lobbyHeroCanvas" width="160" height="160"></canvas>
+          </div>
+
+          <div class="equipped-weapon-card">
+            <div class="card-title-small">VŨ KHÍ ĐANG DÙNG</div>
+            <div class="weapon-title-large" id="lobbySelectedWeaponName">🌱 Pea Pistol</div>
+            <div class="weapon-quick-stats">
+              <span id="lobbySelectedWeaponLevel">Cấp độ 1 ★</span>
+              <b id="lobbySelectedWeaponDmg">28 DMG</b>
+            </div>
           </div>
         </div>
 
-        <div class="equipped-weapon-card">
-          <div class="card-title-small">Vũ Khí Xuất Trận</div>
-          <div class="weapon-title-large" id="lobbySelectedWeaponName">🌱 Pea Pistol</div>
-          <div class="weapon-quick-stats">
-            <span id="lobbySelectedWeaponLevel">Cấp độ 1 ★</span>
-            <b id="lobbySelectedWeaponDmg">28 DMG</b>
+        <!-- RIGHT COLUMN: Menu Tabs & Big Battle Button -->
+        <div class="lobby-right-col">
+          <div class="lobby-menu-buttons">
+            <button class="lobby-nav-btn" id="lobbyArmoryBtn">
+              <span class="btn-emoji">🎒</span>
+              <span class="btn-text">Tủ Đồ & Vũ Khí</span>
+            </button>
+            <button class="lobby-nav-btn" id="lobbyStatsBtn">
+              <span class="btn-emoji">⚡</span>
+              <span class="btn-text">Nâng Cấp Bản Thân</span>
+            </button>
+            <button class="lobby-nav-btn guide-btn" id="lobbyGuideBtn">
+              <span class="btn-emoji">❓</span>
+              <span class="btn-text">Hướng Dẫn</span>
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- Bottom Action Navigation -->
-      <div class="lobby-footer">
-        <button class="lobby-nav-btn" id="lobbyArmoryBtn">
-          <span>🎒</span> Tủ Đồ & Vũ Khí
-        </button>
-        <button class="lobby-battle-btn" id="lobbyStartBtn">
-          <span>⚔️</span> VÀO TRẬN CHIẾN
-        </button>
-        <button class="lobby-nav-btn" id="lobbyStatsBtn">
-          <span>⚡</span> Nâng Cấp Chỉ Số
-        </button>
-        <button class="icon-btn" id="lobbyGuideBtn" style="padding: 12px 18px; border-radius: 14px;">
-          <span>❓</span> Hướng Dẫn
-        </button>
+          <button class="lobby-battle-btn" id="lobbyStartBtn">
+            <span class="battle-btn-icon">⚔️</span>
+            <div class="battle-btn-label">
+              <div class="battle-main-txt">VÀO TRẬN CHIẾN</div>
+              <div class="battle-sub-txt">BẮT ĐẦU SINH TỒN</div>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 

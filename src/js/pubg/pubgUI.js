@@ -49,9 +49,9 @@ function drawLobbyHeroPreview() {
   const selectedWId = inventory.getSelectedWeapon();
   const effW = inventory.getEffectiveWeapon(selectedWId);
 
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2 + 10;
-  const r = 42;
+  const cx = 68;
+  const cy = 80;
+  const r = 32;
 
   // Soft shadow
   ctx.beginPath();
@@ -62,8 +62,8 @@ function drawLobbyHeroPreview() {
   // Stem Leaves (Back fins)
   ctx.fillStyle = '#388e3c';
   ctx.beginPath();
-  ctx.ellipse(cx - r * 0.8, cy - 14, 18, 10, -0.4, 0, Math.PI * 2);
-  ctx.ellipse(cx - r * 0.8, cy + 14, 18, 10, 0.4, 0, Math.PI * 2);
+  ctx.ellipse(cx - r * 0.8, cy - 11, 14, 8, -0.4, 0, Math.PI * 2);
+  ctx.ellipse(cx - r * 0.8, cy + 11, 14, 8, 0.4, 0, Math.PI * 2);
   ctx.fill();
 
   // Peashooter Head Body (Radial gradient)
@@ -72,56 +72,56 @@ function drawLobbyHeroPreview() {
   ctx.fillStyle = '#4caf50';
   ctx.fill();
   ctx.strokeStyle = '#1b5e20';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 3.5;
   ctx.stroke();
 
   // Spetsnaz Level 3 Helmet
   ctx.fillStyle = '#263238';
   ctx.beginPath();
-  ctx.arc(cx - 3, cy, r + 2, Math.PI * 0.55, Math.PI * 1.45);
+  ctx.arc(cx - 2, cy, r + 2, Math.PI * 0.55, Math.PI * 1.45);
   ctx.lineTo(cx - r * 0.4, cy);
   ctx.closePath();
   ctx.fill();
   ctx.strokeStyle = '#37474f';
-  ctx.lineWidth = 3.5;
+  ctx.lineWidth = 3;
   ctx.stroke();
 
   // Helmet metal visor band
   ctx.fillStyle = '#102027';
-  ctx.fillRect(cx - r * 0.35, cy - 18, 9, 36);
+  ctx.fillRect(cx - r * 0.35, cy - 14, 7, 28);
   ctx.strokeStyle = '#00e5ff';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(cx - r * 0.35, cy - 18, 9, 36);
+  ctx.lineWidth = 1.8;
+  ctx.strokeRect(cx - r * 0.35, cy - 14, 7, 28);
 
   // Heavy Cannon Snout
-  const snoutX = cx + r + 10;
+  const snoutX = cx + r + 8;
   ctx.fillStyle = '#37474f';
-  ctx.fillRect(cx + r - 4, cy - 10, 14, 20);
+  ctx.fillRect(cx + r - 3, cy - 8, 11, 16);
 
   ctx.beginPath();
-  ctx.ellipse(snoutX, cy, 16, 13, 0, 0, Math.PI * 2);
+  ctx.ellipse(snoutX, cy, 13, 11, 0, 0, Math.PI * 2);
   ctx.fillStyle = effW.bulletColor;
   ctx.fill();
   ctx.strokeStyle = '#1b5e20';
-  ctx.lineWidth = 3.5;
+  ctx.lineWidth = 3;
   ctx.stroke();
 
   // Glowing laser sight dot
   ctx.fillStyle = '#ff1744';
   ctx.beginPath();
-  ctx.arc(snoutX + 10, cy - 8, 3, 0, Math.PI * 2);
+  ctx.arc(snoutX + 8, cy - 6, 2.5, 0, Math.PI * 2);
   ctx.fill();
 
   // Eyes
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.arc(cx + 8, cy - 12, 8, 0, Math.PI * 2);
-  ctx.arc(cx + 8, cy + 12, 8, 0, Math.PI * 2);
+  ctx.arc(cx + 6, cy - 10, 6.5, 0, Math.PI * 2);
+  ctx.arc(cx + 6, cy + 10, 6.5, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = '#000000';
   ctx.beginPath();
-  ctx.arc(cx + 12, cy - 12, 4, 0, Math.PI * 2);
-  ctx.arc(cx + 12, cy + 12, 4, 0, Math.PI * 2);
+  ctx.arc(cx + 9, cy - 10, 3.2, 0, Math.PI * 2);
+  ctx.arc(cx + 9, cy + 10, 3.2, 0, Math.PI * 2);
   ctx.fill();
 }
 

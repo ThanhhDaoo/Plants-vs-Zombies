@@ -57,31 +57,27 @@
   }
 }
 
-/* 2. Mobile Landscape Compact Layout (Phones in Landscape / Height <= 550px) */
+/* 2. Mobile Landscape Two-Column Layout (Phones in Landscape / Height <= 550px) */
 @media (max-height: 550px) {
   #lobbyScreen {
-    padding: 6px max(14px, env(safe-area-inset-right, 14px)) 8px max(14px, env(safe-area-inset-left, 14px));
-    gap: 4px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
+    padding: 6px max(14px, env(safe-area-inset-right, 14px)) 6px max(14px, env(safe-area-inset-left, 14px));
+    overflow: hidden;
   }
 
   /* Header */
   .lobby-header {
-    padding: 4px 14px;
-    border-radius: 14px;
+    padding: 3px 12px;
+    border-radius: 12px;
     border-width: 2.5px;
     box-shadow: 0 4px 0 #1a0f06;
   }
 
   .brand-icon {
-    font-size: 1.5em;
+    font-size: 1.4em;
   }
 
   .brand-title {
-    font-size: 1.15em;
+    font-size: 1.08em;
   }
 
   .brand-subtitle {
@@ -90,22 +86,25 @@
 
   .currency-badge {
     padding: 3px 10px;
-    font-size: 0.95em;
+    font-size: 0.9em;
     border-width: 2px;
   }
 
   .icon-btn {
-    padding: 4px 9px;
-    font-size: 0.78em;
-    border-radius: 9px;
+    padding: 3px 8px;
+    font-size: 0.75em;
+    border-radius: 8px;
   }
 
-  /* Center Stage */
-  .lobby-center-stage {
+  /* Two Column Main Layout */
+  .lobby-main-layout {
+    gap: 14px;
     padding: 2px 0;
-    gap: 20px;
-    flex: 1;
-    min-height: 0;
+  }
+
+  /* Left Column (Hero & Weapon Card) */
+  .lobby-left-col {
+    gap: 12px;
   }
 
   .hero-stage-podium {
@@ -114,11 +113,11 @@
   }
 
   .podium-ring {
-    width: 115px;
-    height: 38px;
-    bottom: 4px;
+    width: 110px;
+    height: 36px;
+    bottom: 5px;
     border-width: 2.5px;
-    box-shadow: 0 6px 0 #0d3810;
+    box-shadow: 0 5px 0 #0d3810;
   }
 
   #lobbyHeroCanvas {
@@ -127,15 +126,15 @@
   }
 
   .equipped-weapon-card {
-    width: 200px;
+    width: 175px;
     padding: 6px 12px;
-    border-radius: 12px;
+    border-radius: 13px;
     border-width: 2.5px;
     box-shadow: 0 4px 0 #1a0f06;
   }
 
   .card-title-small {
-    font-size: 0.65em;
+    font-size: 0.62em;
     margin-bottom: 2px;
   }
 
@@ -149,35 +148,48 @@
     font-size: 0.8em;
   }
 
-  /* Footer Action Buttons */
-  .lobby-footer {
-    gap: 10px;
-    margin-top: 2px;
-    padding-bottom: env(safe-area-inset-bottom, 2px);
-  }
-
-  .lobby-battle-btn {
-    padding: 8px 24px;
-    font-size: 1.18em;
-    border-radius: 14px;
-    border-width: 3px;
-    box-shadow: 0 5px 0 #bf360c, 0 8px 18px rgba(230, 81, 0, 0.5);
+  /* Right Column (Menu Buttons & Giant Battle Button) */
+  .lobby-right-col {
+    width: 260px;
+    max-width: 48%;
     gap: 8px;
   }
 
-  .lobby-nav-btn {
-    padding: 8px 14px;
-    font-size: 0.9em;
-    border-radius: 12px;
-    border-width: 2.5px;
-    box-shadow: 0 4px 0 #1a0f06;
-    gap: 6px;
+  .lobby-menu-buttons {
+    gap: 5px;
   }
 
-  #lobbyGuideBtn {
-    padding: 8px 12px !important;
-    font-size: 0.82em !important;
-    border-radius: 12px !important;
+  .lobby-nav-btn {
+    padding: 6px 12px;
+    font-size: 0.88em;
+    border-radius: 11px;
+    border-width: 2px;
+    box-shadow: 0 3px 0 #1a0f06;
+    gap: 8px;
+  }
+
+  .lobby-nav-btn .btn-emoji {
+    font-size: 1.1em;
+  }
+
+  .lobby-battle-btn {
+    padding: 8px 16px;
+    border-radius: 14px;
+    border-width: 3px;
+    box-shadow: 0 5px 0 #bf360c, 0 8px 16px rgba(230, 81, 0, 0.5);
+    gap: 10px;
+  }
+
+  .battle-btn-icon {
+    font-size: 1.5em;
+  }
+
+  .battle-main-txt {
+    font-size: 1.18em;
+  }
+
+  .battle-sub-txt {
+    font-size: 0.6em;
   }
 
   /* Armory Modal on Mobile */
@@ -189,115 +201,115 @@
   }
 
   .armory-header {
-    padding: 8px 16px;
+    padding: 6px 14px;
   }
 
   .armory-title-row h3 {
-    font-size: 1.15em;
+    font-size: 1.1em;
   }
 
   .tab-btn {
     padding: 5px 12px;
-    font-size: 0.88em;
+    font-size: 0.85em;
     border-radius: 10px;
   }
 
   .armory-content {
-    padding: 10px 14px;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 10px;
+    padding: 8px 12px;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 8px;
   }
 
   .armory-item-card {
-    padding: 10px;
+    padding: 9px;
     border-radius: 12px;
   }
 
   .weapon-icon {
-    font-size: 1.6em;
+    font-size: 1.5em;
   }
 
   .weapon-meta h4 {
-    font-size: 0.98em;
+    font-size: 0.95em;
   }
 
   .weapon-stats {
-    padding: 5px 8px;
-    margin-bottom: 6px;
+    padding: 4px 8px;
+    margin-bottom: 5px;
   }
 
   .weapon-desc {
-    font-size: 0.75em;
-    margin-bottom: 8px;
-    min-height: 24px;
+    font-size: 0.72em;
+    margin-bottom: 6px;
+    min-height: 22px;
   }
 
   .action-btn {
-    padding: 7px 10px;
-    font-size: 0.85em;
-    border-radius: 9px;
+    padding: 6px 8px;
+    font-size: 0.82em;
+    border-radius: 8px;
   }
 
   /* In-Game HUD on Mobile Landscape */
   #pubgHud {
-    padding: 6px max(12px, env(safe-area-inset-right, 12px)) 6px max(12px, env(safe-area-inset-left, 12px));
+    padding: 4px max(10px, env(safe-area-inset-right, 10px)) 4px max(10px, env(safe-area-inset-left, 10px));
   }
 
   .pubg-mode-badge {
     padding: 3px 8px;
-    font-size: 0.85em;
+    font-size: 0.82em;
   }
 
   .pubg-center-stats {
-    padding: 4px 12px;
+    padding: 3px 10px;
     gap: 8px;
-    border-radius: 12px;
+    border-radius: 11px;
   }
 
   .stat-pill .label {
-    font-size: 0.62em;
+    font-size: 0.6em;
   }
 
   .stat-pill .value {
-    font-size: 1.05em;
+    font-size: 1em;
   }
 
   .pubg-player-status {
-    width: 170px;
-    padding: 5px 10px;
-    gap: 4px;
-    border-radius: 12px;
+    width: 160px;
+    padding: 4px 8px;
+    gap: 3px;
+    border-radius: 11px;
   }
 
   .bar-container {
-    gap: 5px;
+    gap: 4px;
   }
 
   .bar-track {
-    height: 10px;
+    height: 9px;
   }
 
   .bar-value {
-    font-size: 0.8em;
-    min-width: 50px;
+    font-size: 0.78em;
+    min-width: 46px;
   }
 
   .pubg-weapon-card {
-    padding: 5px 14px;
-    border-radius: 14px;
+    padding: 4px 12px;
+    border-radius: 12px;
   }
 
   .weapon-title {
-    font-size: 0.95em;
+    font-size: 0.9em;
   }
 
   .weapon-ammo {
-    font-size: 1.15em;
+    font-size: 1.1em;
   }
 
   .touch-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 0.72em;
+    width: 48px;
+    height: 48px;
+    font-size: 0.7em;
   }
 }
