@@ -3,14 +3,33 @@ import { pubgState } from './pubgState.js';
 import { WEAPONS } from './pubgWeapons.js';
 
 export function setupPubgControls(canvas) {
+  // Elements for interactive desktop key hints
+  const keyHintW = document.getElementById('keyHintW');
+  const keyHintA = document.getElementById('keyHintA');
+  const keyHintS = document.getElementById('keyHintS');
+  const keyHintD = document.getElementById('keyHintD');
+  const fireBtn = document.getElementById('pubgFireBtn');
+
   // --- Keyboard Listeners ---
   window.addEventListener('keydown', (e) => {
     if (!pubgState.active) return;
     const k = e.key.toLowerCase();
-    if (k === 'w' || k === 'arrowup') pubgState.input.keys.w = true;
-    if (k === 'a' || k === 'arrowleft') pubgState.input.keys.a = true;
-    if (k === 's' || k === 'arrowdown') pubgState.input.keys.s = true;
-    if (k === 'd' || k === 'arrowright') pubgState.input.keys.d = true;
+    if (k === 'w' || k === 'arrowup') {
+      pubgState.input.keys.w = true;
+      if (keyHintW) keyHintW.classList.add('active');
+    }
+    if (k === 'a' || k === 'arrowleft') {
+      pubgState.input.keys.a = true;
+      if (keyHintA) keyHintA.classList.add('active');
+    }
+    if (k === 's' || k === 'arrowdown') {
+      pubgState.input.keys.s = true;
+      if (keyHintS) keyHintS.classList.add('active');
+    }
+    if (k === 'd' || k === 'arrowright') {
+      pubgState.input.keys.d = true;
+      if (keyHintD) keyHintD.classList.add('active');
+    }
     if (k === ' ' || k === 'shift') triggerDash();
     if (k === 'r') triggerReload();
   });
@@ -18,10 +37,22 @@ export function setupPubgControls(canvas) {
   window.addEventListener('keyup', (e) => {
     if (!pubgState.active) return;
     const k = e.key.toLowerCase();
-    if (k === 'w' || k === 'arrowup') pubgState.input.keys.w = false;
-    if (k === 'a' || k === 'arrowleft') pubgState.input.keys.a = false;
-    if (k === 's' || k === 'arrowdown') pubgState.input.keys.s = false;
-    if (k === 'd' || k === 'arrowright') pubgState.input.keys.d = false;
+    if (k === 'w' || k === 'arrowup') {
+      pubgState.input.keys.w = false;
+      if (keyHintW) keyHintW.classList.remove('active');
+    }
+    if (k === 'a' || k === 'arrowleft') {
+      pubgState.input.keys.a = false;
+      if (keyHintA) keyHintA.classList.remove('active');
+    }
+    if (k === 's' || k === 'arrowdown') {
+      pubgState.input.keys.s = false;
+      if (keyHintS) keyHintS.classList.remove('active');
+    }
+    if (k === 'd' || k === 'arrowright') {
+      pubgState.input.keys.d = false;
+      if (keyHintD) keyHintD.classList.remove('active');
+    }
   });
 
   // --- Mouse Listeners ---
@@ -47,12 +78,14 @@ export function setupPubgControls(canvas) {
     if (!pubgState.active) return;
     if (e.button === 0) {
       pubgState.input.mouse.isDown = true;
+      if (fireBtn) fireBtn.classList.add('active');
     }
   });
 
   window.addEventListener('mouseup', (e) => {
     if (e.button === 0) {
       pubgState.input.mouse.isDown = false;
+      if (fireBtn) fireBtn.classList.remove('active');
     }
   });
 
@@ -309,6 +342,11 @@ export function triggerDash() {
     p.isDashing = true;
     p.dashTimer = 220; // 220ms dash duration
     p.dashCooldown = 1500; // 1.5s cooldown
+    const dashBtn = document.getElementById('pubgDashBtn');
+    if (dashBtn) {
+      dashBtn.classList.add('active');
+      setTimeout(() => dashBtn.classList.remove('active'), 250);
+    }
   }
 }
 
@@ -319,4 +357,9 @@ export function triggerReload() {
 
   p.isReloading = true;
   p.reloadTimer = w.reloadTime;
+  const reloadBtn = document.getElementById('pubgReloadBtn');
+  if (reloadBtn) {
+    reloadBtn.classList.add('active');
+    setTimeout(() => reloadBtn.classList.remove('active'), 300);
+  }
 }

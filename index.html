@@ -312,11 +312,24 @@
 
         <!-- Visible On-Screen Analog Movement Joystick (Bottom-Left) -->
         <div id="pubgJoystickZone" class="pubg-joystick-zone">
+          <div class="desktop-control-hint joystick-hint-label">⌨️ WASD Di chuyển</div>
           <div id="pubgJoystickBase" class="pubg-joystick-base">
-            <div class="joystick-dir up">▲</div>
-            <div class="joystick-dir down">▼</div>
-            <div class="joystick-dir left">◀</div>
-            <div class="joystick-dir right">▶</div>
+            <div class="joystick-dir up" id="keyHintW">
+              <span class="mobile-arrow">▲</span>
+              <span class="desktop-key">W</span>
+            </div>
+            <div class="joystick-dir down" id="keyHintS">
+              <span class="mobile-arrow">▼</span>
+              <span class="desktop-key">S</span>
+            </div>
+            <div class="joystick-dir left" id="keyHintA">
+              <span class="mobile-arrow">◀</span>
+              <span class="desktop-key">A</span>
+            </div>
+            <div class="joystick-dir right" id="keyHintD">
+              <span class="mobile-arrow">▶</span>
+              <span class="desktop-key">D</span>
+            </div>
             <div id="pubgJoystickKnob" class="pubg-joystick-knob">
               <div class="knob-inner-pip"></div>
             </div>
@@ -325,15 +338,18 @@
 
         <!-- Ergonomic Combat Actions Arc Cluster (Bottom-Right: Fire, Dash, Reload) -->
         <div class="pubg-touch-actions">
-          <button class="touch-btn sub-btn reload-btn" id="pubgReloadBtn" title="Nạp đạn">
+          <button class="touch-btn sub-btn reload-btn" id="pubgReloadBtn" title="Nạp đạn [Phím R]">
+            <span class="desktop-key-badge">R</span>
             <span class="btn-icon">🔄</span>
             <span class="btn-label">Đạn</span>
           </button>
-          <button class="touch-btn sub-btn dash-btn" id="pubgDashBtn" title="Lướt né đòn">
+          <button class="touch-btn sub-btn dash-btn" id="pubgDashBtn" title="Lướt né đòn [Phím Space]">
+            <span class="desktop-key-badge">Space</span>
             <span class="btn-icon">⚡</span>
             <span class="btn-label">Lướt</span>
           </button>
-          <button class="touch-btn fire-btn" id="pubgFireBtn" title="Bắn">
+          <button class="touch-btn fire-btn" id="pubgFireBtn" title="Bắn [Chuột trái]">
+            <span class="desktop-key-badge fire-badge">🖱️ Chuột Trái</span>
             <span class="fire-icon">🎯</span>
             <span class="fire-label">BẮN</span>
             <span class="fire-ring"></span>
@@ -342,6 +358,13 @@
 
         <!-- Bottom Bar (Bottom-Center Combat Console & Stats) -->
         <div class="pubg-bottom-bar">
+          <!-- Desktop Keyboard Control Ribbon -->
+          <div class="desktop-guide-ribbon">
+            <span>⌨️ <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Di chuyển</span>
+            <span>🖱️ Chuột: Ngắm & Bắn</span>
+            <span><kbd>Space</kbd> Lướt</span>
+            <span><kbd>R</kbd> Nạp đạn</span>
+          </div>
           <div class="pubg-bottom-center-panel">
             <!-- Player Health & Shield Bar (Directly with Weapon Card) -->
             <div class="pubg-player-status">

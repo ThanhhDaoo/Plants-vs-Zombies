@@ -559,4 +559,30 @@
   .btn-label {
     font-size: 0.68em;
   }
+
+  /* Strictly hide all Desktop Key Guides and Hints on Mobile */
+  .desktop-key,
+  .desktop-key-badge,
+  .desktop-control-hint,
+  .desktop-guide-ribbon {
+    display: none !important;
+  }
+
+  .mobile-arrow {
+    display: block !important;
+  }
+}
+
+/* Touchscreen devices strictly hide desktop keyboard guides */
+@media (hover: none), (pointer: coarse) {
+  .desktop-key,
+  .desktop-key-badge,
+  .desktop-control-hint,
+  .desktop-guide-ribbon {
+    display: none !important;
+  }
+
+  .mobile-arrow {
+    display: block !important;
+  }
 }
