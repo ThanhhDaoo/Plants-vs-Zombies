@@ -1,118 +1,116 @@
-# Plants vs. Zombies 🌻🧟 (Web, Mobile PWA & Native App)
+# Plants vs Zombies: Battle Royale
 
-A modern, high-performance cross-platform implementation of the classic lane defense game **Plants vs. Zombies**, built with modular HTML5, CSS3, and ES6 JavaScript. Powered by **Vite** and **Capacitor** for seamless deployment across Web, Mobile PWA, Android, and iOS.
+Game sinh tồn chiến thuật 2D kết hợp phong cách Battle Royale và cơ chế Plants vs Zombies cổ điển, được phát triển trên nền tảng Web, Mobile PWA và ứng dụng di động Native (Android & iOS) sử dụng Vite và Capacitor.
 
----
-
-## 🚀 Key Highlights & Platforms
-
-* 🌐 **Web & Desktop:** Fast dev server & optimized bundle powered by **Vite**.
-* 📱 **Mobile PWA:** Progressive Web App with offline service worker, installable directly to iOS & Android homescreens.
-* 📦 **Native Mobile Apps (Capacitor):** Pre-configured Android & iOS native projects ready for APK/AAB export or Xcode compilation.
-* 🔊 **Web Audio Synthesizer:** Built-in dynamic sound effects (peashooter, sun chimes, zombie hits, victory fanfare) with no external audio file bloat.
-* 🎮 **Touch & Landscape Optimization:** Auto landscape prompt, touch-to-plant, touch sun collection, and mobile safe area insets.
+**Tác giả:** Thanh Đào ([@ThanhhDaoo](https://github.com/ThanhhDaoo))
 
 ---
 
-## 📁 Professional Project Structure
+## Giới thiệu
 
-```
-plants-vs-zombies/
-├── android/                    # Native Android Studio project (Capacitor)
-├── ios/                        # Native Xcode project (Capacitor)
-├── public/                     # Static assets & PWA configuration
-│   ├── favicon.ico             # App icon
-│   ├── icon-192.png            # PWA standard icon
-│   ├── icon-512.png            # PWA splash icon
-│   ├── manifest.webmanifest    # Web App Manifest
-│   └── sw.js                   # Service Worker (offline cache)
-├── src/
-│   ├── styles/                 # Modular CSS architecture
-│   │   ├── variables.css       # Design tokens & color system
-│   │   ├── layout.css          # Game container & grid board
-│   │   ├── ui.css              # HUD, cards, controls, leaderboard & modals
-│   │   ├── entities.css        # Plants, zombies, projectiles & animations
-│   │   ├── responsive.css      # Landscape locking & mobile responsiveness
-│   │   └── index.css           # Bundled styles
-│   ├── js/                     # Modular Game Logic (ES6 Modules)
-│   │   ├── config.js           # Plant & zombie stats, game constants
-│   │   ├── state.js            # Reactive game state & localStorage persistence
-│   │   ├── sound.js            # Web Audio API sound synthesizer
-│   │   ├── board.js            # Grid calculation & fullscreen controller
-│   │   ├── plants.js           # Plant selection, planting, abilities & shooting
-│   │   ├── zombies.js          # Zombie AI, speed, wave director & multipliers
-│   │   ├── projectiles.js      # Collision detection, slow/fire/pierce effects
-│   │   ├── sun.js              # Sky suns, sunflower production & collection
-│   │   ├── ui.js               # HUD updates, points popups & Top 10 leaderboard
-│   │   └── game.js             # Main loop, speed control, pause/resume & game over
-│   └── main.js                 # App bootstrap, event binders & PWA registrar
-├── index.html                  # Root entry point
-├── vite.config.js              # Vite bundler configuration
-├── capacitor.config.json       # Mobile native app settings
-└── package.json                # Dependencies and build scripts
-```
+Dự án tái hiện thế giới Plants vs Zombies dưới góc nhìn chiến đấu sinh tồn thời gian thực:
+- Nhập vai Đậu Chiến Binh Spetsnaz với khả năng di chuyển tự do, ngắm bắn xoay 360 độ, lướt né đòn và thay băng đạn.
+- Sinh tồn trước các đợt sóng Zombie đa dạng và Boss đột biến trong khu vườn vòng bo kịch độc.
+- Thu thập hòm tiếp tế rơi ngẫu nhiên trên bản đồ để sở hữu các vũ khí hỏa lực cao cấp.
+- Nâng cấp chỉ số bản thân (Máu, Giáp, Tốc độ, Bán kính hút đồ) và mở khóa các loại súng trong Tủ Đồ.
 
 ---
 
-## 🛠️ Quick Start
+## Nền tảng hỗ trợ
 
-### 1. Requirements
-* [Node.js](https://nodejs.org/) (v18 or higher)
-* [npm](https://www.npmjs.com/)
+- **Web Máy Tính (Desktop):** Giao diện sảnh điều khiển rộng mở, đầy đủ nhiệm vụ ngày, bảng xếp hạng và hiển thị phím tắt trực quan (WASD, Chuột, Space, R).
+- **Web Di Động (Mobile Responsive):** Tối ưu hóa cho màn hình ngang, cụm phím điều khiển công thái học dạng vòng cung ôm sát ngón tay cái, thanh HUD bán trong suốt chống che khuất zombie.
+- **Android:** Hỗ trợ cài đặt trực tiếp qua file APK hoặc đồng bộ qua Android Studio.
+- **iOS:** Tích hợp sẵn project Xcode thông qua Capacitor, sẵn sàng chạy trên máy ảo hoặc thiết bị iPhone thật.
 
-### 2. Install Dependencies
+---
+
+## Hướng dẫn cài đặt và chạy trên máy tính
+
+### 1. Yêu cầu hệ thống
+- Node.js phiên bản 18 trở lên
+- npm
+
+### 2. Cài đặt thư viện
 ```bash
 npm install
 ```
 
-### 3. Run Development Server (Web & Local Mobile)
+### 3. Chạy môi trường phát triển (Development)
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser. Since `--host` is enabled, you can also open the local network IP on your phone connected to the same Wi-Fi.
+Truy cập đường dẫn: `http://localhost:3000` trên trình duyệt.
 
-### 4. Build for Production (Web)
+### 4. Đóng gói bản Web (Production)
 ```bash
 npm run build
 ```
-Production assets are generated in the `dist/` directory.
+File build hoàn thiện sẽ nằm trong thư mục `dist/`.
 
 ---
 
-## 📱 Building Mobile Native Apps
+## Hướng dẫn build ứng dụng di động
 
-### Android App (APK / AAB)
-1. Build web assets and sync to Android:
+### Bản Android
+1. Build code web và đồng bộ sang Android:
    ```bash
    npm run build:android
    ```
-2. Open in Android Studio to run on an emulator or export APK:
+2. Build file APK trực tiếp qua dòng lệnh:
+   ```bash
+   cd android && ./gradlew assembleDebug && cd ..
+   ```
+   File APK đầu ra nằm tại: `android/app/build/outputs/apk/debug/app-debug.apk` (hoặc thư mục `build-outputs/PlantsVsZombies-debug.apk`).
+3. Hoặc mở project trong Android Studio:
    ```bash
    npm run cap:open:android
    ```
 
-### iOS App (Xcode / iPhone)
-1. Build web assets and sync to iOS:
+### Bản iOS
+1. Build code web và đồng bộ sang iOS:
    ```bash
    npm run build:ios
    ```
-2. Open in Xcode to build and run on iOS Simulator or Device:
+2. Mở project trong Xcode để kiểm thử hoặc đóng gói:
    ```bash
    npm run cap:open:ios
+   ```
+3. Hoặc biên dịch trực tiếp qua `xcodebuild`:
+   ```bash
+   xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
    ```
 
 ---
 
-## 🌟 Game Features
+## Cấu trúc thư mục dự án
 
-* 🌻 **9 Unique Plants:** Sunflower, Peashooter, Repeater, Snow Pea, Wall-nut, Chomper, Threepeater, Fire Pea, Cactus.
-* 🧟 **5 Zombie Variants:** Normal, Conehead, Buckethead, Fast, and Boss Zombies.
-* ⚡ **Variable Speed:** Toggle between 1x, 2x, and 3x game speeds.
-* 🏆 **Top 10 High Scores:** Stored locally with detailed date and time stamps.
-* 🔊 **Sound System:** Toggle sound on/off anytime with the HUD sound button.
+```
+plants-vs-zombies/
+├── android/               # Dự án Android Studio (Capacitor)
+├── ios/                   # Dự án Xcode (Capacitor)
+├── build-outputs/         # Nơi lưu trữ file APK và bản nén cài đặt
+├── public/                # Tài nguyên tĩnh, favicon, PWA manifest, service worker
+├── src/
+│   ├── js/
+│   │   ├── pubg/          # Logic chế độ Battle Royale (điều khiển, nhân vật, vũ khí, kho đồ, HUD)
+│   │   ├── config.js      # Cấu hình chỉ số cây và zombie
+│   │   ├── sound.js       # Hệ thống âm thanh tổng hợp Web Audio API
+│   │   └── main.js        # Khởi chạy ứng dụng
+│   └── styles/
+│       ├── pubg.css       # Giao diện sàn đấu, joystick, nút bắn, thanh máu sinh tồn
+│       ├── lobby.css      # Giao diện trang chủ, sảnh chờ, kho đồ và hướng dẫn
+│       ├── responsive.css # Tối ưu hóa hiển thị xoay ngang cho điện thoại và máy tính bảng
+│       └── index.css      # Điểm nạp CSS chính
+├── capacitor.config.json  # Cấu hình ứng dụng di động Capacitor
+├── index.html             # Trang giao diện chính
+├── package.json           # Danh sách gói phụ thuộc và câu lệnh build
+└── vite.config.js         # Cấu hình đóng gói Vite
+```
 
 ---
 
-## 📄 License
+## Tác giả
 
-This project is licensed under the MIT License.
+- **Thanh Đào** - [@ThanhhDaoo](https://github.com/ThanhhDaoo)
+- Mọi quyền được bảo lưu (All Rights Reserved).

@@ -29,8 +29,8 @@
     "mobile",
     "vite"
   ],
-  "author": "ThanhhDaoo",
-  "license": "MIT",
+  "author": "Thanh Dao (@ThanhhDaoo)",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^8.5.3",
     "sharp": "^0.35.5",

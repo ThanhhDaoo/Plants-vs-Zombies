@@ -14,6 +14,8 @@ android/app/build
 ios/App/Pods
 ios/App/build
 build-outputs/
+**/swiftpm/
+*.xcworkspace/xcshareddata/swiftpm/
 
 # IDE & OS
 .DS_Store
