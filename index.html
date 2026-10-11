@@ -55,17 +55,62 @@
         </div>
       </div>
 
-      <!-- Main Lobby Content: Left Hero Showcase & Right Action Panel -->
+      <!-- Atmospheric PvZ Scenery (Backyard Fence, Sunbeams, Sunflowers, Peeking Zombie) -->
+      <div class="lobby-scenery-backdrop" aria-hidden="true">
+        <div class="scenery-sunbeam"></div>
+        <div class="scenery-clouds"></div>
+        <div class="scenery-fence">
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+          <div class="fence-post"></div>
+        </div>
+        <div class="scenery-zombie-peeker" title="Một Zombie đang rình rập...">
+          <div class="zombie-cone">⚠️</div>
+          <div class="zombie-emoji">🧟</div>
+        </div>
+        <div class="scenery-sunflower left">🌻</div>
+        <div class="scenery-sunflower right">🌻</div>
+        <div class="scenery-floating-sun s1">☀️</div>
+        <div class="scenery-floating-sun s2">☀️</div>
+        <div class="scenery-floating-sun s3">✨</div>
+      </div>
+
+      <!-- Main Lobby Content: Left Hero Showcase, Center Intel & Right Action Panel -->
       <div class="lobby-main-layout">
         <!-- LEFT COLUMN: Character & Equipped Weapon Plaque -->
         <div class="lobby-left-col">
-          <div class="hero-stage-podium">
-            <div class="podium-ring"></div>
-            <canvas id="lobbyHeroCanvas" width="160" height="160"></canvas>
+          <div class="hero-showcase-wrapper">
+            <div class="hero-title-badge">
+              <span class="badge-icon">🎖️</span>
+              <span class="badge-text">CHIẾN BINH ĐẬU</span>
+              <span class="hero-level-tag">Lv.<span id="lobbyHeroLevel">1</span></span>
+            </div>
+
+            <div class="hero-stage-podium">
+              <div class="podium-aura"></div>
+              <div class="podium-ring"></div>
+              <canvas id="lobbyHeroCanvas" width="160" height="160"></canvas>
+            </div>
+
+            <div class="hero-quick-attributes">
+              <div class="attr-pill" title="Máu sinh tồn"><span class="attr-icon">❤️</span> <span id="lobbyHeroHp">100</span> <span class="attr-lbl">HP</span></div>
+              <div class="attr-pill" title="Giáp chống đỡ"><span class="attr-icon">🛡️</span> <span id="lobbyHeroArmor">25</span> <span class="attr-lbl">Giáp</span></div>
+              <div class="attr-pill" title="Tốc độ di chuyển"><span class="attr-icon">⚡</span> <span id="lobbyHeroSpeed">4.6</span> <span class="attr-lbl">Spd</span></div>
+            </div>
           </div>
 
           <div class="equipped-weapon-card">
-            <div class="card-title-small">VŨ KHÍ ĐANG DÙNG</div>
+            <div class="card-header-row">
+              <div class="card-title-small">VŨ KHÍ TRANG BỊ</div>
+              <button class="quick-change-weapon-btn" id="lobbyQuickArmoryBtn" title="Mở tủ đồ đổi súng">Đổi Súng 🔫</button>
+            </div>
             <div class="weapon-title-large" id="lobbySelectedWeaponName">🌱 Pea Pistol</div>
             <div class="weapon-quick-stats">
               <span id="lobbySelectedWeaponLevel">Cấp độ 1 ★</span>
@@ -74,12 +119,121 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: Menu Tabs & Big Battle Button -->
+        <!-- CENTER COLUMN: Game Mode, Missions & Desktop Controls (Desktop Only) -->
+        <div class="lobby-center-col">
+          <!-- 1. Battle Royale Mode & Map Card -->
+          <div class="lobby-mode-card">
+            <div class="mode-badge-row">
+              <span class="mode-tag solo">🏆 ĐƠN ĐẤU SINH TỒN</span>
+              <span class="mode-tag map">🗺️ SÂN SAU TẬN THẾ</span>
+              <span class="mode-tag players">👥 35 NGƯỜI CHƠI</span>
+            </div>
+            <div class="mode-title-row">
+              <div class="mode-title">CHIẾN TRƯỜNG ĐẬU VS ZOMBIE</div>
+              <span class="mode-status-live">● ĐANG MỞ</span>
+            </div>
+            <div class="mode-desc">Thu thập hòm tiếp tế, chạy bo kịch độc, né đạn phản công và trở thành Đậu Chiến Binh sống sót cuối cùng!</div>
+            <div class="mode-features-grid">
+              <div class="feat-item"><span class="feat-icon">☣️</span> <b>Vòng Bo:</b> Thu 45s</div>
+              <div class="feat-item"><span class="feat-icon">📦</span> <b>Hòm Thính:</b> Súng VIP</div>
+              <div class="feat-item"><span class="feat-icon">🧟</span> <b>Zombie Elite:</b> Rớt Não</div>
+              <div class="feat-item"><span class="feat-icon">💥</span> <b>Lướt Dash:</b> Né đòn</div>
+            </div>
+          </div>
+
+          <!-- 2. Daily Missions / Survival Quests Card -->
+          <div class="lobby-quests-card">
+            <div class="quests-card-header">
+              <span class="quests-card-title">🎯 NHIỆM VỤ SINH TỒN HÔM NAY</span>
+              <span class="quests-card-timer">Làm mới hàng ngày</span>
+            </div>
+            <div class="quests-list">
+              <div class="quest-item">
+                <span class="quest-icon">💀</span>
+                <div class="quest-info">
+                  <div class="quest-name">Hạ gục 5 Zombie bất kỳ</div>
+                  <div class="quest-bar"><div class="quest-bar-fill" style="width: 40%;"></div></div>
+                </div>
+                <div class="quest-reward">+150 🪙</div>
+              </div>
+              <div class="quest-item">
+                <span class="quest-icon">🧠</span>
+                <div class="quest-info">
+                  <div class="quest-name">Tiêu diệt Zombie Nón Cối hoặc Cờ</div>
+                  <div class="quest-bar"><div class="quest-bar-fill" style="width: 60%;"></div></div>
+                </div>
+                <div class="quest-reward">+1 🧠</div>
+              </div>
+              <div class="quest-item">
+                <span class="quest-icon">🏆</span>
+                <div class="quest-info">
+                  <div class="quest-name">Lọt vào Top 5 Sống Sót Cuối Cùng</div>
+                  <div class="quest-bar"><div class="quest-bar-fill" style="width: 25%;"></div></div>
+                </div>
+                <div class="quest-reward">+300 🪙</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Desktop Controls Reference Card -->
+          <div class="lobby-desktop-controls-card">
+            <div class="controls-card-header">
+              <span class="controls-card-title">⌨️ HƯỚNG DẪN ĐIỀU KHIỂN TRÊN MÁY TÍNH</span>
+              <span class="controls-card-tag">PHÍM TẮT WEB</span>
+            </div>
+            <div class="controls-key-grid">
+              <div class="control-key-item">
+                <div class="key-cluster"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+                <span>Di chuyển</span>
+              </div>
+              <div class="control-key-item">
+                <kbd class="key-mouse">🖱️ Chuột Trái</kbd>
+                <span>Bắn đạn liên thanh</span>
+              </div>
+              <div class="control-key-item">
+                <kbd class="key-space">Space</kbd>
+                <span>Lướt né đòn</span>
+              </div>
+              <div class="control-key-item">
+                <kbd>R</kbd>
+                <span>Thay đạn</span>
+              </div>
+              <div class="control-key-item">
+                <kbd class="key-mouse">Di Chuột</kbd>
+                <span>Ngắm xoay 360°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Profile, Menu Tabs & Big Battle Button -->
         <div class="lobby-right-col">
+          <!-- Player Profile / Rank Record Card (Desktop Only) -->
+          <div class="lobby-player-profile-card">
+            <div class="profile-header-row">
+              <span class="profile-avatar">🎖️</span>
+              <div class="profile-info">
+                <div class="profile-name">TÂN BINH ĐẬU CHIẾN</div>
+                <div class="profile-rank" id="lobbyPlayerRankTitle">Cấp Binh Nhì • Sân Sau</div>
+              </div>
+            </div>
+            <div class="profile-stats-grid">
+              <div class="pstat-item">
+                <span class="pstat-lbl">💀 Đã Diệt</span>
+                <span class="pstat-val" id="lobbyTotalKills">0</span>
+              </div>
+              <div class="pstat-item">
+                <span class="pstat-lbl">🏆 Top 1 Kỷ Lục</span>
+                <span class="pstat-val" id="lobbyTop1Count">0</span>
+              </div>
+            </div>
+          </div>
+
           <div class="lobby-menu-buttons">
             <button class="lobby-nav-btn" id="lobbyArmoryBtn">
               <span class="btn-emoji">🎒</span>
               <span class="btn-text">Tủ Đồ & Vũ Khí</span>
+              <span class="btn-badge-alert" id="lobbyArmoryAlert">SẴN SÀNG</span>
             </button>
             <button class="lobby-nav-btn" id="lobbyStatsBtn">
               <span class="btn-emoji">⚡</span>
@@ -87,7 +241,7 @@
             </button>
             <button class="lobby-nav-btn guide-btn" id="lobbyGuideBtn">
               <span class="btn-emoji">❓</span>
-              <span class="btn-text">Hướng Dẫn</span>
+              <span class="btn-text">Sổ Tay Hướng Dẫn</span>
             </button>
           </div>
 
@@ -97,6 +251,7 @@
               <div class="battle-main-txt">VÀO TRẬN CHIẾN</div>
               <div class="battle-sub-txt">BẮT ĐẦU SINH TỒN</div>
             </div>
+            <div class="battle-pulse-ring"></div>
           </button>
         </div>
       </div>

@@ -23,6 +23,12 @@ export function renderLobbyStats() {
   const top1El = document.getElementById('lobbyTop1');
   if (top1El) top1El.textContent = inventory.data.topRank || 0;
 
+  const totalKillsEl = document.getElementById('lobbyTotalKills');
+  if (totalKillsEl) totalKillsEl.textContent = inventory.data.totalKills || 0;
+
+  const top1CountEl = document.getElementById('lobbyTop1Count');
+  if (top1CountEl) top1CountEl.textContent = inventory.data.topRank || 0;
+
   // Selected Weapon Showcase
   const selectedWId = inventory.getSelectedWeapon();
   const effW = inventory.getEffectiveWeapon(selectedWId);
@@ -35,6 +41,31 @@ export function renderLobbyStats() {
 
   const previewDmg = document.getElementById('lobbySelectedWeaponDmg');
   if (previewDmg) previewDmg.textContent = `${effW.damage} DMG`;
+
+  // Hero Attributes & Level
+  const heroLvl = Math.max(1, Math.round(((inventory.data.stats?.maxHealthLevel || 1) + (inventory.data.stats?.armorLevel || 1) + (inventory.data.stats?.speedLevel || 1)) / 3));
+  const heroLvlEl = document.getElementById('lobbyHeroLevel');
+  if (heroLvlEl) heroLvlEl.textContent = heroLvl;
+
+  const hpEl = document.getElementById('lobbyHeroHp');
+  if (hpEl) hpEl.textContent = 100 + ((inventory.data.stats?.maxHealthLevel || 1) - 1) * 25;
+
+  const armorEl = document.getElementById('lobbyHeroArmor');
+  if (armorEl) armorEl.textContent = 25 + ((inventory.data.stats?.armorLevel || 1) - 1) * 20;
+
+  const speedEl = document.getElementById('lobbyHeroSpeed');
+  if (speedEl) speedEl.textContent = (4.6 + ((inventory.data.stats?.speedLevel || 1) - 1) * 0.3).toFixed(1);
+
+  // Player Rank Title
+  const rankEl = document.getElementById('lobbyPlayerRankTitle');
+  if (rankEl) {
+    const score = (inventory.data.highScore || 0) + (inventory.data.totalKills || 0) * 50;
+    if (score >= 2000) rankEl.textContent = 'Đậu Đại Tướng 5 Sao 🌟';
+    else if (score >= 1000) rankEl.textContent = 'Đậu Đặc Nhiệm Tinh Anh ⚡';
+    else if (score >= 400) rankEl.textContent = 'Đậu Biệt Kích Rừng Rậm 🌲';
+    else if (score >= 100) rankEl.textContent = 'Chiến Binh Đậu Cỏ 🛡️';
+    else rankEl.textContent = 'Tân Binh Đậu Mới Nhú 🌱';
+  }
 
   // Draw Lobby Peashooter Hero Canvas
   drawLobbyHeroPreview();
@@ -141,6 +172,14 @@ function setupLobbyEvents() {
   const armoryBtn = document.getElementById('lobbyArmoryBtn');
   if (armoryBtn) {
     armoryBtn.addEventListener('click', () => {
+      initAudio();
+      openArmoryModal();
+    });
+  }
+
+  const quickArmoryBtn = document.getElementById('lobbyQuickArmoryBtn');
+  if (quickArmoryBtn) {
+    quickArmoryBtn.addEventListener('click', () => {
       initAudio();
       openArmoryModal();
     });

@@ -97,15 +97,43 @@
     border-radius: 8px;
   }
 
-  /* Two Column Main Layout */
+  /* Desktop-Only Lobby Elements Strictly Hidden on Mobile Landscape */
+  .lobby-scenery-backdrop,
+  .lobby-center-col,
+  .lobby-player-profile-card,
+  .hero-title-badge,
+  .hero-quick-attributes,
+  .quick-change-weapon-btn,
+  .btn-badge-alert,
+  .battle-pulse-ring,
+  .podium-aura {
+    display: none !important;
+  }
+
+  /* Two Column Main Layout on Mobile Landscape */
   .lobby-main-layout {
     gap: 14px;
     padding: 2px 0;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
 
-  /* Left Column (Hero & Weapon Card) */
+  /* Left Column (Hero & Weapon Card Side-by-Side on Mobile) */
   .lobby-left-col {
-    gap: 12px;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: auto !important;
+    flex: 1 !important;
+  }
+
+  .hero-showcase-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
   }
 
   .hero-stage-podium {
@@ -127,11 +155,12 @@
   }
 
   .equipped-weapon-card {
-    width: 175px;
+    width: 175px !important;
     padding: 6px 12px;
     border-radius: 13px;
     border-width: 2.5px;
     box-shadow: 0 4px 0 #1a0f06;
+    flex-shrink: 0 !important;
   }
 
   .card-title-small {
