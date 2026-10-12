@@ -586,7 +586,7 @@
 
   /* In-Game HUD on Mobile (Ultra-Slim & Translucent) */
   #pubgHud {
-    padding: 2px max(8px, env(safe-area-inset-right, 8px)) 2px max(8px, env(safe-area-inset-left, 8px)) !important;
+    padding: 3px max(24px, env(safe-area-inset-right, 24px)) 2px max(24px, env(safe-area-inset-left, 24px)) !important;
   }
 
   .pubg-mode-badge {
@@ -670,20 +670,20 @@
   }
 
   .pubg-joystick-zone {
-    bottom: 10px !important;
-    left: max(12px, env(safe-area-inset-left, 12px)) !important;
+    bottom: max(22px, env(safe-area-inset-bottom, 22px)) !important;
+    left: max(32px, env(safe-area-inset-left, 32px)) !important;
+    width: 98px !important;
+    height: 98px !important;
+  }
+
+  .pubg-joystick-base {
     width: 88px !important;
     height: 88px !important;
   }
 
-  .pubg-joystick-base {
-    width: 80px !important;
-    height: 80px !important;
-  }
-
   .pubg-joystick-knob {
-    width: 36px !important;
-    height: 36px !important;
+    width: 40px !important;
+    height: 40px !important;
   }
 
   .pubg-weapon-card {
@@ -702,31 +702,31 @@
 
   /* Mobile Ergonomic Touch Cluster for Compact Landscape */
   .pubg-touch-actions {
-    bottom: max(4px, env(safe-area-inset-bottom, 4px)) !important;
-    right: max(6px, env(safe-area-inset-right, 6px)) !important;
-    width: 140px !important;
-    height: 130px !important;
+    bottom: max(18px, env(safe-area-inset-bottom, 18px)) !important;
+    right: max(28px, env(safe-area-inset-right, 28px)) !important;
+    width: 155px !important;
+    height: 145px !important;
   }
 
   .touch-btn.fire-btn {
-    right: 2px !important;
-    bottom: 2px !important;
-    width: 64px !important;
-    height: 64px !important;
+    right: 6px !important;
+    bottom: 6px !important;
+    width: 66px !important;
+    height: 66px !important;
   }
 
   .touch-btn.dash-btn {
-    right: 16px !important;
-    bottom: 78px !important;
-    width: 44px !important;
-    height: 44px !important;
+    right: 12px !important;
+    bottom: 80px !important;
+    width: 46px !important;
+    height: 46px !important;
   }
 
   .touch-btn.reload-btn {
-    right: 76px !important;
-    bottom: 18px !important;
-    width: 44px !important;
-    height: 44px !important;
+    right: 80px !important;
+    bottom: 12px !important;
+    width: 46px !important;
+    height: 46px !important;
   }
 
   .fire-icon {

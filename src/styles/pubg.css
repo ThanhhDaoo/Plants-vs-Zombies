@@ -236,8 +236,8 @@
 /* Visible Analog Movement Joystick (Bottom-Left) */
 .pubg-joystick-zone {
   position: absolute;
-  bottom: 18px;
-  left: 20px;
+  bottom: max(26px, env(safe-area-inset-bottom, 26px));
+  left: max(32px, env(safe-area-inset-left, 32px));
   width: 110px;
   height: 110px;
   display: flex;
@@ -469,10 +469,10 @@
 /* Mobile Ergonomic Combat Actions Arc (Fire + Dash + Reload) */
 .pubg-touch-actions {
   position: absolute;
-  bottom: max(6px, env(safe-area-inset-bottom, 6px));
-  right: max(8px, env(safe-area-inset-right, 8px));
-  width: 165px;
-  height: 155px;
+  bottom: max(22px, env(safe-area-inset-bottom, 22px));
+  right: max(28px, env(safe-area-inset-right, 28px));
+  width: 170px;
+  height: 160px;
   pointer-events: none;
   z-index: 55;
 }
@@ -509,8 +509,8 @@
 
 /* Sub-action buttons base (Dash & Reload) */
 .touch-btn.sub-btn {
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   border: 2.5px solid #ffffff;
   box-shadow: 0 4px 0 #1a0f06, 0 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -522,8 +522,8 @@
 
 /* Dash Button: Ergonomic arc above Fire button */
 .touch-btn.dash-btn {
-  right: 18px;
-  bottom: 90px;
+  right: 12px;
+  bottom: 88px;
   background: linear-gradient(180deg, #ffa726 0%, #fb8c00 50%, #e65100 100%);
   box-shadow: 0 4px 0 #8c3800, 0 4px 14px rgba(251, 140, 0, 0.5);
 }
@@ -535,7 +535,7 @@
 /* Reload Button: Ergonomic arc to the left/up-left of Fire button */
 .touch-btn.reload-btn {
   right: 88px;
-  bottom: 24px;
+  bottom: 14px;
   background: linear-gradient(180deg, #29b6f6 0%, #0288d1 50%, #01579b 100%);
   box-shadow: 0 4px 0 #003766, 0 4px 14px rgba(2, 136, 209, 0.5);
 }
@@ -546,10 +546,10 @@
 
 /* Primary Fire Button: Bottom-right corner thumb rest anchor */
 .touch-btn.fire-btn {
-  right: 2px;
-  bottom: 2px;
-  width: 76px;
-  height: 76px;
+  right: 6px;
+  bottom: 6px;
+  width: 72px;
+  height: 72px;
   background: radial-gradient(circle at 35% 35%, #ff5252 0%, #d50000 65%, #7f0000 100%);
   border: 3.5px solid #ffe082;
   box-shadow: 0 5px 0 #5f0000, 0 0 24px rgba(255, 23, 68, 0.75);

@@ -1257,8 +1257,10 @@ function drawScreenOverlays(ctx, canvas) {
   const isCompact = canvas.height < 520;
   const mapW = isCompact ? 100 : 160;
   const mapH = isCompact ? 100 : 160;
-  const mapX = canvas.width - mapW - (isCompact ? 10 : 16);
-  const mapY = isCompact ? 8 : 16;
+  const mapMarginRight = isCompact ? 24 : 18;
+  const mapMarginTop = isCompact ? 10 : 16;
+  const mapX = canvas.width - mapW - mapMarginRight;
+  const mapY = mapMarginTop;
   const ratio = mapW / MAP_CONFIG.WIDTH;
 
   ctx.save();
