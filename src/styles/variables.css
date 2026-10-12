@@ -33,7 +33,7 @@ html, body {
   overflow: hidden;
   position: relative;
   font-family: var(--font-family);
-  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  background: #101c13;
   touch-action: manipulation;
 }
 
