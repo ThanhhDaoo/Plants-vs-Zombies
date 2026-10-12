@@ -234,181 +234,478 @@ function drawZombies(ctx) {
     ctx.save();
     ctx.translate(z.x, z.y);
 
-    // Shadow
+    const r = z.radius;
+    const walk = z.walkCycle || 0;
+    const isMoving = z.vx !== 0 || z.vy !== 0 || true; // zombies always shamble
+    const shambleAngle = Math.sin(walk) * 0.14; // Limp tilt
+    const shambleBob = Math.sin(walk * 2) * 1.8; // Vertical bob
+    const armL = Math.sin(walk) * 9; // Left arm reach
+    const armR = -Math.sin(walk) * 9; // Right arm reach
+
+    // 1. Soft Dynamic Ambient Shadow underneath
     ctx.beginPath();
-    ctx.ellipse(0, z.radius * 0.9, z.radius * 0.95, z.radius * 0.45, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
+    ctx.ellipse(0, r * 0.88, r * 1.05 + Math.abs(Math.sin(walk)) * 2, r * 0.42, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
     ctx.fill();
 
-    // Rotate towards facing angle
-    ctx.rotate(z.angle);
+    // Rotate towards facing angle + shambling limp
+    ctx.rotate(z.angle + shambleAngle);
+    ctx.translate(shambleBob, 0);
 
-    // Leg walking wobble animation
-    const legOffset = Math.sin(z.walkCycle) * 4;
+    // 2. Palette Selection based on Zombie Tier & Status
+    let skinBase = '#7ea077';
+    let skinShadow = '#516f4b';
+    let skinHighlight = '#a3c59b';
+    let coatColor = '#4a3f35';
+    let tieColor = '#d32f2f';
 
-    // Body base
-    ctx.beginPath();
-    ctx.arc(0, 0, z.radius, 0, Math.PI * 2);
-
-    // Color skin depending on type & slow status
     if (z.slowTimer > 0) {
-      ctx.fillStyle = '#4fc3f7';
+      skinBase = '#80deea';
+      skinShadow = '#0097a7';
+      skinHighlight = '#e0f7fa';
+      coatColor = '#263238';
     } else if (z.type === 'toxic') {
-      ctx.fillStyle = '#00e676';
+      skinBase = '#00e676';
+      skinShadow = '#00a152';
+      skinHighlight = '#b9f6ca';
+      coatColor = '#1b5e20';
+      tieColor = '#ffea00';
+    } else if (z.type === 'runner') {
+      skinBase = '#8ca88b';
+      skinShadow = '#597058';
+      skinHighlight = '#b2ccb1';
+      coatColor = '#b71c1c';
+      tieColor = '#ffffff';
     } else if (z.type === 'boss') {
-      ctx.fillStyle = '#455a64';
-    } else {
-      ctx.fillStyle = '#795548';
+      skinBase = '#435865';
+      skinShadow = '#26343d';
+      skinHighlight = '#78909c';
+      coatColor = '#121d23';
+      tieColor = '#ff1744';
     }
+
+    // --- 3. Tattered Suit Coat & White Collar (Back/Torso) ---
+    // Torn business suit jacket
+    ctx.beginPath();
+    ctx.rect(-r * 1.05, -r * 0.72, r * 0.92, r * 1.44);
+    ctx.fillStyle = coatColor;
     ctx.fill();
-    ctx.strokeStyle = '#263238';
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#18120b';
+    ctx.lineWidth = 2.4;
     ctx.stroke();
 
-    // Tattered clothes / vest on back
-    ctx.fillStyle = z.type === 'runner' ? '#d32f2f' : '#37474f';
-    ctx.fillRect(-z.radius, -z.radius * 0.7, z.radius * 0.8, z.radius * 1.4);
-
-    // Red necktie
-    ctx.fillStyle = '#e53935';
+    // Ragged jagged tears on suit hem
     ctx.beginPath();
-    ctx.moveTo(2, -3);
-    ctx.lineTo(8, -1);
-    ctx.lineTo(2, 2);
+    ctx.moveTo(-r * 1.05, -r * 0.72);
+    ctx.lineTo(-r * 1.18, -r * 0.38);
+    ctx.lineTo(-r * 1.05, -r * 0.1);
+    ctx.lineTo(-r * 1.22, r * 0.22);
+    ctx.lineTo(-r * 1.05, r * 0.52);
+    ctx.lineTo(-r * 1.16, r * 0.72);
+    ctx.fillStyle = coatColor;
+    ctx.fill();
+
+    // White shirt collar lapels
+    ctx.fillStyle = '#f5f5f5';
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.15, -6);
+    ctx.lineTo(r * 0.12, -2.5);
+    ctx.lineTo(-r * 0.15, 0);
+    ctx.lineTo(r * 0.12, 2.5);
+    ctx.lineTo(-r * 0.15, 6);
     ctx.closePath();
     ctx.fill();
 
-    // Reaching zombie arms
-    ctx.fillStyle = z.type === 'toxic' ? '#00e676' : '#8d6e63';
-    ctx.fillRect(z.radius - 6, -11 + legOffset, 16, 5);
-    ctx.fillRect(z.radius - 6, 6 - legOffset, 16, 5);
+    // Ragged Red Tie dangling & swaying
+    ctx.save();
+    ctx.translate(r * 0.08, 0);
+    ctx.rotate(-shambleAngle * 2);
+    ctx.fillStyle = tieColor;
+    ctx.beginPath();
+    ctx.moveTo(0, -3.5);
+    ctx.lineTo(12, -1.8);
+    ctx.lineTo(16, 0);
+    ctx.lineTo(12, 1.8);
+    ctx.lineTo(0, 3.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#7f0000';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.restore();
 
-    // Sharp claws
-    ctx.fillStyle = '#d7ccc8';
-    ctx.fillRect(z.radius + 8, -12 + legOffset, 4, 3);
-    ctx.fillRect(z.radius + 8, 7 - legOffset, 4, 3);
+    // --- 4. Articulated Reaching Arms with Claws ---
+    drawZombieArm(ctx, r, coatColor, skinBase, -r * 0.35, -r * 0.82, armL);
+    drawZombieArm(ctx, r, coatColor, skinBase, -r * 0.35, r * 0.82, armR);
 
-    // Hungry, derpy eyes
+    // --- 5. Authentic PvZ Zombie Head with 3D Shading ---
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    const headGrad = ctx.createRadialGradient(-r * 0.35, -r * 0.35, r * 0.15, 0, 0, r);
+    headGrad.addColorStop(0, skinHighlight);
+    headGrad.addColorStop(0.65, skinBase);
+    headGrad.addColorStop(1, skinShadow);
+    ctx.fillStyle = headGrad;
+    ctx.fill();
+    ctx.strokeStyle = '#1b2718';
+    ctx.lineWidth = 2.6;
+    ctx.stroke();
+
+    // Decaying comic ears on sides
+    ctx.fillStyle = skinBase;
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.1, -r * 0.96, 4.5, 3.2, 0.3, 0, Math.PI * 2);
+    ctx.ellipse(-r * 0.1, r * 0.96, 4.5, 3.2, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Sparse wispy black hairs on balding head
+    ctx.strokeStyle = '#212121';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.7, -5);
+    ctx.quadraticCurveTo(-r * 1.05, -9 + shambleAngle * 8, -r * 0.95, -14);
+    ctx.moveTo(-r * 0.8, 0);
+    ctx.quadraticCurveTo(-r * 1.15, shambleAngle * 10, -r * 1.08, -3);
+    ctx.moveTo(-r * 0.7, 5);
+    ctx.quadraticCurveTo(-r * 1.05, 9 + shambleAngle * 8, -r * 0.95, 14);
+    ctx.stroke();
+
+    // --- 6. Open Slack Jaw & Crooked Teeth ---
+    ctx.beginPath();
+    ctx.ellipse(r * 0.62, 0, r * 0.28, r * 0.42, 0, -Math.PI / 2, Math.PI / 2);
+    ctx.fillStyle = '#160808';
+    ctx.fill();
+    ctx.strokeStyle = '#1b2718';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Goofy pink tongue
+    ctx.fillStyle = '#e57373';
+    ctx.beginPath();
+    ctx.ellipse(r * 0.65, 2, 4, 3, 0.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Crooked yellow teeth
+    ctx.fillStyle = '#fff9c4';
+    ctx.strokeStyle = '#5d4037';
+    ctx.lineWidth = 1;
+    // Tooth 1
+    ctx.fillRect(r * 0.55, -7, 3.5, 3.5);
+    ctx.strokeRect(r * 0.55, -7, 3.5, 3.5);
+    // Tooth 2
+    ctx.fillRect(r * 0.6, 4, 3.5, 3.5);
+    ctx.strokeRect(r * 0.6, 4, 3.5, 3.5);
+    // Tooth 3
+    ctx.fillRect(r * 0.52, -1, 3, 3);
+    ctx.strokeRect(r * 0.52, -1, 3, 3);
+
+    // --- 7. Iconic Asymmetric Derpy Eyes ---
+    // Left eye (big bulging eye)
+    ctx.save();
+    ctx.translate(r * 0.18, -r * 0.36);
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.29, 0, Math.PI * 2);
+    ctx.fillStyle = '#fffde7';
+    ctx.fill();
+    ctx.strokeStyle = '#263238';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    // Tiny pupil looking forward
+    ctx.fillStyle = z.type === 'boss' ? '#ff1744' : '#1a1a1a';
+    ctx.beginPath();
+    ctx.arc(r * 0.08, -r * 0.04, r * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+    // Specular shine
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(4, -7, 5, 0, Math.PI * 2);
-    ctx.arc(4, 7, 5, 0, Math.PI * 2);
+    ctx.arc(r * 0.05, -r * 0.08, 1.8, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = z.type === 'boss' ? '#ff1744' : '#212121';
+    ctx.restore();
+
+    // Right eye (smaller droopy eye with heavy lid)
+    ctx.save();
+    ctx.translate(r * 0.18, r * 0.36);
     ctx.beginPath();
-    ctx.arc(6, -7, 2.5, 0, Math.PI * 2);
-    ctx.arc(6, 7, 2.5, 0, Math.PI * 2);
+    ctx.arc(0, 0, r * 0.23, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff9c4';
     ctx.fill();
-
-    // Mouth with jagged teeth
-    ctx.fillStyle = '#212121';
-    ctx.fillRect(z.radius - 4, -4, 5, 8);
+    ctx.strokeStyle = '#263238';
+    ctx.lineWidth = 1.9;
+    ctx.stroke();
+    // Off-center pupil
+    ctx.fillStyle = z.type === 'boss' ? '#ff1744' : '#1a1a1a';
+    ctx.beginPath();
+    ctx.arc(r * 0.06, r * 0.05, r * 0.09, 0, Math.PI * 2);
+    ctx.fill();
+    // Specular shine
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(z.radius - 3, -3, 2, 2);
-    ctx.fillRect(z.radius - 3, 2, 2, 2);
+    ctx.beginPath();
+    ctx.arc(r * 0.03, r * 0.02, 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    // Droopy decaying eyelid
+    ctx.fillStyle = skinBase;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.23, Math.PI * 1.15, Math.PI * 1.85);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#263238';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
 
-    // Special Tier Visuals
+    // --- 8. Special Tier Visuals ---
     // 1. Conehead
     if (z.type === 'conehead') {
-      ctx.fillStyle = '#ff6d00';
+      ctx.save();
+      ctx.translate(-r * 0.08, 0);
+      // Flanged base rim
+      ctx.fillStyle = '#e65100';
       ctx.beginPath();
-      ctx.moveTo(10, -10);
-      ctx.lineTo(10, 10);
-      ctx.lineTo(-16, 0);
-      ctx.closePath();
+      ctx.ellipse(r * 0.28, 0, 5, r * 0.72, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#e65100';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#bf360c';
+      ctx.lineWidth = 2.2;
       ctx.stroke();
-      // White reflective stripes on cone
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 3;
+
+      // Vibrant orange cone body
+      const coneGrad = ctx.createLinearGradient(0, -r * 0.65, 0, r * 0.65);
+      coneGrad.addColorStop(0, '#ff9800');
+      coneGrad.addColorStop(0.4, '#ff5722');
+      coneGrad.addColorStop(1, '#d84315');
       ctx.beginPath();
-      ctx.moveTo(0, -6);
-      ctx.lineTo(0, 6);
-      ctx.moveTo(-8, -3);
-      ctx.lineTo(-8, 3);
+      ctx.moveTo(r * 0.28, -r * 0.68);
+      ctx.lineTo(r * 0.28, r * 0.68);
+      ctx.lineTo(-r * 0.95, 0);
+      ctx.closePath();
+      ctx.fillStyle = coneGrad;
+      ctx.fill();
       ctx.stroke();
+
+      // Reflective white safety stripes
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.05, -r * 0.44);
+      ctx.lineTo(-r * 0.05, r * 0.44);
+      ctx.moveTo(-r * 0.48, -r * 0.24);
+      ctx.lineTo(-r * 0.48, r * 0.24);
+      ctx.stroke();
+
+      // Black chin strap
+      ctx.strokeStyle = '#212121';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(r * 0.12, 0, r * 0.85, -Math.PI * 0.4, Math.PI * 0.4);
+      ctx.stroke();
+      ctx.restore();
     }
 
     // 2. Buckethead
     else if (z.type === 'buckethead') {
-      ctx.fillStyle = '#cfd8dc';
-      ctx.fillRect(-12, -12, 22, 24);
-      ctx.strokeStyle = '#455a64';
-      ctx.lineWidth = 2.5;
-      ctx.strokeRect(-12, -12, 22, 24);
-      // Metallic handle
+      ctx.save();
+      ctx.translate(-r * 0.08, 0);
+      const bucketGrad = ctx.createLinearGradient(0, -r * 0.78, 0, r * 0.78);
+      bucketGrad.addColorStop(0, '#eceff1');
+      bucketGrad.addColorStop(0.35, '#b0bec5');
+      bucketGrad.addColorStop(0.7, '#78909c');
+      bucketGrad.addColorStop(1, '#455a64');
+
+      // Bucket body with rounded edges
       ctx.beginPath();
-      ctx.arc(-1, 0, 14, -Math.PI / 2, Math.PI / 2);
-      ctx.strokeStyle = '#37474f';
+      ctx.roundRect(-r * 0.85, -r * 0.75, r * 1.25, r * 1.5, [4, 8, 8, 4]);
+      ctx.fillStyle = bucketGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#263238';
+      ctx.lineWidth = 2.5;
       ctx.stroke();
+
+      // Rolled rim lip
+      ctx.fillStyle = '#cfd8dc';
+      ctx.fillRect(r * 0.35, -r * 0.8, 5, r * 1.6);
+      ctx.strokeRect(r * 0.35, -r * 0.8, 5, r * 1.6);
+
+      // Rib ring
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.35, -r * 0.7);
+      ctx.lineTo(-r * 0.35, r * 0.7);
+      ctx.stroke();
+
+      // Steel wire handle
+      ctx.beginPath();
+      ctx.arc(-r * 0.2, -r * 0.85, r * 0.5, 0, Math.PI);
+      ctx.strokeStyle = '#37474f';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Battle dent
+      ctx.fillStyle = '#263238';
+      ctx.beginPath();
+      ctx.arc(-r * 0.42, -r * 0.2, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
 
     // 3. Football Runner
     else if (z.type === 'runner') {
-      ctx.fillStyle = '#b71c1c';
+      ctx.save();
       ctx.beginPath();
-      ctx.arc(-2, 0, z.radius - 3, 0, Math.PI * 2);
+      ctx.arc(-r * 0.15, 0, r * 0.95, 0, Math.PI * 2);
+      const helmGrad = ctx.createRadialGradient(-r * 0.3, -r * 0.3, 2, -r * 0.15, 0, r);
+      helmGrad.addColorStop(0, '#ef5350');
+      helmGrad.addColorStop(0.6, '#d32f2f');
+      helmGrad.addColorStop(1, '#b71c1c');
+      ctx.fillStyle = helmGrad;
       ctx.fill();
-      // Helmet center stripe
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(-z.radius + 2, 0);
-      ctx.lineTo(z.radius - 2, 0);
+      ctx.strokeStyle = '#1b120c';
+      ctx.lineWidth = 2.6;
       ctx.stroke();
+
+      // Center white racing stripe
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 4.5;
+      ctx.beginPath();
+      ctx.moveTo(-r * 1.05, 0);
+      ctx.lineTo(r * 0.65, 0);
+      ctx.stroke();
+
+      // Steel face grill cage
+      ctx.strokeStyle = '#eceff1';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(r * 0.35, -8);
+      ctx.lineTo(r * 0.8, -8);
+      ctx.moveTo(r * 0.45, 0);
+      ctx.lineTo(r * 0.88, 0);
+      ctx.moveTo(r * 0.35, 8);
+      ctx.lineTo(r * 0.8, 8);
+      ctx.moveTo(r * 0.7, -9);
+      ctx.lineTo(r * 0.7, 9);
+      ctx.stroke();
+
+      // Red padded shoulders
+      ctx.fillStyle = '#b71c1c';
+      ctx.fillRect(-r * 0.9, -r * 1.25, 12, 6);
+      ctx.fillRect(-r * 0.9, r * 1.25 - 6, 12, 6);
+      ctx.restore();
     }
 
     // 4. Toxic Zombie
     else if (z.type === 'toxic') {
-      ctx.strokeStyle = '#b9f6ca';
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 230, 118, 0.6)';
       ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
       ctx.beginPath();
-      ctx.arc(0, 0, z.radius + 4, 0, Math.PI * 2);
+      ctx.arc(0, 0, r * 1.28 + Math.sin(Date.now() * 0.006) * 3, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.setLineDash([]);
+
+      const bub1 = Math.sin(Date.now() * 0.008) * 2;
+      ctx.fillStyle = '#69f0ae';
+      ctx.beginPath();
+      ctx.arc(-r * 0.4, -r * 0.5, 4 + bub1, 0, Math.PI * 2);
+      ctx.arc(-r * 0.2, r * 0.5, 3.5 - bub1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
 
     // 5. Shield Zombie
     else if (z.type === 'shield') {
-      // Large reinforced wooden door shield in front
+      ctx.save();
+      ctx.translate(r + 6, 0);
+      // Weathered wood door
       ctx.fillStyle = '#4e342e';
-      ctx.fillRect(z.radius + 6, -18, 9, 36);
-      ctx.strokeStyle = '#cfd8dc';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(z.radius + 6, -18, 9, 36);
-      // Iron bolts
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(z.radius + 9, -14, 3, 3);
-      ctx.fillRect(z.radius + 9, 11, 3, 3);
-      ctx.fillRect(z.radius + 9, -2, 3, 3);
+      ctx.fillRect(0, -r * 1.3, 11, r * 2.6);
+      ctx.strokeStyle = '#27170e';
+      ctx.lineWidth = 2.6;
+      ctx.strokeRect(0, -r * 1.3, 11, r * 2.6);
+
+      // Wood plank separation
+      ctx.strokeStyle = '#3e2723';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.4);
+      ctx.lineTo(11, -r * 0.4);
+      ctx.moveTo(0, r * 0.4);
+      ctx.lineTo(11, r * 0.4);
+      ctx.stroke();
+
+      // Iron reinforcing bands
+      ctx.fillStyle = '#37474f';
+      ctx.fillRect(-1.5, -r * 1.1, 14, 5);
+      ctx.fillRect(-1.5, r * 1.1 - 5, 14, 5);
+      // Hex rivets
+      ctx.fillStyle = '#eceff1';
+      ctx.fillRect(4, -r * 1.1 + 1.5, 2.5, 2);
+      ctx.fillRect(4, r * 1.1 - 3.5, 2.5, 2);
+
+      // Brass door handle
+      ctx.fillStyle = '#ffd54f';
+      ctx.fillRect(2, -4, 7, 8);
+      ctx.restore();
     }
 
     // 6. Gargantuar Titan Boss
     else if (z.type === 'boss') {
-      // Huge street lamp-post weapon
-      ctx.fillStyle = '#263238';
-      ctx.fillRect(z.radius - 4, -26, 32, 10);
+      ctx.save();
+      ctx.translate(r * 0.2, -r * 1.1);
+      // Street lamp-post weapon
+      ctx.fillStyle = '#3e2723';
+      ctx.fillRect(0, -6, r * 1.6, 12);
+      ctx.strokeStyle = '#1b120c';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(0, -6, r * 1.6, 12);
+
+      // Glowing lamp bulb
       ctx.fillStyle = '#ffe082';
-      ctx.fillRect(z.radius + 24, -28, 12, 14); // Glowing street lamp bulb
+      ctx.fillRect(r * 1.4, -9, 14, 18);
       ctx.strokeStyle = '#ffb300';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(z.radius + 24, -28, 12, 14);
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(r * 1.4, -9, 14, 18);
+
+      // Lamp glow
+      ctx.fillStyle = 'rgba(255, 235, 59, 0.45)';
+      ctx.beginPath();
+      ctx.arc(r * 1.5 + 7, 0, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Surgical scars on brow
+      ctx.strokeStyle = '#cfd8dc';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.35, -r * 0.4);
+      ctx.lineTo(r * 0.35, -r * 0.1);
+      ctx.stroke();
+      for (let s = -4; s <= 4; s += 4) {
+        ctx.beginPath();
+        ctx.moveTo(s - 2, -r * 0.3);
+        ctx.lineTo(s + 2, -r * 0.2);
+        ctx.stroke();
+      }
     }
 
     ctx.restore();
 
-    // Health Bar & Tier Badge (unrotated, above zombie head)
+    // 9. Health Bar & Tier Badge (unrotated, above zombie head)
     ctx.save();
     ctx.translate(z.x, z.y);
     const barW = Math.max(34, z.radius * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    ctx.fillRect(-barW / 2, -z.radius - 14, barW, 5);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+    ctx.fillRect(-barW / 2, -z.radius - 14, barW, 5.5);
 
     // HP Fill
     const hpRatio = Math.max(0, z.health / z.maxHealth);
     ctx.fillStyle = z.type === 'boss' ? '#ffd600' : z.slowTimer > 0 ? '#29b6f6' : '#e53935';
-    ctx.fillRect(-barW / 2, -z.radius - 14, barW * hpRatio, 5);
+    ctx.fillRect(-barW / 2, -z.radius - 14, barW * hpRatio, 5.5);
+
+    // HP Border
+    ctx.strokeStyle = '#1b0f06';
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(-barW / 2, -z.radius - 14, barW, 5.5);
 
     // Name badge for Boss
     if (z.type === 'boss') {
@@ -423,87 +720,331 @@ function drawZombies(ctx) {
   });
 }
 
+// Helper function to draw articulated zombie arm & claw
+function drawZombieArm(ctx, r, coatColor, skinColor, startX, startY, reachOffset) {
+  ctx.save();
+  ctx.translate(startX, startY);
+
+  const armLen = r * 0.85 + reachOffset;
+
+  // Torn suit jacket sleeve
+  ctx.fillStyle = coatColor;
+  ctx.beginPath();
+  ctx.moveTo(0, -4.5);
+  ctx.lineTo(armLen * 0.45, -5.5);
+  ctx.lineTo(armLen * 0.4, 0);
+  ctx.lineTo(armLen * 0.48, 5.5);
+  ctx.lineTo(0, 4.5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#18120b';
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+
+  // Decaying zombie forearm
+  ctx.fillStyle = skinColor;
+  ctx.beginPath();
+  ctx.rect(armLen * 0.35, -3.2, armLen * 0.5, 6.4);
+  ctx.fill();
+  ctx.strokeStyle = '#1b2718';
+  ctx.lineWidth = 1.6;
+  ctx.stroke();
+
+  // Claws / outstretched fingers reaching forward
+  ctx.translate(armLen * 0.85, 0);
+  ctx.fillStyle = skinColor;
+  for (let f = -1; f <= 1; f++) {
+    ctx.beginPath();
+    ctx.moveTo(0, f * 3);
+    ctx.lineTo(6.5, f * 3.8);
+    ctx.lineTo(8, f * 2.2);
+    ctx.lineTo(0, f * 1);
+    ctx.closePath();
+    ctx.fill();
+    // Dirty claw nail
+    ctx.fillStyle = '#212121';
+    ctx.fillRect(6, f * 2.8, 2.2, 2);
+    ctx.fillStyle = skinColor;
+  }
+
+  ctx.restore();
+}
+
 function drawPlayer(ctx, p) {
   ctx.save();
   ctx.translate(p.x, p.y);
 
-  // Soft shadow underneath
+  const r = p.radius;
+  const walk = p.walkCycle || 0;
+  const isMoving = !!p.isMoving;
+  const currentW = WEAPONS[p.currentWeapon] || WEAPONS.pea_pistol;
+
+  // Walk cycle animation offsets
+  const footSway1 = isMoving ? Math.sin(walk) * 6 : 0;
+  const footSway2 = isMoving ? -Math.sin(walk) * 6 : 0;
+  const bodyBob = isMoving ? Math.sin(walk * 2) * 1.5 : Math.sin(walk) * 0.8;
+  const bodySquash = isMoving ? 1 + Math.sin(walk * 2) * 0.04 : 1 + Math.sin(walk) * 0.02;
+
+  // 1. Soft Dynamic Shadow underneath
   ctx.beginPath();
-  ctx.ellipse(0, p.radius * 0.85, p.radius * 0.95, p.radius * 0.45, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+  ctx.ellipse(0, r * 0.88, r * 1.1 + (isMoving ? Math.abs(Math.sin(walk)) * 2 : 0), r * 0.44, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
   ctx.fill();
 
   // Dash smoke trail
   if (p.isDashing) {
     ctx.beginPath();
-    ctx.arc(-22, 0, p.radius * 0.9, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(129, 199, 132, 0.5)';
+    ctx.arc(-24, 0, r * 0.95, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(129, 199, 132, 0.55)';
     ctx.fill();
   }
 
-  // Golden Armor Barrier Ring
+  // Golden Armor Barrier Ring (Rotating Hexagonal Aura)
   if (p.armor > 0) {
-    ctx.beginPath();
-    ctx.arc(0, 0, p.radius + 7, 0, Math.PI * 2);
+    ctx.save();
+    const rotArmor = Date.now() * 0.002;
+    ctx.rotate(rotArmor);
     ctx.strokeStyle = 'rgba(255, 215, 0, 0.85)';
     ctx.lineWidth = 3;
+    ctx.setLineDash([10, 6]);
+    ctx.beginPath();
+    ctx.arc(0, 0, r + 8, 0, Math.PI * 2);
     ctx.stroke();
+    ctx.restore();
   }
 
   // Rotate to aim angle
   ctx.rotate(p.angle);
+  ctx.translate(bodyBob, 0);
 
-  // 1. Dual Stem Leaves (Back fins)
+  // 2. 4 Adorable Waddling Green Leaf Feet (Plant Pedestal)
+  ctx.fillStyle = '#2e7d32';
+  ctx.strokeStyle = '#1b5e20';
+  ctx.lineWidth = 2;
+  // Back-left foot
+  ctx.beginPath();
+  ctx.ellipse(-r * 0.65 + footSway1, -r * 0.55, 8, 5, -0.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Back-right foot
+  ctx.beginPath();
+  ctx.ellipse(-r * 0.65 + footSway2, r * 0.55, 8, 5, 0.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Front-left foot
+  ctx.beginPath();
+  ctx.ellipse(r * 0.35 + footSway2, -r * 0.6, 8, 5, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Front-right foot
+  ctx.beginPath();
+  ctx.ellipse(r * 0.35 + footSway1, r * 0.6, 8, 5, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // 3. Dual Swishing Stem Leaves (Back fins) with natural wave physics
+  const leafWave = Math.sin(walk * 1.5) * 0.18;
+  ctx.save();
+  ctx.translate(-r * 0.72, 0);
+  ctx.rotate(leafWave);
   ctx.fillStyle = '#388e3c';
-  ctx.beginPath();
-  ctx.ellipse(-p.radius * 0.7, -10, 10, 6, -0.4, 0, Math.PI * 2);
-  ctx.ellipse(-p.radius * 0.7, 10, 10, 6, 0.4, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 2. Peashooter Head Body (Vibrant gradient)
-  ctx.beginPath();
-  ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
-  ctx.fillStyle = '#4caf50';
-  ctx.fill();
   ctx.strokeStyle = '#1b5e20';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2.2;
+  // Top stem leaf
+  ctx.beginPath();
+  ctx.ellipse(-6, -11, 12, 7, -0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Leaf vein
+  ctx.strokeStyle = '#81c784';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(0, -9);
+  ctx.lineTo(-12, -13);
+  ctx.stroke();
+  // Bottom stem leaf
+  ctx.fillStyle = '#388e3c';
+  ctx.strokeStyle = '#1b5e20';
+  ctx.lineWidth = 2.2;
+  ctx.beginPath();
+  ctx.ellipse(-6, 11, 12, 7, 0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Leaf vein
+  ctx.strokeStyle = '#81c784';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(0, 9);
+  ctx.lineTo(-12, 13);
+  ctx.stroke();
+  ctx.restore();
+
+  // 4. Peashooter Head Body (Vibrant 3D Spherical Volume)
+  ctx.save();
+  ctx.scale(1 / bodySquash, bodySquash);
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  const bodyGrad = ctx.createRadialGradient(-r * 0.35, -r * 0.35, r * 0.15, 0, 0, r);
+  bodyGrad.addColorStop(0, '#98ee99');
+  bodyGrad.addColorStop(0.35, '#4caf50');
+  bodyGrad.addColorStop(0.8, '#388e3c');
+  bodyGrad.addColorStop(1, '#1b5e20');
+  ctx.fillStyle = bodyGrad;
+  ctx.fill();
+  ctx.strokeStyle = '#134017';
+  ctx.lineWidth = 2.8;
   ctx.stroke();
 
-  // 3. Spetsnaz Level 3 Tactical Helmet (PUBG Commando Helmet)
-  ctx.fillStyle = '#263238';
+  // Crescent Specular Highlight on forehead
   ctx.beginPath();
-  ctx.arc(-2, 0, p.radius + 1, Math.PI * 0.55, Math.PI * 1.45);
-  ctx.lineTo(-p.radius * 0.4, 0);
+  ctx.arc(-r * 0.15, -r * 0.25, r * 0.65, Math.PI * 1.1, Math.PI * 1.6);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  ctx.restore();
+
+  // 5. Special Ops Commando Helmet & Fluttering Red Bandana
+  ctx.save();
+  // Commando tactical combat helmet on back of head
+  ctx.beginPath();
+  ctx.arc(-2, 0, r + 1.5, Math.PI * 0.52, Math.PI * 1.48);
+  ctx.lineTo(-r * 0.38, 0);
   ctx.closePath();
+  const helmGrad = ctx.createLinearGradient(-r, 0, 0, 0);
+  helmGrad.addColorStop(0, '#212f24');
+  helmGrad.addColorStop(0.7, '#37473a');
+  helmGrad.addColorStop(1, '#1e2920');
+  ctx.fillStyle = helmGrad;
   ctx.fill();
-  ctx.strokeStyle = '#37474f';
+  ctx.strokeStyle = '#141d15';
   ctx.lineWidth = 2.5;
   ctx.stroke();
 
-  // Helmet metal band & visor slit
-  ctx.fillStyle = '#102027';
-  ctx.fillRect(-p.radius * 0.3, -12, 6, 24);
-  ctx.strokeStyle = '#00e5ff';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(-p.radius * 0.3, -12, 6, 24);
-
-  // 4. Heavy Cannon Snout with Recoil Animation
-  const currentW = WEAPONS[p.currentWeapon] || WEAPONS.pea_pistol;
-  const recoilX = p.recoilOffset || 0;
-  const snoutX = p.radius + 6 - recoilX;
-
-  // Metallic barrel sleeve
-  ctx.fillStyle = '#37474f';
-  ctx.fillRect(p.radius - 2, -6, 8, 12);
-
-  // Snout cone
+  // Steel rivets on helmet rim
+  ctx.fillStyle = '#cfd8dc';
   ctx.beginPath();
-  ctx.ellipse(snoutX, 0, 11, 9, 0, 0, Math.PI * 2);
-  ctx.fillStyle = currentW.bulletColor;
+  ctx.arc(-r * 0.55, -r * 0.75, 1.8, 0, Math.PI * 2);
+  ctx.arc(-r * 0.85, 0, 1.8, 0, Math.PI * 2);
+  ctx.arc(-r * 0.55, r * 0.75, 1.8, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = '#1b5e20';
-  ctx.lineWidth = 2.5;
+
+  // Two fluttering Red Commando Bandana Ribbons
+  const ribbonWave = Math.sin(walk * 2) * 5;
+  ctx.strokeStyle = '#e53935';
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.95, -4);
+  ctx.quadraticCurveTo(-r * 1.35, -8 + ribbonWave, -r * 1.55, -5 + ribbonWave);
+  ctx.moveTo(-r * 0.95, 3);
+  ctx.quadraticCurveTo(-r * 1.35, 7 - ribbonWave, -r * 1.6, 9 - ribbonWave);
   ctx.stroke();
+  ctx.restore();
+
+  // 6. Custom Weapon Snout with Recoil Animation
+  const recoilX = p.recoilOffset || 0;
+  const snoutX = r + 6 - recoilX;
+
+  // Snout Collar Sleeve
+  ctx.fillStyle = '#2e3d30';
+  ctx.fillRect(r - 3, -7, 9, 14);
+  ctx.strokeStyle = '#141d15';
+  ctx.lineWidth = 1.8;
+  ctx.strokeRect(r - 3, -7, 9, 14);
+
+  // Weapon-specific muzzle styling
+  if (p.currentWeapon === 'threepeater_shotgun') {
+    // Triple cluster shotgun barrels
+    [-6, 0, 6].forEach((offsetY) => {
+      ctx.beginPath();
+      ctx.ellipse(snoutX, offsetY, 8.5, 6.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = currentW.bulletColor;
+      ctx.fill();
+      ctx.strokeStyle = '#1b5e20';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+      ctx.fillStyle = '#143517';
+      ctx.beginPath();
+      ctx.arc(snoutX + 3, offsetY, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  } else if (p.currentWeapon === 'snow_pea_sniper') {
+    // Frost crystal flared snout
+    ctx.beginPath();
+    ctx.ellipse(snoutX, 0, 12, 10, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#80deea';
+    ctx.fill();
+    ctx.strokeStyle = '#00838f';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    // Ice crystal shards
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(snoutX + 5, -8);
+    ctx.lineTo(snoutX + 10, -5);
+    ctx.lineTo(snoutX + 4, -4);
+    ctx.moveTo(snoutX + 5, 8);
+    ctx.lineTo(snoutX + 10, 5);
+    ctx.lineTo(snoutX + 4, 4);
+    ctx.fill();
+  } else if (p.currentWeapon === 'fire_pea_gatling') {
+    // Revolving gatling barrel
+    ctx.beginPath();
+    ctx.ellipse(snoutX, 0, 13, 11, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#d84315';
+    ctx.fill();
+    ctx.strokeStyle = '#bf360c';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    // Revolving brass chambers
+    ctx.fillStyle = '#ffb300';
+    for (let c = 0; c < 4; c++) {
+      const ca = c * (Math.PI / 2) + Date.now() * 0.01;
+      ctx.beginPath();
+      ctx.arc(snoutX + Math.cos(ca) * 5, Math.sin(ca) * 5, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (p.currentWeapon === 'melon_bazooka') {
+    // Heavy melon mortar barrel
+    ctx.beginPath();
+    ctx.ellipse(snoutX, 0, 15, 13, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#7cb342';
+    ctx.fill();
+    ctx.strokeStyle = '#33691e';
+    ctx.lineWidth = 2.8;
+    ctx.stroke();
+    // Iron mortar band
+    ctx.strokeStyle = '#37474f';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(snoutX - 4, -13, 4, 26);
+  } else if (p.currentWeapon === 'plasma_cannon') {
+    // High-tech plasma energy coil
+    ctx.beginPath();
+    ctx.ellipse(snoutX, 0, 13, 11, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#7c4dff';
+    ctx.fill();
+    ctx.strokeStyle = '#b388ff';
+    ctx.lineWidth = 2.6;
+    ctx.stroke();
+    // Glowing cyan plasma core
+    ctx.fillStyle = '#00e5ff';
+    ctx.beginPath();
+    ctx.arc(snoutX + 2, 0, 5 + Math.sin(Date.now() * 0.01) * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    // Standard Pea Pistol Trumpet Snout
+    ctx.beginPath();
+    ctx.ellipse(snoutX, 0, 12, 10, 0, 0, Math.PI * 2);
+    ctx.fillStyle = currentW.bulletColor;
+    ctx.fill();
+    ctx.strokeStyle = '#1b5e20';
+    ctx.lineWidth = 2.6;
+    ctx.stroke();
+    // Inner dark cavity
+    ctx.fillStyle = '#143818';
+    ctx.beginPath();
+    ctx.arc(snoutX + 3, 0, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // --- Dynamic Tactical Crosshair & Laser Sight ("Tâm Bắn Linh Động") ---
   const isLocked = !!pubgState.input.lockedTarget;
@@ -523,7 +1064,7 @@ function drawPlayer(ctx, p) {
   ctx.lineTo(targetDist, 0);
   ctx.stroke();
 
-  // 2. Sharp Core Laser Line with subtle dash
+  // 2. Sharp Core Laser Line
   ctx.strokeStyle = aimColor;
   ctx.lineWidth = isLocked ? 2 : 1.5;
   ctx.setLineDash(isLocked ? [12, 6] : [6, 6]);
@@ -600,18 +1141,46 @@ function drawPlayer(ctx, p) {
 
   ctx.restore();
 
-  // 5. Determined Warrior Eyes
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.arc(4, -8, 5.5, 0, Math.PI * 2);
-  ctx.arc(4, 8, 5.5, 0, Math.PI * 2);
-  ctx.fill();
-  // Pupils looking straight forward
-  ctx.fillStyle = '#000000';
-  ctx.beginPath();
-  ctx.arc(7, -8, 2.8, 0, Math.PI * 2);
-  ctx.arc(7, 8, 2.8, 0, Math.PI * 2);
-  ctx.fill();
+  // 7. Expressive Determined Cartoon Eyes with Natural Blinking
+  const isBlinking = Math.sin(Date.now() * 0.0025) > 0.98;
+
+  if (isBlinking) {
+    // Cute confident squint when blinking
+    ctx.strokeStyle = '#1b5e20';
+    ctx.lineWidth = 2.8;
+    ctx.beginPath();
+    ctx.arc(5, -8, 6, 0.2, Math.PI - 0.2);
+    ctx.arc(5, 8, 6, -Math.PI + 0.2, -0.2);
+    ctx.stroke();
+  } else {
+    // Sclera (White eye)
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.ellipse(4, -8, 6.5, 5.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(4, 8, 6.5, 5.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#134017';
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+
+    // Large pupils looking forward (+X)
+    ctx.fillStyle = '#0f1710';
+    ctx.beginPath();
+    ctx.arc(6.5, -8, 3.4, 0, Math.PI * 2);
+    ctx.arc(6.5, 8, 3.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Double specular reflection shine dots (Giving life to eyes!)
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    // Big shine
+    ctx.arc(6.8, -9.5, 1.4, 0, Math.PI * 2);
+    ctx.arc(6.8, 6.5, 1.4, 0, Math.PI * 2);
+    // Small shine
+    ctx.arc(8, -7, 0.8, 0, Math.PI * 2);
+    ctx.arc(8, 9, 0.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   ctx.restore();
 }

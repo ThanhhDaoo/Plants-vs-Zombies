@@ -217,6 +217,14 @@ function updatePubg(delta) {
   p.x += moveX * currentSpeed;
   p.y += moveY * currentSpeed;
 
+  if (moveLen > 0) {
+    p.isMoving = true;
+    p.walkCycle = (p.walkCycle || 0) + (currentSpeed * delta) / 55;
+  } else {
+    p.isMoving = false;
+    p.walkCycle = (p.walkCycle || 0) + delta / 350;
+  }
+
   // Clamp player to map
   p.x = Math.max(p.radius + 15, Math.min(MAP_CONFIG.WIDTH - p.radius - 15, p.x));
   p.y = Math.max(p.radius + 15, Math.min(MAP_CONFIG.HEIGHT - p.radius - 15, p.y));
