@@ -9,6 +9,10 @@ export function setupPubgControls(canvas) {
   const keyHintA = document.getElementById('keyHintA');
   const keyHintS = document.getElementById('keyHintS');
   const keyHintD = document.getElementById('keyHintD');
+  const reloadBtn = document.getElementById('pubgReloadBtn');
+  const stormBtn = document.getElementById('pubgSkillStormBtn');
+  const bombBtn = document.getElementById('pubgSkillBombBtn');
+  const dashBtn = document.getElementById('pubgDashBtn');
   const fireBtn = document.getElementById('pubgFireBtn');
 
   // --- Keyboard Listeners ---
@@ -31,10 +35,34 @@ export function setupPubgControls(canvas) {
       pubgState.input.keys.d = true;
       if (keyHintD) keyHintD.classList.add('active');
     }
-    if (k === ' ' || k === 'shift') triggerDash();
-    if (k === 'r') triggerReload();
-    if (k === 'q') triggerPeaStorm();
-    if (k === 'e') triggerCherryBomb();
+    if (k === ' ' || k === 'shift') {
+      if (dashBtn) {
+        dashBtn.classList.add('active');
+        setTimeout(() => dashBtn.classList.remove('active'), 180);
+      }
+      triggerDash();
+    }
+    if (k === 'r') {
+      if (reloadBtn) {
+        reloadBtn.classList.add('active');
+        setTimeout(() => reloadBtn.classList.remove('active'), 180);
+      }
+      triggerReload();
+    }
+    if (k === 'q') {
+      if (stormBtn) {
+        stormBtn.classList.add('active');
+        setTimeout(() => stormBtn.classList.remove('active'), 180);
+      }
+      triggerPeaStorm();
+    }
+    if (k === 'e') {
+      if (bombBtn) {
+        bombBtn.classList.add('active');
+        setTimeout(() => bombBtn.classList.remove('active'), 180);
+      }
+      triggerCherryBomb();
+    }
   });
 
   window.addEventListener('keyup', (e) => {

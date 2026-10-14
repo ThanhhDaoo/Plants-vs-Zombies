@@ -756,16 +756,37 @@
     font-size: 0.66em !important;
   }
 
-  /* Strictly hide all Desktop Key Guides and Hints on Mobile */
-  .desktop-key,
-  .desktop-key-badge,
-  .desktop-control-hint,
-  .desktop-guide-ribbon {
-    display: none !important;
+  /* On compact screens: hide desktop keys only on pure touch devices, keep on desktop */
+  @media (hover: none), (pointer: coarse) {
+    .desktop-key,
+    .desktop-key-badge,
+    .desktop-control-hint,
+    .desktop-guide-ribbon {
+      display: none !important;
+    }
+
+    .mobile-arrow {
+      display: block !important;
+    }
   }
 
-  .mobile-arrow {
-    display: block !important;
+  @media (hover: hover) and (pointer: fine) {
+    .desktop-key,
+    .desktop-key-badge {
+      display: inline-flex !important;
+    }
+    .desktop-control-hint {
+      display: flex !important;
+    }
+    .desktop-guide-ribbon {
+      display: flex !important;
+      padding: 2px 8px !important;
+      font-size: 9.5px !important;
+      gap: 8px !important;
+    }
+    .mobile-arrow {
+      display: none !important;
+    }
   }
 }
 
@@ -780,5 +801,22 @@
 
   .mobile-arrow {
     display: block !important;
+  }
+}
+
+/* Desktop devices with keyboard/mouse strictly show desktop keyboard badges & hints */
+@media (hover: hover) and (pointer: fine) {
+  .desktop-key,
+  .desktop-key-badge {
+    display: inline-flex !important;
+  }
+
+  .desktop-control-hint,
+  .desktop-guide-ribbon {
+    display: flex !important;
+  }
+
+  .mobile-arrow {
+    display: none !important;
   }
 }
