@@ -37,8 +37,33 @@ function toggleFullscreen() {
   }
 }
 
-// Service worker for PWA offline play
-if ('serviceWorker' in navigator && !window.location.host.includes('localhost:5173')) {
+// Platform check: Native Capacitor App vs Web Browser
+const isNativePlatform = Boolean(
+  (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) ||
+  window.location.protocol === 'capacitor:' ||
+  window.location.protocol === 'ionic:' ||
+  window.location.protocol === 'file:'
+);
+
+if (isNativePlatform) {
+  // In native Capacitor app, assets are loaded directly from local app bundle.
+  // Purge any stale service worker & cacheStorage so updates are always instant.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const reg of registrations) {
+        reg.unregister();
+      }
+    });
+  }
+  if ('caches' in window) {
+    caches.keys().then((keys) => {
+      for (const k of keys) {
+        caches.delete(k);
+      }
+    });
+  }
+} else if ('serviceWorker' in navigator && !window.location.host.includes('localhost:5173')) {
+  // Service worker for PWA offline play on web browsers only
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
