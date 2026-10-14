@@ -3,7 +3,7 @@ import './styles/index.css';
 import { initAudio, toggleAudio } from './js/sound.js';
 import { initPubg, startPubgGame, stopPubg } from './js/pubg/pubgGame.js';
 import { setupSurvivalUI, renderLobbyStats, openArmoryModal, closeArmoryModal } from './js/pubg/pubgUI.js';
-import { triggerDash, triggerReload } from './js/pubg/pubgControls.js';
+import { triggerDash, triggerReload, triggerPeaStorm, triggerCherryBomb } from './js/pubg/pubgControls.js';
 
 // Expose globals for modal button clicks
 window.restartPubg = () => {
@@ -78,6 +78,16 @@ function setupApp() {
   const pubgReloadBtn = document.getElementById('pubgReloadBtn');
   if (pubgReloadBtn) {
     pubgReloadBtn.addEventListener('click', triggerReload);
+  }
+
+  const pubgSkillStormBtn = document.getElementById('pubgSkillStormBtn');
+  if (pubgSkillStormBtn) {
+    pubgSkillStormBtn.addEventListener('click', triggerPeaStorm);
+  }
+
+  const pubgSkillBombBtn = document.getElementById('pubgSkillBombBtn');
+  if (pubgSkillBombBtn) {
+    pubgSkillBombBtn.addEventListener('click', triggerCherryBomb);
   }
 
   // Initialize UI & Survival Engine

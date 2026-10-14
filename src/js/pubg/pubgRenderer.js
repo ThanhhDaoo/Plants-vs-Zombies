@@ -10,14 +10,23 @@ export function renderPubg(ctx, canvas) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
-  // Center camera smoothly on player
-  ctx.translate(canvas.width / 2 - cam.x, canvas.height / 2 - cam.y);
+  // Center camera smoothly on player with dynamic screen shake
+  let shakeX = 0;
+  let shakeY = 0;
+  if (pubgState.screenShake > 0) {
+    shakeX = (Math.random() - 0.5) * pubgState.screenShake;
+    shakeY = (Math.random() - 0.5) * pubgState.screenShake;
+  }
+  ctx.translate(canvas.width / 2 - cam.x + shakeX, canvas.height / 2 - cam.y + shakeY);
 
   // 1. Draw Battlefield Map Grid, Lawn Pattern & Environment
   drawBattlefield(ctx);
 
   // 2. Draw Crates & Ground Loot Items
   drawCratesAndItems(ctx);
+
+  // 2b. Draw Airborne Cherry Bombs
+  drawBombs(ctx);
 
   // 3. Draw Safe Zone Border & Electric Cyan Storm
   drawZone(ctx);
@@ -813,6 +822,31 @@ function drawPlayer(ctx, p) {
     ctx.restore();
   }
 
+  // Mega Pea Charging Energy Ring
+  if (p.isCharging) {
+    ctx.save();
+    const chargeProgress = Math.min(1, (p.chargeTimer || 0) / (p.maxChargeTime || 450));
+    const rot = Date.now() * 0.006;
+    ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(118, 255, 3, ${0.4 + chargeProgress * 0.6})`;
+    ctx.lineWidth = 3 + chargeProgress * 3;
+    ctx.setLineDash([12, 6]);
+    ctx.beginPath();
+    ctx.arc(0, 0, r + 12 + Math.sin(Date.now() * 0.02) * 3, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Converging particles
+    ctx.fillStyle = '#76ff03';
+    for (let c = 0; c < 4; c++) {
+      const ca = c * (Math.PI / 2) + rot * 1.5;
+      const cDist = (r + 14) * (1 - chargeProgress * 0.35);
+      ctx.beginPath();
+      ctx.arc(Math.cos(ca) * cDist, Math.sin(ca) * cDist, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
   // Rotate to aim angle
   ctx.rotate(p.angle);
   ctx.translate(bodyBob, 0);
@@ -952,7 +986,7 @@ function drawPlayer(ctx, p) {
   ctx.strokeRect(r - 3, -7, 9, 14);
 
   // Weapon-specific muzzle styling
-  if (p.currentWeapon === 'threepeater_shotgun') {
+  if (p.currentWeapon === 'threepeater_shotgun' || p.currentWeapon === 'threepeater') {
     // Triple cluster shotgun barrels
     [-6, 0, 6].forEach((offsetY) => {
       ctx.beginPath();
@@ -967,7 +1001,7 @@ function drawPlayer(ctx, p) {
       ctx.arc(snoutX + 3, offsetY, 3.2, 0, Math.PI * 2);
       ctx.fill();
     });
-  } else if (p.currentWeapon === 'snow_pea_sniper') {
+  } else if (p.currentWeapon === 'snow_pea_sniper' || p.currentWeapon === 'snow_sniper') {
     // Frost crystal flared snout
     ctx.beginPath();
     ctx.ellipse(snoutX, 0, 12, 10, 0, 0, Math.PI * 2);
@@ -986,7 +1020,7 @@ function drawPlayer(ctx, p) {
     ctx.lineTo(snoutX + 10, 5);
     ctx.lineTo(snoutX + 4, 4);
     ctx.fill();
-  } else if (p.currentWeapon === 'fire_pea_gatling') {
+  } else if (p.currentWeapon === 'fire_pea_gatling' || p.currentWeapon === 'fire_gatling') {
     // Revolving gatling barrel
     ctx.beginPath();
     ctx.ellipse(snoutX, 0, 13, 11, 0, 0, Math.PI * 2);
@@ -1003,7 +1037,7 @@ function drawPlayer(ctx, p) {
       ctx.arc(snoutX + Math.cos(ca) * 5, Math.sin(ca) * 5, 2.5, 0, Math.PI * 2);
       ctx.fill();
     }
-  } else if (p.currentWeapon === 'melon_bazooka') {
+  } else if (p.currentWeapon === 'melon_bazooka' || p.currentWeapon === 'melon_launcher') {
     // Heavy melon mortar barrel
     ctx.beginPath();
     ctx.ellipse(snoutX, 0, 15, 13, 0, 0, Math.PI * 2);
@@ -1016,7 +1050,7 @@ function drawPlayer(ctx, p) {
     ctx.strokeStyle = '#37474f';
     ctx.lineWidth = 3;
     ctx.strokeRect(snoutX - 4, -13, 4, 26);
-  } else if (p.currentWeapon === 'plasma_cannon') {
+  } else if (p.currentWeapon === 'plasma_cannon' || p.currentWeapon === 'plasma_repeater') {
     // High-tech plasma energy coil
     ctx.beginPath();
     ctx.ellipse(snoutX, 0, 13, 11, 0, 0, Math.PI * 2);
@@ -1189,20 +1223,50 @@ function drawProjectiles(ctx) {
   // Player Projectiles
   pubgState.bullets.forEach((b) => {
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
-    ctx.fillStyle = b.color;
-    ctx.shadowColor = b.color;
-    ctx.shadowBlur = 12;
-    ctx.fill();
 
-    // Bullet trail tail
-    ctx.beginPath();
-    ctx.moveTo(b.x, b.y);
-    ctx.lineTo(b.x - b.vx * 2, b.y - b.vy * 2);
-    ctx.strokeStyle = b.color;
-    ctx.lineWidth = b.radius * 1.4;
-    ctx.stroke();
+    if (b.isMegaPea) {
+      // Giant Mega Pea with pulsing radiance
+      const pulse = Math.sin(Date.now() * 0.03) * 2;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius + 6 + pulse, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(118, 255, 3, 0.4)';
+      ctx.shadowColor = '#76ff03';
+      ctx.shadowBlur = 24;
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#76ff03';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      // Long blazing comet tail
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      ctx.lineTo(b.x - b.vx * 3.5, b.y - b.vy * 3.5);
+      ctx.strokeStyle = '#76ff03';
+      ctx.lineWidth = b.radius * 2.2;
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+      ctx.fillStyle = b.color;
+      ctx.shadowColor = b.color;
+      ctx.shadowBlur = 12;
+      ctx.fill();
+
+      // Bullet trail tail
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      ctx.lineTo(b.x - b.vx * 2, b.y - b.vy * 2);
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = b.radius * 1.4;
+      ctx.stroke();
+    }
 
     ctx.restore();
   });
@@ -1220,6 +1284,78 @@ function drawProjectiles(ctx) {
       ctx.restore();
     });
   }
+}
+
+// Draw Airborne & Ticking Cherry Bombs
+function drawBombs(ctx) {
+  if (!pubgState.bombs || pubgState.bombs.length === 0) return;
+
+  pubgState.bombs.forEach((b) => {
+    ctx.save();
+    // Parabolic height calculation
+    const progress = Math.min(1, b.timer / b.duration);
+    const curX = b.startX + (b.targetX - b.startX) * progress;
+    const curY = b.startY + (b.targetY - b.startY) * progress;
+    const arcHeight = Math.sin(progress * Math.PI) * b.arcHeight;
+    const drawY = curY - arcHeight;
+
+    // 1. Soft Shadow on the ground
+    ctx.beginPath();
+    ctx.ellipse(curX, curY + 6, 16 * (1 - progress * 0.25), 7 * (1 - progress * 0.25), 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fill();
+
+    // 2. Cherry Bomb body
+    ctx.translate(curX, drawY);
+    ctx.rotate(b.rotation);
+
+    // Glowing pulsation as fuse burns
+    const pulse = Math.sin(Date.now() * 0.03) * 1.5;
+
+    // Left cherry
+    ctx.beginPath();
+    ctx.arc(-7, 2, 10 + pulse, 0, Math.PI * 2);
+    ctx.fillStyle = '#d50000';
+    ctx.fill();
+    ctx.strokeStyle = '#b71c1c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Right cherry
+    ctx.beginPath();
+    ctx.arc(7, 4, 11 + pulse, 0, Math.PI * 2);
+    ctx.fillStyle = '#c62828';
+    ctx.fill();
+    ctx.strokeStyle = '#8e0000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Stems (Green joining arches)
+    ctx.strokeStyle = '#2e7d32';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(-7, -4);
+    ctx.quadraticCurveTo(-2, -18, 0, -20);
+    ctx.moveTo(7, -2);
+    ctx.quadraticCurveTo(2, -18, 0, -20);
+    ctx.stroke();
+
+    // Stem leaf
+    ctx.fillStyle = '#43a047';
+    ctx.beginPath();
+    ctx.ellipse(4, -20, 6, 3, 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Burning fuse spark at top
+    ctx.beginPath();
+    ctx.arc(0, -22, 4 + Math.random() * 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffeb3b';
+    ctx.shadowColor = '#ff9800';
+    ctx.shadowBlur = 10;
+    ctx.fill();
+
+    ctx.restore();
+  });
 }
 
 function drawParticles(ctx) {

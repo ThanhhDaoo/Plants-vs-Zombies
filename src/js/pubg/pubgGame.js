@@ -5,7 +5,15 @@ import { spawnInitialZombies, updateZombies, ZOMBIE_TYPES } from './pubgZombies.
 import { renderPubg } from './pubgRenderer.js';
 import { setupPubgControls, triggerReload } from './pubgControls.js';
 import { inventory } from './pubgInventory.js';
-import { playShootSound, playHitSound, playExplosionSound, playSunSound } from '../sound.js';
+import {
+  playShootSound,
+  playHitSound,
+  playExplosionSound,
+  playSunSound,
+  playPeaStormSound,
+  playCherryThrowSound,
+  playChargedShotSound
+} from '../sound.js';
 
 let animationFrameId = null;
 let lastTimestamp = 0;
@@ -63,6 +71,17 @@ export function startPubgGame() {
   p.score = 0;
   p.recoilOffset = 0;
 
+  // Reset skills & charging
+  p.skills = {
+    stormCd: 0,
+    stormMaxCd: 7000,
+    bombCd: 0,
+    bombMaxCd: 10000
+  };
+  p.isCharging = false;
+  p.chargeTimer = 0;
+  p.chargeMaxAlerted = false;
+
   // Reset in-match rewards
   pubgState.matchRewards = {
     coins: 0,
@@ -85,11 +104,13 @@ export function startPubgGame() {
 
   // Clear combat entities
   pubgState.bullets = [];
+  pubgState.bombs = [];
   pubgState.enemyProjectiles = [];
   pubgState.shockwaves = [];
   pubgState.particles = [];
   pubgState.floatingTexts = [];
   pubgState.groundItems = [];
+  pubgState.screenShake = 0;
 
   // Spawn Crates & Zombies
   spawnCrates(28);
@@ -293,9 +314,15 @@ function updatePubg(delta) {
   cam.x += (p.x - cam.x) * 0.12;
   cam.y += (p.y - cam.y) * 0.12;
 
-  // 3. Firing Mechanism
+  // 3. Firing & Combat Skills Mechanism
   const now = Date.now();
   const currentW = inventory.getEffectiveWeapon(p.currentWeapon);
+
+  // Update Combat Skills Cooldowns
+  if (p.skills) {
+    if (p.skills.stormCd > 0) p.skills.stormCd = Math.max(0, p.skills.stormCd - delta);
+    if (p.skills.bombCd > 0) p.skills.bombCd = Math.max(0, p.skills.bombCd - delta);
+  }
 
   // Reload progress
   if (p.isReloading) {
@@ -307,6 +334,27 @@ function updatePubg(delta) {
   }
 
   const isFiring = pubgState.input.mouse.isDown || pubgState.input.touch.aimActive || pubgState.input.touch.isFiring;
+
+  // Hold-to-charge Mega Pea Shot
+  if (isFiring && !p.isReloading) {
+    p.chargeTimer = (p.chargeTimer || 0) + delta;
+    if (p.chargeTimer >= p.maxChargeTime) {
+      p.isCharging = true;
+      if (!p.chargeMaxAlerted) {
+        p.chargeMaxAlerted = true;
+        addFloatingText(p.x, p.y - 30, '⚡ ĐẠI BÁC SẴN SÀNG!', '#76ff03', 15);
+      }
+    }
+  } else {
+    if (p.isCharging && p.chargeTimer >= p.maxChargeTime) {
+      fireMegaPea();
+    }
+    p.isCharging = false;
+    p.chargeTimer = 0;
+    p.chargeMaxAlerted = false;
+  }
+
+  // Standard automatic firing
   if (isFiring && !p.isReloading && now - p.lastShotTime >= currentW.fireRate) {
     if (p.ammo > 0) {
       fireWeapon(currentW);
@@ -320,8 +368,24 @@ function updatePubg(delta) {
     }
   }
 
-  // 4. Update Bullets
+  // 4. Update Bullets & Thrown Bombs
   updateBullets(delta);
+  updateBombs(delta);
+
+  // 4b. Update Shockwaves
+  for (let i = pubgState.shockwaves.length - 1; i >= 0; i--) {
+    const sw = pubgState.shockwaves[i];
+    sw.radius += (sw.speed || 10) * (delta / 16);
+    sw.alpha = Math.max(0, 1 - sw.radius / sw.maxRadius);
+    if (sw.radius >= sw.maxRadius || sw.alpha <= 0) {
+      pubgState.shockwaves.splice(i, 1);
+    }
+  }
+
+  // 4c. Screen Shake Decay
+  if (pubgState.screenShake > 0) {
+    pubgState.screenShake = Math.max(0, pubgState.screenShake - (delta / 16) * 1.5);
+  }
 
   // 5. Update Zombies
   updateZombies(delta);
@@ -813,9 +877,316 @@ function updatePubgHud() {
       zoneTime.style.color = '#00e5ff';
     }
   }
+  // Update Cooldowns for Dash & Combat Skills
+  const dashCd = Math.max(0, p.dashCooldown);
+  const dashOverlay = document.getElementById('pubgDashCdOverlay');
+  const dashCdText = document.getElementById('pubgDashCdText');
+  const dashBtn = document.getElementById('pubgDashBtn');
+  if (dashOverlay && dashCdText && dashBtn) {
+    if (dashCd > 0) {
+      dashOverlay.classList.add('active');
+      dashCdText.textContent = (dashCd / 1000).toFixed(1) + 's';
+      dashBtn.classList.add('on-cooldown');
+    } else {
+      dashOverlay.classList.remove('active');
+      dashCdText.textContent = '';
+      dashBtn.classList.remove('on-cooldown');
+    }
+  }
+
+  const stormCd = Math.max(0, p.skills ? p.skills.stormCd : 0);
+  const stormOverlay = document.getElementById('pubgStormCdOverlay');
+  const stormCdText = document.getElementById('pubgStormCdText');
+  const stormBtn = document.getElementById('pubgSkillStormBtn');
+  if (stormOverlay && stormCdText && stormBtn) {
+    if (stormCd > 0) {
+      stormOverlay.classList.add('active');
+      stormCdText.textContent = (stormCd / 1000).toFixed(1) + 's';
+      stormBtn.classList.add('on-cooldown');
+    } else {
+      stormOverlay.classList.remove('active');
+      stormCdText.textContent = '';
+      stormBtn.classList.remove('on-cooldown');
+    }
+  }
+
+  const bombCd = Math.max(0, p.skills ? p.skills.bombCd : 0);
+  const bombOverlay = document.getElementById('pubgBombCdOverlay');
+  const bombCdText = document.getElementById('pubgBombCdText');
+  const bombBtn = document.getElementById('pubgSkillBombBtn');
+  if (bombOverlay && bombCdText && bombBtn) {
+    if (bombCd > 0) {
+      bombOverlay.classList.add('active');
+      bombCdText.textContent = (bombCd / 1000).toFixed(1) + 's';
+      bombBtn.classList.add('on-cooldown');
+    } else {
+      bombOverlay.classList.remove('active');
+      bombCdText.textContent = '';
+      bombBtn.classList.remove('on-cooldown');
+    }
+  }
+}
+
+// Update airborne/ticking Cherry Bombs
+function updateBombs(delta) {
+  if (!pubgState.bombs) return;
+
+  for (let i = pubgState.bombs.length - 1; i >= 0; i--) {
+    const b = pubgState.bombs[i];
+    b.timer += delta;
+    b.rotation += 0.08;
+
+    const progress = Math.min(1, b.timer / b.duration);
+    const curX = b.startX + (b.targetX - b.startX) * progress;
+    const curY = b.startY + (b.targetY - b.startY) * progress;
+
+    // Sparks from fuse
+    if (Math.random() < 0.45) {
+      pubgState.particles.push({
+        x: curX,
+        y: curY - Math.sin(progress * Math.PI) * b.arcHeight - 18,
+        vx: (Math.random() - 0.5) * 2,
+        vy: -Math.random() * 2,
+        size: 3,
+        color: '#ffeb3b',
+        life: 180,
+        maxLife: 180
+      });
+    }
+
+    if (b.timer >= b.duration) {
+      // DETONATION!
+      playExplosionSound();
+      pubgState.screenShake = 16;
+
+      // Fiery shockwave
+      pubgState.shockwaves.push({
+        x: curX,
+        y: curY,
+        radius: 15,
+        maxRadius: b.blastRadius,
+        color: '#ff1744',
+        speed: 14,
+        alpha: 1
+      });
+
+      // Explosion particles
+      createExplosionParticles(curX, curY, '#ff1744');
+      for (let pIdx = 0; pIdx < 16; pIdx++) {
+        const a = Math.random() * Math.PI * 2;
+        const spd = 3 + Math.random() * 7;
+        pubgState.particles.push({
+          x: curX,
+          y: curY,
+          vx: Math.cos(a) * spd,
+          vy: Math.sin(a) * spd,
+          size: 5 + Math.random() * 4,
+          color: Math.random() < 0.5 ? '#ff5722' : '#ffd54f',
+          life: 400,
+          maxLife: 400
+        });
+      }
+
+      // Damage all zombies in blast radius
+      for (let j = pubgState.zombies.length - 1; j >= 0; j--) {
+        const z = pubgState.zombies[j];
+        const dist = Math.hypot(curX - z.x, curY - z.y);
+        if (dist < b.blastRadius) {
+          const falloff = 1 - (dist / b.blastRadius);
+          const dmg = Math.round(b.damage * Math.max(0.45, falloff));
+          z.health -= dmg;
+          addFloatingText(z.x, z.y - 14, `-${dmg} 🍒💥`, '#ff1744', 18);
+
+          // Knockback
+          const ang = Math.atan2(z.y - curY, z.x - curX);
+          z.x += Math.cos(ang) * (26 * falloff);
+          z.y += Math.sin(ang) * (26 * falloff);
+
+          if (z.health <= 0) {
+            handleZombieKilled(z, j);
+          }
+        }
+      }
+
+      // Damage crates
+      for (let k = pubgState.crates.length - 1; k >= 0; k--) {
+        const c = pubgState.crates[k];
+        if (Math.hypot(curX - c.x, curY - c.y) < b.blastRadius) {
+          c.health -= b.damage;
+          if (c.health <= 0) {
+            playExplosionSound();
+            dropCrateLoot(c.x, c.y, c.isAirdrop);
+            pubgState.crates.splice(k, 1);
+          }
+        }
+      }
+
+      pubgState.bombs.splice(i, 1);
+    }
+  }
+}
+
+// Combat Skill 1: Pea Nova Storm 360° (Phím Q / Nút Bão Đạn)
+export function triggerPeaStorm() {
+  const p = pubgState.player;
+  if (!pubgState.active || pubgState.isGameOver || pubgState.isVictory) return;
+  if (!p.skills) p.skills = { stormCd: 0, stormMaxCd: 7000, bombCd: 0, bombMaxCd: 10000 };
+  if (p.skills.stormCd > 0) return;
+
+  p.skills.stormCd = p.skills.stormMaxCd;
+  playPeaStormSound();
+
+  const stormBtn = document.getElementById('pubgSkillStormBtn');
+  if (stormBtn) {
+    stormBtn.classList.add('active');
+    setTimeout(() => stormBtn.classList.remove('active'), 250);
+  }
+
+  // Burst particles around player
+  for (let i = 0; i < 24; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 4 + Math.random() * 6;
+    pubgState.particles.push({
+      x: p.x,
+      y: p.y,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd,
+      size: 4 + Math.random() * 3,
+      color: '#ea80fc',
+      life: 300,
+      maxLife: 300
+    });
+  }
+
+  // Shockwave ring
+  pubgState.shockwaves.push({
+    x: p.x,
+    y: p.y,
+    radius: 15,
+    maxRadius: 220,
+    color: '#ab47bc',
+    speed: 12,
+    alpha: 1
+  });
+
+  addFloatingText(p.x, p.y - 32, '🌪️ BÃO ĐẠN 360°!', '#ea80fc', 18);
+
+  const currentW = inventory.getEffectiveWeapon(p.currentWeapon);
+  const pelletCount = 20;
+  const baseDmg = Math.max(50, Math.round(currentW.damage * 1.4));
+
+  for (let i = 0; i < pelletCount; i++) {
+    const angle = (i / pelletCount) * Math.PI * 2 + p.angle;
+    pubgState.bullets.push({
+      x: p.x + Math.cos(angle) * (p.radius + 14),
+      y: p.y + Math.sin(angle) * (p.radius + 14),
+      vx: Math.cos(angle) * 15,
+      vy: Math.sin(angle) * 15,
+      radius: 7,
+      color: currentW.bulletColor || '#76c828',
+      damage: baseDmg,
+      isFire: currentW.isFire,
+      slowEffect: currentW.slowEffect,
+      isExplosive: currentW.isExplosive,
+      blastRadius: currentW.blastRadius ? currentW.blastRadius * 0.75 : 0,
+      isPlasma: currentW.isPlasma,
+      pierceRemaining: 2,
+      hitZombies: new Set(),
+      range: 700,
+      distanceTraveled: 0
+    });
+  }
+}
+
+// Combat Skill 2: Cherry Bomb Airstrike (Phím E / Nút Bom Nổ)
+export function triggerCherryBomb() {
+  const p = pubgState.player;
+  if (!pubgState.active || pubgState.isGameOver || pubgState.isVictory) return;
+  if (!p.skills) p.skills = { stormCd: 0, stormMaxCd: 7000, bombCd: 0, bombMaxCd: 10000 };
+  if (p.skills.bombCd > 0) return;
+
+  p.skills.bombCd = p.skills.bombMaxCd;
+  playCherryThrowSound();
+
+  const bombBtn = document.getElementById('pubgSkillBombBtn');
+  if (bombBtn) {
+    bombBtn.classList.add('active');
+    setTimeout(() => bombBtn.classList.remove('active'), 250);
+  }
+
+  // Determine target coordinates (towards locked target or facing direction)
+  let targetX = p.x + Math.cos(p.angle) * 230;
+  let targetY = p.y + Math.sin(p.angle) * 230;
+
+  if (pubgState.input.lockedTarget && pubgState.input.lockedTarget.health > 0) {
+    targetX = pubgState.input.lockedTarget.x;
+    targetY = pubgState.input.lockedTarget.y;
+  }
+
+  // Clamp within map bounds
+  targetX = Math.max(40, Math.min(MAP_CONFIG.WIDTH - 40, targetX));
+  targetY = Math.max(40, Math.min(MAP_CONFIG.HEIGHT - 40, targetY));
+
+  pubgState.bombs.push({
+    startX: p.x,
+    startY: p.y,
+    targetX,
+    targetY,
+    duration: 520, // 520ms flight
+    arcHeight: 65,
+    timer: 0,
+    damage: 320,
+    blastRadius: 210,
+    rotation: 0
+  });
+
+  addFloatingText(p.x, p.y - 32, '🍒 BOM ANH ĐÀO!', '#ff4081', 18);
+}
+
+// Charged Shot: Super Mega Pea
+export function fireMegaPea() {
+  const p = pubgState.player;
+  const currentW = inventory.getEffectiveWeapon(p.currentWeapon);
+  playChargedShotSound();
+  pubgState.screenShake = 10;
+
+  p.recoilOffset = 12;
+  pubgState.input.crosshairRecoil = 18;
+
+  addFloatingText(p.x, p.y - 32, '💥 ĐẠI BÁC SIÊU ĐẬU!', '#76ff03', 19);
+
+  pubgState.bullets.push({
+    x: p.x + Math.cos(p.angle) * (p.radius + 18),
+    y: p.y + Math.sin(p.angle) * (p.radius + 18),
+    vx: Math.cos(p.angle) * 19,
+    vy: Math.sin(p.angle) * 19,
+    radius: 14,
+    color: '#76ff03',
+    damage: Math.round(currentW.damage * 2.8),
+    isFire: true,
+    isExplosive: true,
+    blastRadius: 110,
+    isMegaPea: true,
+    pierceRemaining: 4,
+    hitZombies: new Set(),
+    range: 1000,
+    distanceTraveled: 0
+  });
+
+  // Shockwave in firing direction
+  pubgState.shockwaves.push({
+    x: p.x + Math.cos(p.angle) * 20,
+    y: p.y + Math.sin(p.angle) * 20,
+    radius: 10,
+    maxRadius: 100,
+    color: '#76ff03',
+    speed: 10,
+    alpha: 0.9
+  });
 }
 
 export function stopPubg() {
   pubgState.active = false;
   if (animationFrameId) cancelAnimationFrame(animationFrameId);
 }
+

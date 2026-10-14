@@ -1,6 +1,7 @@
 // Controls Module for Keyboard, Mouse, and Dual Virtual Mobile Joysticks
 import { pubgState } from './pubgState.js';
 import { WEAPONS } from './pubgWeapons.js';
+import { triggerPeaStorm, triggerCherryBomb } from './pubgGame.js';
 
 export function setupPubgControls(canvas) {
   // Elements for interactive desktop key hints
@@ -32,6 +33,8 @@ export function setupPubgControls(canvas) {
     }
     if (k === ' ' || k === 'shift') triggerDash();
     if (k === 'r') triggerReload();
+    if (k === 'q') triggerPeaStorm();
+    if (k === 'e') triggerCherryBomb();
   });
 
   window.addEventListener('keyup', (e) => {
@@ -277,6 +280,32 @@ function setupMobileTouchHud() {
       triggerReload();
     });
   }
+
+  // Combat Skill 1: Pea Storm 360° Button
+  const stormBtn = document.getElementById('pubgSkillStormBtn');
+  if (stormBtn) {
+    stormBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerPeaStorm();
+    }, { passive: false });
+    stormBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerPeaStorm();
+    });
+  }
+
+  // Combat Skill 2: Cherry Bomb Button
+  const bombBtn = document.getElementById('pubgSkillBombBtn');
+  if (bombBtn) {
+    bombBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerCherryBomb();
+    }, { passive: false });
+    bombBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerCherryBomb();
+    });
+  }
 }
 
 // Background Canvas Touch Handlers (Fallback & Free Aim Swipe)
@@ -363,3 +392,6 @@ export function triggerReload() {
     setTimeout(() => reloadBtn.classList.remove('active'), 300);
   }
 }
+
+export { triggerPeaStorm, triggerCherryBomb };
+

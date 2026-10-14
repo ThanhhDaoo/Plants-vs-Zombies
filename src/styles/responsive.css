@@ -700,49 +700,60 @@
     font-size: 1.02em !important;
   }
 
-  /* Mobile Ergonomic Touch Cluster for Compact Landscape */
+  /* Mobile Ergonomic Touch Cluster for Compact Landscape (Enlarged & Widely Spaced) */
   .pubg-touch-actions {
-    bottom: max(18px, env(safe-area-inset-bottom, 18px)) !important;
-    right: max(28px, env(safe-area-inset-right, 28px)) !important;
-    width: 155px !important;
-    height: 145px !important;
+    bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+    right: max(20px, env(safe-area-inset-right, 20px)) !important;
+    width: 236px !important;
+    height: 220px !important;
   }
 
   .touch-btn.fire-btn {
-    right: 6px !important;
-    bottom: 6px !important;
-    width: 66px !important;
-    height: 66px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    width: 78px !important;
+    height: 78px !important;
   }
 
-  .touch-btn.dash-btn {
-    right: 12px !important;
-    bottom: 80px !important;
-    width: 46px !important;
-    height: 46px !important;
+  .touch-btn.sub-btn {
+    width: 54px !important;
+    height: 54px !important;
   }
 
   .touch-btn.reload-btn {
-    right: 80px !important;
-    bottom: 12px !important;
-    width: 46px !important;
-    height: 46px !important;
+    right: 140px !important;
+    bottom: 14px !important;
+  }
+
+  .touch-btn.storm-btn {
+    right: 132px !important;
+    bottom: 88px !important;
+  }
+
+  .touch-btn.bomb-btn {
+    right: 74px !important;
+    bottom: 144px !important;
+  }
+
+  .touch-btn.dash-btn {
+    right: 8px !important;
+    bottom: 124px !important;
   }
 
   .fire-icon {
-    font-size: 1.2em !important;
+    font-size: 1.38em !important;
   }
 
   .fire-label {
-    font-size: 0.7em !important;
+    font-size: 0.78em !important;
   }
 
   .btn-icon {
-    font-size: 1.02em !important;
+    font-size: 1.15em !important;
   }
 
   .btn-label {
-    font-size: 0.65em !important;
+    font-size: 0.66em !important;
   }
 
   /* Strictly hide all Desktop Key Guides and Hints on Mobile */

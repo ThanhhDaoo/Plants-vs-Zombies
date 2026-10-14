@@ -467,12 +467,13 @@
 }
 
 /* Mobile Ergonomic Combat Actions Arc (Fire + Dash + Reload) */
+/* Mobile Ergonomic Combat Actions Arc Cluster (Enlarged & Widely Spaced Arc) */
 .pubg-touch-actions {
   position: absolute;
-  bottom: max(22px, env(safe-area-inset-bottom, 22px));
-  right: max(28px, env(safe-area-inset-right, 28px));
-  width: 170px;
-  height: 160px;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  right: max(22px, env(safe-area-inset-right, 22px));
+  width: 250px;
+  height: 235px;
   pointer-events: none;
   z-index: 55;
 }
@@ -493,6 +494,7 @@
   touch-action: manipulation;
   pointer-events: auto;
   transition: transform 0.08s ease, filter 0.08s ease, box-shadow 0.08s ease;
+  overflow: hidden;
 }
 
 /* Expanded invisible touch hit-slop so rapid thumb taps never miss */
@@ -507,10 +509,10 @@
   pointer-events: auto;
 }
 
-/* Sub-action buttons base (Dash & Reload) */
+/* Sub-action buttons base (Dash, Reload, Skills) - Enlarged for easy tapping */
 .touch-btn.sub-btn {
-  width: 50px;
-  height: 50px;
+  width: 58px;
+  height: 58px;
   border: 2.5px solid #ffffff;
   box-shadow: 0 4px 0 #1a0f06, 0 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -520,36 +522,64 @@
   box-shadow: 0 1px 0 #1a0f06;
 }
 
-/* Dash Button: Ergonomic arc above Fire button */
-.touch-btn.dash-btn {
-  right: 12px;
-  bottom: 88px;
-  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 50%, #e65100 100%);
-  box-shadow: 0 4px 0 #8c3800, 0 4px 14px rgba(251, 140, 0, 0.5);
-}
-
-.touch-btn.dash-btn:active {
-  box-shadow: 0 1px 0 #8c3800, 0 0 20px rgba(255, 167, 38, 0.85);
-}
-
-/* Reload Button: Ergonomic arc to the left/up-left of Fire button */
+/* 1. Reload Button: Left of Fire button with generous 52px clearance */
 .touch-btn.reload-btn {
-  right: 88px;
-  bottom: 14px;
+  right: 148px;
+  bottom: 16px;
   background: linear-gradient(180deg, #29b6f6 0%, #0288d1 50%, #01579b 100%);
   box-shadow: 0 4px 0 #003766, 0 4px 14px rgba(2, 136, 209, 0.5);
 }
 
-.touch-btn.reload-btn:active {
+.touch-btn.reload-btn:active,
+.touch-btn.reload-btn.active {
   box-shadow: 0 1px 0 #003766, 0 0 20px rgba(41, 182, 246, 0.85);
 }
 
-/* Primary Fire Button: Bottom-right corner thumb rest anchor */
+/* 2. Skill 1: Pea Storm 360° (Upper-left arc, comfortable 25px gap from reload) */
+.touch-btn.storm-btn {
+  right: 142px;
+  bottom: 96px;
+  background: linear-gradient(180deg, #ab47bc 0%, #8e24aa 50%, #4a148c 100%);
+  box-shadow: 0 4px 0 #31075e, 0 4px 14px rgba(156, 39, 176, 0.5);
+}
+
+.touch-btn.storm-btn:active,
+.touch-btn.storm-btn.active {
+  box-shadow: 0 1px 0 #31075e, 0 0 22px rgba(206, 147, 216, 0.9);
+}
+
+/* 3. Skill 2: Cherry Bomb (Top-left / High arc, comfortable 28px gap from storm) */
+.touch-btn.bomb-btn {
+  right: 80px;
+  bottom: 154px;
+  background: linear-gradient(180deg, #ff1744 0%, #d50000 50%, #880e4f 100%);
+  box-shadow: 0 4px 0 #5f0000, 0 4px 14px rgba(255, 23, 68, 0.5);
+}
+
+.touch-btn.bomb-btn:active,
+.touch-btn.bomb-btn.active {
+  box-shadow: 0 1px 0 #5f0000, 0 0 24px rgba(255, 64, 129, 0.9);
+}
+
+/* 4. Dash Button: Top-right arc (Comfortable 26px gap from bomb and 34px from fire) */
+.touch-btn.dash-btn {
+  right: 8px;
+  bottom: 132px;
+  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 50%, #e65100 100%);
+  box-shadow: 0 4px 0 #8c3800, 0 4px 14px rgba(251, 140, 0, 0.5);
+}
+
+.touch-btn.dash-btn:active,
+.touch-btn.dash-btn.active {
+  box-shadow: 0 1px 0 #8c3800, 0 0 20px rgba(255, 167, 38, 0.85);
+}
+
+/* Primary Fire Button: Bottom-right corner thumb rest anchor (Enlarged to 82px) */
 .touch-btn.fire-btn {
-  right: 6px;
-  bottom: 6px;
-  width: 72px;
-  height: 72px;
+  right: 12px;
+  bottom: 12px;
+  width: 82px;
+  height: 82px;
   background: radial-gradient(circle at 35% 35%, #ff5252 0%, #d50000 65%, #7f0000 100%);
   border: 3.5px solid #ffe082;
   box-shadow: 0 5px 0 #5f0000, 0 0 24px rgba(255, 23, 68, 0.75);
@@ -562,22 +592,55 @@
   filter: brightness(1.2);
 }
 
+/* Cooldown overlay for skills and dash */
+.cooldown-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(12, 8, 6, 0.76);
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cooldown-overlay.active {
+  display: flex;
+}
+
+.cd-text {
+  font-size: 0.82em;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  letter-spacing: -0.5px;
+}
+
+.touch-btn.on-cooldown {
+  filter: grayscale(0.4) opacity(0.85);
+  cursor: not-allowed;
+}
+
 .fire-icon {
-  font-size: 1.45em;
+  font-size: 1.55em;
   line-height: 1;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
 }
 
 .fire-label {
-  font-size: 0.84em;
+  font-size: 0.88em;
   font-weight: 900;
   letter-spacing: 0.8px;
   text-shadow: 1.5px 1.5px 0 #5f0000;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .btn-icon {
-  font-size: 1.2em;
+  font-size: 1.25em;
   line-height: 1;
 }
 

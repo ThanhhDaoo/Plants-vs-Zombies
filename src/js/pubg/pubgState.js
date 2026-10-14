@@ -35,7 +35,19 @@ export const pubgState = {
     lastShotTime: 0,
     recoilOffset: 0,
     kills: 0,
-    score: 0
+    score: 0,
+    // Active Combat Skills
+    skills: {
+      stormCd: 0,
+      stormMaxCd: 7000,
+      bombCd: 0,
+      bombMaxCd: 10000
+    },
+    // Charged Mega Pea Attack
+    isCharging: false,
+    chargeTimer: 0,
+    maxChargeTime: 450,
+    chargeMaxAlerted: false
   },
 
   camera: {
@@ -65,11 +77,13 @@ export const pubgState = {
   enemyProjectiles: [],
   shockwaves: [],
   bullets: [],
+  bombs: [],
   crates: [],
   groundItems: [],
   particles: [],
   floatingTexts: [],
   airdrop: null,
+  screenShake: 0,
 
   // In-match collected rewards
   matchRewards: {
